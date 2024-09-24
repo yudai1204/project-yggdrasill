@@ -44,7 +44,7 @@ export const Basic = () => {
       <Perf position="top-left" />
 
       {/* 背景 */}
-      <color args={["ivory"]} attach="background" />
+      {/* <color args={["transparent"]} attach="background" /> */}
 
       {/* 環境光 */}
       <ambientLight intensity={0.5} />
@@ -79,13 +79,19 @@ export const Basic = () => {
 
         {/* 3Dモデル */}
         <mesh
+          castShadow
           position={[2, 10, 2]}
           scale={0.4}
           rotation={[0, -Math.PI / 2, -Math.PI / 2]}
         >
           <Flower />
         </mesh>
-        <mesh position={[0, 0, 0]} scale={1} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh
+          castShadow
+          position={[0, 0, 0]}
+          scale={1}
+          rotation={[0, -Math.PI / 2, 0]}
+        >
           <Tree />
         </mesh>
       </group>

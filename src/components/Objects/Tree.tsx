@@ -17,7 +17,7 @@ export const Tree = () => {
   });
 
   return (
-    <Gltf src="/gltf/treeMesh.gltf" scale={1} />
+    <Gltf src="/gltf/treeMesh.gltf" scale={1} castShadow receiveShadow />
     // <mesh scale={0.02}>
     //   <primitive object={scene} />
     // </mesh>

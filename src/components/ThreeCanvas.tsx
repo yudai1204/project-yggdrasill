@@ -13,6 +13,7 @@ export const ThreeCanvas = () => {
           flat
           shadows
           gl={{
+            alpha: true,
             antialias: true,
             toneMapping: THREE.ACESFilmicToneMapping,
             // outputEncoding: THREE.sRGBEncoding,

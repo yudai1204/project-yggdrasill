@@ -17,7 +17,7 @@ export const Flower = () => {
   });
 
   return (
-    <Gltf src="/gltf/cherryBlossom.gltf" scale={1} />
+    <Gltf src="/gltf/cherryBlossom.gltf" scale={1} castShadow receiveShadow />
     // <mesh scale={0.02}>
     //   <primitive object={scene} />
     // </mesh>

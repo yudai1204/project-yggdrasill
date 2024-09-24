@@ -10,7 +10,9 @@ export default function Home() {
       <title>Project Yggdrasill</title>
       <Box width="100%" height="100vh">
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
-          {/* <P5Canvas /> */}
+          <P5Canvas />
+        </Box>
+        <Box position="absolute" top="0" left="0" width="100%" height="100%">
           <ThreeCanvas />
         </Box>
       </Box>
