@@ -18,10 +18,10 @@ const initPosition = {
  * refとstyleに指定することで、そのHTML要素のリサイズと移動が可能になる
  * @param position HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる
  */
-export function useInteractJS(
+export const useInteractJS = (
   position: Partial<typeof initPosition> = initPosition,
   onDragEnd: () => void
-) {
+) => {
   const [_position, setPosition] = useState({
     ...initPosition,
     ...position,
@@ -109,4 +109,4 @@ export function useInteractJS(
     enable: () => setEnable(true),
     disable: () => setEnable(false),
   };
-}
+};

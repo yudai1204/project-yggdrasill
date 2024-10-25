@@ -1,18 +1,36 @@
 import { Button } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import type { DeviceType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
+import { useWindowSize } from "@/util/hooks";
+import { set } from "lodash";
+import { sendJson } from "@/util/util";
 
 export const Device = () => {
+  const windowRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const deviceBodyRef = useRef<DeviceType | null>(null);
+
   const shouldReconnect = useRef<boolean>(true);
   const reconnectTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const [connectingStatus, setConnectingStatus] =
     useState<string>("Connecting...");
-  const deviceBodyRef = useRef<DeviceType | null>(null);
   const [deviceNum, setDeviceNum] = useState<number | null>(null);
   const [deviceBody, setDeviceBody] = useState<DeviceType | null>(null);
+
+  const windowSize = useWindowSize(windowRef);
+
+  useEffect(() => {
+    if (deviceBodyRef.current) {
+      deviceBodyRef.current = {
+        ...deviceBodyRef.current,
+        size: windowSize,
+      };
+      setDeviceBody({ ...deviceBodyRef.current });
+      sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+    }
+  }, [windowSize]);
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -37,7 +55,7 @@ export const Device = () => {
   }, []);
 
   return (
-    <div>
+    <div ref={windowRef} style={{ width: "100%", height: "100svh" }}>
       <h1>Device</h1>
       <h2>Status: {connectingStatus}</h2>
       {deviceBodyRef.current && deviceBody && (

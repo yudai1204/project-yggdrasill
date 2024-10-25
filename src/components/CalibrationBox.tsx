@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useInteractJS } from "../util/hook";
+import { useInteractJS } from "../util/hooks";
 import {
   Box,
   Slider,
@@ -46,7 +46,7 @@ export const CalibrationBox = (props: Props) => {
       x: interact.position.x,
       y: interact.position.y,
     });
-  }, [interact.position, position.width, position.height]);
+  }, [interact.position]);
 
   useEffect(() => {
     interact.updatePosition({

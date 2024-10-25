@@ -7,12 +7,12 @@ import { connectWebSocket } from "./useScreen";
 
 export const Screen = () => {
   const wsRef = useRef<WebSocket | null>(null);
+  const screenBodyRef = useRef<ScreenType | null>(null);
   const shouldReconnect = useRef<boolean>(true);
   const reconnectTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const [connectingStatus, setConnectingStatus] =
     useState<string>("Connecting...");
-  const screenBodyRef = useRef<ScreenType | null>(null);
 
   const [devices, setDevices] = useState<DeviceType[]>([]);
 
