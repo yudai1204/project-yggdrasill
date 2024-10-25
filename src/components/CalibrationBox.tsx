@@ -75,8 +75,8 @@ export const CalibrationBox = (props: Props) => {
             left={interact.position.x}
             h={interact.position.height + 600}
             w={interact.position.width}
-            borderRight="2px solid #0489B1"
-            borderLeft="2px solid #0489B1"
+            borderRight="2px solid #A9D0F5"
+            borderLeft="2px solid #A9D0F5"
             transform={`rotate(${position.rotate}deg)`}
             zIndex={1}
           />
@@ -86,8 +86,8 @@ export const CalibrationBox = (props: Props) => {
             left={interact.position.x - 300}
             h={interact.position.height}
             w={interact.position.width + 600}
-            borderTop="2px solid #0489B1"
-            borderBottom="2px solid #0489B1"
+            borderTop="2px solid #A9D0F5"
+            borderBottom="2px solid #A9D0F5"
             transform={`rotate(${position.rotate}deg)`}
             zIndex={1}
           />
@@ -97,8 +97,8 @@ export const CalibrationBox = (props: Props) => {
         ref={interact.ref}
         style={{
           ...interact.style,
-          border: "2px solid #0489B1",
-          backgroundColor: "#A9D0F5",
+          border: "2px solid #A9D0F5",
+          backgroundColor: "#0489B1",
         }}
         transform={`rotate(${position.rotate}deg)`}
         userSelect="none"
@@ -147,7 +147,7 @@ export const CalibrationBox = (props: Props) => {
           type="number"
           size="sm"
           w={100}
-          backgroundColor="white"
+          backgroundColor="black"
           value={position.rotate}
           onChange={(e) => {
             setPosition({ ...position, rotate: Number(e.target.value) });

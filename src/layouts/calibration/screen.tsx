@@ -146,7 +146,13 @@ export const Screen = () => {
   }, []);
 
   return (
-    <Box w="100%" h="100svh" position="relative" overflow="hidden">
+    <Box
+      w="100%"
+      h="100svh"
+      position="relative"
+      overflow="hidden"
+      padding="60px 40px"
+    >
       <h1>Screen</h1>
       <h2>Status: {connectingStatus}</h2>
       {screenBodyRef.current && (
