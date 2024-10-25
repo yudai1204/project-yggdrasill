@@ -1,5 +1,6 @@
 export interface DeviceType {
   type: "user" | "device";
+  connectedAt: number;
   uuid: string;
   size: {
     width: number;
@@ -16,10 +17,16 @@ export interface DeviceType {
 
 export interface ScreenType {
   type: "screen";
+  connectedAt: number;
   uuid: string;
   size: {
     width: number;
     height: number;
   };
+  devices: DeviceType[];
+}
+
+export interface ManagerType {
+  screens: ScreenType[];
   devices: DeviceType[];
 }

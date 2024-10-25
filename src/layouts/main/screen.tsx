@@ -17,8 +17,6 @@ export const Screen = () => {
   const [devices, setDevices] = useState<DeviceType[]>([]);
   const [screenNum, setScreenNum] = useState<number | null>(null);
 
-  console.log({ screenNum });
-
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
     connectWebSocket({

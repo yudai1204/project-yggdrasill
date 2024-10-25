@@ -87,6 +87,7 @@ export const Device = () => {
             {deviceBodyRef.current.position.y}
           </p>
           <p>Device Zoom: {deviceBodyRef.current.zoom}</p>
+          <p>Connected At: {deviceBodyRef.current.connectedAt}</p>
         </>
       )}
       <Button onClick={resetPos}>Reset Position</Button>

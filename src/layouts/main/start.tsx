@@ -1,5 +1,4 @@
 import { Box, Select, Button, VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 
 type Props = {
   setDevice: (device: string) => void;
@@ -13,6 +12,7 @@ export const StartCalibration = ({ setDevice, device, connect }: Props) => {
         <Box>このデバイスを何として扱うか選択してください。</Box>
         <Select onChange={(e) => setDevice(e.target.value)} value={device}>
           <option value="screen">スクリーン</option>
+          <option value="manager">管理画面</option>
           <option value="device">マスク(タブレット端末)</option>
           <option value="user">ユーザ端末</option>
         </Select>

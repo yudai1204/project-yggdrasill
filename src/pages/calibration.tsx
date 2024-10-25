@@ -1,5 +1,5 @@
-import Calibration from "@/layouts/calibration/index";
+import Main from "@/layouts/main/index";
 
 export default function Home() {
-  return <Calibration />;
+  return <Main />;
 }

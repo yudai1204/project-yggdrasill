@@ -2,36 +2,43 @@ import type { DeviceType, ScreenType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { getScreenSize } from "@/util/util";
 
-const initScreen = () => {
+const initDevice = () => {
   const screenSize = getScreenSize();
-  const screen: ScreenType = {
-    type: "screen",
+  const device: DeviceType = {
+    connectedAt: 0,
+    type: "device",
     uuid: crypto.randomUUID(),
     size: screenSize,
-    devices: [],
+    rotation: 0,
+    position: {
+      x: 0,
+      y: 0,
+    },
+    zoom: 1,
+    isConnected: false,
   };
-  return screen;
+  return device;
 };
 
 type Props = {
   wsRef: React.MutableRefObject<WebSocket | null>;
-  screenBodyRef: React.MutableRefObject<ScreenType | null>;
+  deviceBodyRef: React.MutableRefObject<DeviceType | null>;
   setConnectingStatus: React.Dispatch<React.SetStateAction<string>>;
-  setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
+  setDeviceNum: React.Dispatch<React.SetStateAction<number | null>>;
+  setDeviceBody: React.Dispatch<React.SetStateAction<DeviceType | null>>;
   shouldReconnect: React.MutableRefObject<boolean>;
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
-  setScreenNum: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const connectWebSocket = (props: Props) => {
   const {
     wsRef,
-    screenBodyRef,
+    deviceBodyRef,
     setConnectingStatus,
-    setDevices,
+    setDeviceNum,
+    setDeviceBody,
     shouldReconnect,
     reconnectTimeout,
-    setScreenNum,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -44,12 +51,13 @@ export const connectWebSocket = (props: Props) => {
 
     // 初回接続処理
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      if (screenBodyRef.current === null) {
-        const screen = initScreen();
-        sendJson(wsRef.current, screen, "init");
-        screenBodyRef.current = screen;
+      if (deviceBodyRef.current === null) {
+        const device = initDevice();
+        sendJson(wsRef.current, device, "init");
+        deviceBodyRef.current = device;
+        setDeviceBody(deviceBodyRef.current);
       } else {
-        sendJson(wsRef.current, screenBodyRef.current, "reconnect");
+        sendJson(wsRef.current, deviceBodyRef.current, "reconnect");
       }
     }
   };
@@ -58,16 +66,15 @@ export const connectWebSocket = (props: Props) => {
     console.log("Message received: ", e.data);
     const data = JSON.parse(e.data);
     if (data.head.type === "init") {
-      screenBodyRef.current = data.body;
-      setDevices([...(screenBodyRef.current?.devices ?? [])]);
-      setScreenNum(data.head.index);
+      deviceBodyRef.current = data.body;
+      setDeviceBody(deviceBodyRef.current);
+      setDeviceNum(data.head.index);
       console.log("init done");
     } else if (data.head.type === "devices_update") {
-      console.log("devices_update");
-      if (screenBodyRef.current?.devices) {
-        screenBodyRef.current.devices = data.body as DeviceType[];
-        setDevices([...screenBodyRef.current.devices]);
-        setScreenNum(data.head.index);
+      if (deviceBodyRef.current) {
+        deviceBodyRef.current = data.body as DeviceType;
+        setDeviceNum(data.head.index);
+        setDeviceBody(deviceBodyRef.current);
       }
     }
   };
