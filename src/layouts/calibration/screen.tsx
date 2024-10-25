@@ -103,9 +103,8 @@ export const Screen = () => {
                     );
                   }
                 }}
-              >
-                {idx}
-              </CalibrationBox>
+                idxNum={idx}
+              />
             );
           }
         })}

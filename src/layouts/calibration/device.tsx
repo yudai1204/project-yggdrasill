@@ -21,6 +21,7 @@ export const Device = () => {
 
   const windowSize = useWindowSize(windowRef);
 
+  // resize時の挙動
   useEffect(() => {
     if (deviceBodyRef.current) {
       deviceBodyRef.current = {
@@ -31,6 +32,18 @@ export const Device = () => {
       sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
     }
   }, [windowSize]);
+
+  // デバイスの位置をリセット
+  const resetPos = () => {
+    if (deviceBodyRef.current) {
+      deviceBodyRef.current = {
+        ...deviceBodyRef.current,
+        position: { x: 0, y: 0 },
+      };
+      setDeviceBody({ ...deviceBodyRef.current });
+      sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+    }
+  };
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -75,9 +88,7 @@ export const Device = () => {
           <p>Device Zoom: {deviceBodyRef.current.zoom}</p>
         </>
       )}
-      <Button onClick={() => wsRef.current?.send("Hello from Screen")}>
-        HELLO
-      </Button>
+      <Button onClick={resetPos}>Reset Position</Button>
     </div>
   );
 };

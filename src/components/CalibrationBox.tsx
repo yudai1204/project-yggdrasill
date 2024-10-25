@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useInteractJS } from "../util/hooks";
 import {
   Box,
@@ -8,7 +8,10 @@ import {
   SliderThumb,
   Input,
   Checkbox,
+  Grid,
+  Heading,
 } from "@chakra-ui/react";
+import { dispNum, getColor } from "@/util/util";
 
 type Position = {
   x: number;
@@ -24,10 +27,11 @@ type Props = {
   setPosition: (position: Position) => void;
   children?: React.ReactNode;
   onDragEnd: () => void;
+  idxNum: number;
 };
 
 export const CalibrationBox = (props: Props) => {
-  const { position, setPosition, children, onDragEnd } = props;
+  const { position, setPosition, children, onDragEnd, idxNum } = props;
 
   const interact = useInteractJS(
     {
@@ -59,12 +63,17 @@ export const CalibrationBox = (props: Props) => {
       ...position,
       zoom: position.zoom,
     });
-  }, [position.width, position.height]);
+  }, [position.width, position.height, position.x, position.y]);
 
   const [isDisplaySupporter, setIsDisplaySupporter] = useState<boolean>(false);
 
+  const colors = useMemo(() => {
+    console.log({ idxNum });
+    return idxNum ? getColor(idxNum) : ["#036785", "#a9d0f5"];
+  }, [idxNum]);
+
   return (
-    <Box>
+    <Box opacity={isDisplaySupporter ? 1 : 0.8}>
       {/* <Button onClick={() => interact.enable()}>有効化</Button>
       <Button onClick={() => interact.disable()}>無効化</Button> */}
       {isDisplaySupporter && (
@@ -75,8 +84,8 @@ export const CalibrationBox = (props: Props) => {
             left={interact.position.x}
             h={interact.position.height + 600}
             w={interact.position.width}
-            borderRight="2px solid #A9D0F5"
-            borderLeft="2px solid #A9D0F5"
+            borderRight={`2px solid ${colors[1]}`}
+            borderLeft={`2px solid ${colors[1]}`}
             transform={`rotate(${position.rotate}deg)`}
             zIndex={1}
           />
@@ -86,8 +95,8 @@ export const CalibrationBox = (props: Props) => {
             left={interact.position.x - 300}
             h={interact.position.height}
             w={interact.position.width + 600}
-            borderTop="2px solid #A9D0F5"
-            borderBottom="2px solid #A9D0F5"
+            borderTop={`2px solid ${colors[1]}`}
+            borderBottom={`2px solid ${colors[1]}`}
             transform={`rotate(${position.rotate}deg)`}
             zIndex={1}
           />
@@ -97,26 +106,44 @@ export const CalibrationBox = (props: Props) => {
         ref={interact.ref}
         style={{
           ...interact.style,
-          border: "2px solid #A9D0F5",
-          backgroundColor: "#0489B1",
+          border: `2px solid ${colors[1]}`,
+          backgroundColor: colors[0],
         }}
         transform={`rotate(${position.rotate}deg)`}
         userSelect="none"
         overflow="hidden"
         zIndex={100}
+        padding={2}
       >
         <Box>{children}</Box>
-        <Box>
-          pos: {position.x}, {position.y}
-        </Box>
-        <Box>zoom: {position.zoom}</Box>
-        <Box>
-          width: {position.width}, height: {position.height}
-        </Box>
-        <Box>
-          rawWidth: {interact.position.width}, rawHeight:{" "}
-          {interact.position.height}
-        </Box>
+
+        <Heading as="h3" size="xl" textAlign="center">
+          {idxNum}
+        </Heading>
+        <Grid
+          templateColumns="70px 1fr"
+          opacity={0.8}
+          marginTop={4}
+          mx="auto"
+          w="fit-content"
+          minW="200px"
+        >
+          <Box>pos:</Box>
+          <Box>
+            {dispNum(position.x)}, {dispNum(position.y)}
+          </Box>
+          <Box>zoom:</Box>
+          <Box>{dispNum(position.zoom)}</Box>
+          <Box>aspect:</Box>
+          <Box>
+            {dispNum(position.width)} x {dispNum(position.height)}
+          </Box>
+          <Box>size:</Box>
+          <Box>
+            {dispNum(interact.position.width)} x{" "}
+            {dispNum(interact.position.height)}
+          </Box>
+        </Grid>
       </Box>
       <Box
         style={{
