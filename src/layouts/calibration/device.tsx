@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import type { DeviceType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
 import { useWindowSize } from "@/util/hooks";
-import { set } from "lodash";
 import { sendJson } from "@/util/util";
 
 export const Device = () => {
@@ -21,27 +20,29 @@ export const Device = () => {
 
   const windowSize = useWindowSize(windowRef);
 
+  const postUpdateDevice = (newDevice: DeviceType) => {
+    deviceBodyRef.current = newDevice;
+    setDeviceBody({ ...deviceBodyRef.current });
+    sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+  };
+
   // resize時の挙動
   useEffect(() => {
     if (deviceBodyRef.current) {
-      deviceBodyRef.current = {
+      postUpdateDevice({
         ...deviceBodyRef.current,
         size: windowSize,
-      };
-      setDeviceBody({ ...deviceBodyRef.current });
-      sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+      });
     }
   }, [windowSize]);
 
   // デバイスの位置をリセット
   const resetPos = () => {
     if (deviceBodyRef.current) {
-      deviceBodyRef.current = {
+      postUpdateDevice({
         ...deviceBodyRef.current,
-        position: { x: 0, y: 0 },
-      };
-      setDeviceBody({ ...deviceBodyRef.current });
-      sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+        size: windowSize,
+      });
     }
   };
 

@@ -65,10 +65,10 @@ export const connectWebSocket = (props: Props) => {
     console.log("Message received: ", e.data);
     const data = JSON.parse(e.data);
     if (data.head.type === "init") {
-      console.log("init done");
       deviceBodyRef.current = data.body;
       setDeviceBody(deviceBodyRef.current);
       setDeviceNum(data.head.index);
+      console.log("init done");
     } else if (data.head.type === "devices_update") {
       if (deviceBodyRef.current) {
         deviceBodyRef.current = data.body as DeviceType;

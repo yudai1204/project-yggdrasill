@@ -20,6 +20,7 @@ type Props = {
   setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
   shouldReconnect: React.MutableRefObject<boolean>;
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
+  setScreenNum: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -30,6 +31,7 @@ export const connectWebSocket = (props: Props) => {
     setDevices,
     shouldReconnect,
     reconnectTimeout,
+    setScreenNum,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -58,12 +60,14 @@ export const connectWebSocket = (props: Props) => {
     if (data.head.type === "init") {
       screenBodyRef.current = data.body;
       setDevices([...(screenBodyRef.current?.devices ?? [])]);
+      setScreenNum(data.head.index);
       console.log("init done");
     } else if (data.head.type === "devices_update") {
       console.log("devices_update");
       if (screenBodyRef.current?.devices) {
         screenBodyRef.current.devices = data.body as DeviceType[];
         setDevices([...screenBodyRef.current.devices]);
+        setScreenNum(data.head.index);
       }
     }
   };

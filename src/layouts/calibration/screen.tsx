@@ -15,6 +15,9 @@ export const Screen = () => {
     useState<string>("Connecting...");
 
   const [devices, setDevices] = useState<DeviceType[]>([]);
+  const [screenNum, setScreenNum] = useState<number | null>(null);
+
+  console.log({ screenNum });
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -25,6 +28,7 @@ export const Screen = () => {
       setDevices,
       shouldReconnect,
       reconnectTimeout,
+      setScreenNum,
     });
 
     return () => {
@@ -45,7 +49,7 @@ export const Screen = () => {
       overflow="hidden"
       padding="60px 40px"
     >
-      <h1>Screen</h1>
+      <h1>Screen: {screenNum}</h1>
       <h2>Status: {connectingStatus}</h2>
       {screenBodyRef.current && (
         <>

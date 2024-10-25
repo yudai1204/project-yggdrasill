@@ -68,7 +68,6 @@ export const CalibrationBox = (props: Props) => {
   const [isDisplaySupporter, setIsDisplaySupporter] = useState<boolean>(false);
 
   const colors = useMemo(() => {
-    console.log({ idxNum });
     return idxNum ? getColor(idxNum) : ["#036785", "#a9d0f5"];
   }, [idxNum]);
 
