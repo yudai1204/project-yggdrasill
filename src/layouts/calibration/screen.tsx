@@ -1,67 +1,9 @@
 import { Box, Button } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { CalibrationBox } from "@/components/CalibrationBox";
-
-// TODO
-// 1. 初期化
-//   - screenのサイズが必要そう
-// 2. 再接続時の処理
-// 3. デバイスが接続された時に一覧表示をする
-
-interface DeviceType {
-  type: "user" | "device";
-  uuid: string;
-  size: {
-    width: number;
-    height: number;
-  };
-  rotation: number;
-  position: {
-    x: number;
-    y: number;
-  };
-  zoom: number;
-  isConnected: boolean;
-}
-
-interface ScreenType {
-  type: "screen";
-  uuid: string;
-  size: {
-    width: number;
-    height: number;
-  };
-  devices: DeviceType[];
-}
-
-const getScreenSize = () => {
-  return {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
-};
-
-const initScreen = () => {
-  const screenSize = getScreenSize();
-  const screen: ScreenType = {
-    type: "screen",
-    uuid: crypto.randomUUID(),
-    size: screenSize,
-    devices: [],
-  };
-  return screen;
-};
-
-const sendJson = (ws: WebSocket, data: any, type: string) => {
-  ws.send(
-    JSON.stringify({
-      head: {
-        type,
-      },
-      body: data,
-    })
-  );
-};
+import type { DeviceType, ScreenType } from "@/types/calibrate";
+import { sendJson } from "@/util/util";
+import { connectWebSocket } from "./useScreen";
 
 export const Screen = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -74,66 +16,16 @@ export const Screen = () => {
 
   const [devices, setDevices] = useState<DeviceType[]>([]);
 
-  // WebSocketを接続する関数
-  const connectWebSocket = () => {
-    wsRef.current = new WebSocket("ws://localhost:3210");
-
-    wsRef.current.onopen = () => {
-      if (!wsRef.current) return;
-      setConnectingStatus("Connected");
-      console.log("WebSocket connected");
-
-      // 初回接続処理
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        if (screenBodyRef.current === null) {
-          const screen = initScreen();
-          sendJson(wsRef.current, screen, "init");
-          screenBodyRef.current = screen;
-        } else {
-          sendJson(wsRef.current, screenBodyRef.current, "reconnect");
-        }
-      }
-    };
-
-    wsRef.current.onmessage = (e) => {
-      console.log("Message received: ", e.data);
-      const data = JSON.parse(e.data);
-      if (data.head.type === "init") {
-        screenBodyRef.current = data.body;
-        setDevices([...(screenBodyRef.current?.devices ?? [])]);
-        console.log("init done");
-      } else if (data.head.type === "devices_update") {
-        console.log("devices_update");
-        if (screenBodyRef.current?.devices) {
-          screenBodyRef.current.devices = data.body as DeviceType[];
-          setDevices([...screenBodyRef.current.devices]);
-        }
-      }
-    };
-
-    wsRef.current.onclose = () => {
-      setConnectingStatus("Disconnected");
-      console.log("WebSocket disconnected");
-
-      // 自動再接続のための処理
-      if (shouldReconnect.current) {
-        setConnectingStatus("Reconnecting...");
-        console.log("Attempting to reconnect in 1 seconds...");
-        reconnectTimeout.current = setTimeout(() => {
-          connectWebSocket();
-        }, 1000); // 1秒後に再接続
-      }
-    };
-
-    wsRef.current.onerror = (err) => {
-      console.error("WebSocket error: ", err);
-      wsRef.current?.close();
-    };
-  };
-
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
-    connectWebSocket();
+    connectWebSocket({
+      wsRef,
+      screenBodyRef,
+      setConnectingStatus,
+      setDevices,
+      shouldReconnect,
+      reconnectTimeout,
+    });
 
     return () => {
       // コンポーネントのアンマウント時に手動でWebSocketを閉じる
