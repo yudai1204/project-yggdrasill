@@ -33,7 +33,7 @@ export const Basic = () => {
   return (
     <>
       {/* コントロール */}
-      {/* <OrbitControls makeDefault /> */}
+      <OrbitControls makeDefault />
       <PerspectiveCamera
         makeDefault
         position={[0, 3, 16]}
@@ -47,7 +47,7 @@ export const Basic = () => {
       {/* <color args={["transparent"]} attach="background" /> */}
 
       {/* 環境光 */}
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.8} />
 
       {/* 平行光 */}
       <directionalLight
@@ -74,7 +74,7 @@ export const Basic = () => {
         {/* 平面 */}
         <mesh receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>
           <planeGeometry />
-          <meshStandardMaterial color="lightseagreen" />
+          <meshStandardMaterial color="#204f0f" />
         </mesh>
 
         {/* 3Dモデル */}

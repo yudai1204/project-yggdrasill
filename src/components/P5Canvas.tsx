@@ -63,7 +63,7 @@ export const P5Canvas = () => {
 
   const draw = (p5: p5Types) => {
     // p5.background(10, 10, 30); // 暗い青色の背景
-    p5.background(0, 0, 0); // 暗い青色の背景
+    p5.background(120, 0, 0); // 黒の背景
 
     //回転角度
     let angle = p5.millis() / 50000;
