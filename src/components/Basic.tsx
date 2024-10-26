@@ -7,7 +7,11 @@ import { Flower } from "./Objects/Flower";
 import { Tree } from "./Objects/Tree";
 
 // 基本
-export const Basic = () => {
+type Props = {
+  isDebug: boolean;
+};
+export const Basic = (props: Props) => {
+  const { isDebug } = props;
   const directionalLight = useRef<THREE.DirectionalLight>(null);
 
   // ダイレクト光のヘルパー（デバッグ用）
@@ -18,18 +22,23 @@ export const Basic = () => {
     "red"
   );
 
+  console.log({ isDebug: isDebug });
+
   return (
     <>
       {/* コントロール */}
-      {/* <OrbitControls makeDefault /> */}
-      <PerspectiveCamera
-        makeDefault
-        position={[0, 3, 16]}
-        rotation={[Math.PI / 24, 0, 0]}
-      />
+      {isDebug ? (
+        <OrbitControls makeDefault />
+      ) : (
+        <PerspectiveCamera
+          makeDefault
+          position={[0, 3, 16]}
+          rotation={[Math.PI / 24, 0, 0]}
+        />
+      )}
 
       {/* パフォーマンスモニター */}
-      <Perf position="top-left" />
+      {isDebug && <Perf position="top-left" />}
 
       {/* 環境光 */}
       <ambientLight intensity={0.8} />

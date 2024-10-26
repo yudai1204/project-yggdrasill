@@ -5,10 +5,11 @@ import "@fontsource/kaisei-opti";
 import "@fontsource/zen-kaku-gothic-new/300.css";
 
 type Props = {
+  isDebug: boolean;
   logo?: boolean;
 };
 export const AnimationBase = (props: Props) => {
-  const { logo = false } = props;
+  const { logo = false, isDebug } = props;
   return (
     <>
       <Box width="100%" height="100svh">
@@ -16,7 +17,7 @@ export const AnimationBase = (props: Props) => {
           <P5Canvas />
         </Box>
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
-          <ThreeCanvas />
+          <ThreeCanvas isDebug={isDebug} />
         </Box>
       </Box>
       {logo && (

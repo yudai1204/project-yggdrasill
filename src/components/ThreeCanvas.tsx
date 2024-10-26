@@ -5,7 +5,11 @@ import * as THREE from "three";
 import { Basic } from "./Basic";
 
 // メイン
-export const ThreeCanvas = () => {
+type Props = {
+  isDebug: boolean;
+};
+export const ThreeCanvas = (props: Props) => {
+  const { isDebug } = props;
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
@@ -25,7 +29,7 @@ export const ThreeCanvas = () => {
             position: [0, 0, 4], // カメラ位置
           }}
         >
-          <Basic />
+          <Basic isDebug={isDebug} />
         </Canvas>
       </StrictMode>
     </div>

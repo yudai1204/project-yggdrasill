@@ -10,6 +10,7 @@ type Props = {
   setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
   setScreens: React.Dispatch<React.SetStateAction<ScreenType[]>>;
   setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
+  setDisplayDebugger: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -22,6 +23,7 @@ export const connectWebSocket = (props: Props) => {
     setDevices,
     setScreens,
     setMode,
+    setDisplayDebugger,
   } = props;
 
   wsRef.current = new WebSocket(
@@ -43,6 +45,7 @@ export const connectWebSocket = (props: Props) => {
       };
       sendJson(wsRef.current, manager, "init");
       managerBodyRef.current = manager;
+      sendJson(wsRef.current, {}, "getCurrentSettings");
     }
   };
 
@@ -53,8 +56,13 @@ export const connectWebSocket = (props: Props) => {
       managerBodyRef.current = data.body;
       setDevices([...data.body.devices]);
       setScreens([...data.body.screens]);
+    } else if (data.head.type === "getCurrentSettings") {
+      setMode(data.body.mode);
+      setDisplayDebugger(data.body.debug);
     } else if (data.head.type === "setMode") {
       setMode(data.body.mode);
+    } else if (data.head.type === "setDebug") {
+      setDisplayDebugger(data.body.debug);
     }
   };
 

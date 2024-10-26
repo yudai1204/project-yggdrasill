@@ -2,112 +2,17 @@ import {
   Box,
   Button,
   Heading,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  TableContainer,
   ButtonGroup,
+  Switch,
+  FormControl,
+  FormLabel,
+  Stack,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import type { DeviceType, ScreenType, ManagerType } from "@/types/calibrate";
-import { dispNum, getColor, sendJson } from "@/util/util";
+import { sendJson } from "@/util/util";
 import { connectWebSocket } from "./useManager";
-import { format } from "date-fns";
-
-type ItemsProps = {
-  items: any[];
-};
-const Items = (props: ItemsProps) => {
-  const { items } = props;
-  if (!items || items.length === 0) {
-    return <p>No items</p>;
-  }
-  return (
-    <Accordion>
-      {items.map((item, idx) => (
-        <AccordionItem key={item.uuid}>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="left"
-                color={
-                  !item?.position || item.isConnected ? "green.500" : "red.500"
-                }
-              >
-                {idx}: {item.uuid} :{" "}
-                {!item?.position || item.isConnected
-                  ? "Connected"
-                  : "Disconnected"}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4}>
-            <TableContainer>
-              <Table size="sm">
-                <Tbody>
-                  <Tr>
-                    <Td>Size</Td>
-                    <Td>
-                      {item.size.width} x {item.size.height}
-                    </Td>
-                  </Tr>
-                  {item?.position && (
-                    <>
-                      <Tr>
-                        <Td>Position</Td>
-                        <Td>
-                          {dispNum(item.position.x)}, {dispNum(item.position.y)}
-                        </Td>
-                      </Tr>
-                      <Tr>
-                        <Td>Zoom</Td>
-                        <Td>x{dispNum(item.zoom)}</Td>
-                      </Tr>
-                      <Tr>
-                        <Td>Rotation</Td>
-                        <Td>{item.rotation} deg</Td>
-                      </Tr>
-                      <Tr>
-                        <Td>Color</Td>
-                        <Td>
-                          <Box
-                            backgroundColor={getColor(idx)[0]}
-                            border={`2px solid ${getColor(idx)[1]}`}
-                            color="#fff"
-                          >
-                            {getColor(idx).join(", ")}
-                          </Box>
-                        </Td>
-                      </Tr>
-                    </>
-                  )}
-                  <Tr>
-                    <Td>ConnectedAt</Td>
-                    <Td>
-                      {format(
-                        new Date(item.connectedAt),
-                        "yyyy-MM-dd HH:mm:ss"
-                      )}
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </AccordionPanel>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  );
-};
+import { AccordionList } from "@/components/AccordionList";
 
 export const Manager = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -121,6 +26,11 @@ export const Manager = () => {
   const [devices, setDevices] = useState<DeviceType[]>([]);
 
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
+  const [displayDebugger, setDisplayDebugger] = useState<boolean>(false);
+
+  const toggleDisplayDebugger = (e: React.ChangeEvent<HTMLInputElement>) => {
+    sendJson(wsRef.current, { debug: e.target.checked }, "setDebug");
+  };
 
   const toggleMode = () => {
     sendJson(
@@ -132,6 +42,7 @@ export const Manager = () => {
 
   const getAllData = () => {
     sendJson(wsRef.current, managerBodyRef.current, "getAllData");
+    sendJson(wsRef.current, {}, "getCurrentSettings");
   };
 
   // WebSocket接続の開始とクリーンアップ
@@ -145,6 +56,7 @@ export const Manager = () => {
       setScreens,
       setDevices,
       setMode,
+      setDisplayDebugger,
     });
 
     return () => {
@@ -174,6 +86,27 @@ export const Manager = () => {
         <Button onClick={toggleMode}>Toggle Mode</Button>
       </ButtonGroup>
 
+      <FormControl display="flex" alignItems="center">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          px={2}
+          py={1}
+        >
+          <FormLabel htmlFor="display-debugger" display="block" m={0}>
+            Display Debugger:
+          </FormLabel>
+          <Switch
+            id="display-debugger"
+            display="block"
+            isChecked={displayDebugger}
+            onChange={toggleDisplayDebugger}
+          />
+        </Stack>
+        {displayDebugger ? "ON" : "OFF"}
+      </FormControl>
+
       <Box mt={4} pt={4} borderTop="1px solid #777">
         <Heading as="h3" size="md">
           All Devices: {devices?.length}
@@ -183,7 +116,7 @@ export const Manager = () => {
         </Heading>
         {devices && (
           <>
-            <Items items={devices} />
+            <AccordionList items={devices} />
           </>
         )}
         <Heading as="h3" size="md">
@@ -191,7 +124,7 @@ export const Manager = () => {
         </Heading>
         {screens && (
           <>
-            <Items items={screens} />
+            <AccordionList items={screens} />
           </>
         )}
       </Box>

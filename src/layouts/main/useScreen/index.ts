@@ -23,6 +23,7 @@ type Props = {
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
   setScreenNum: React.Dispatch<React.SetStateAction<number | null>>;
   setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
+  setIsDebug: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -35,6 +36,7 @@ export const connectWebSocket = (props: Props) => {
     reconnectTimeout,
     setScreenNum,
     setMode,
+    setIsDebug,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -50,9 +52,11 @@ export const connectWebSocket = (props: Props) => {
       if (screenBodyRef.current === null) {
         const screen = initScreen();
         sendJson(wsRef.current, screen, "init");
+        sendJson(wsRef.current, {}, "getCurrentSettings");
         screenBodyRef.current = screen;
       } else {
         sendJson(wsRef.current, screenBodyRef.current, "reconnect");
+        sendJson(wsRef.current, {}, "getCurrentSettings");
       }
     }
   };
@@ -74,6 +78,11 @@ export const connectWebSocket = (props: Props) => {
       }
     } else if (data.head.type === "setMode") {
       setMode(data.body.mode);
+    } else if (data.head.type === "setDebug") {
+      setIsDebug(data.body.debug);
+    } else if (data.head.type === "getCurrentSettings") {
+      setMode(data.body.mode);
+      setIsDebug(data.body.debug);
     }
   };
 

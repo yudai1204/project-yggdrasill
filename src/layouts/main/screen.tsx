@@ -20,6 +20,7 @@ export const Screen = () => {
   const [devices, setDevices] = useState<DeviceType[]>([]);
   const [screenNum, setScreenNum] = useState<number | null>(null);
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
+  const [isDebug, setIsDebug] = useState<boolean>(false);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -42,6 +43,7 @@ export const Screen = () => {
       reconnectTimeout,
       setScreenNum,
       setMode,
+      setIsDebug,
     });
 
     return () => {
@@ -73,7 +75,7 @@ export const Screen = () => {
           screenNum={screenNum}
         />
       )}
-      {mode === "Operation" && <AnimationBase />}
+      {mode === "Operation" && <AnimationBase isDebug={isDebug} />}
     </Box>
   );
 };
