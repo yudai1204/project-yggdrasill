@@ -47,6 +47,20 @@ export const Screen = () => {
       overflow="hidden"
       padding="60px 40px"
     >
+      {/* User Pos */}
+      <Box
+        position="absolute"
+        bottom={1}
+        left="50%"
+        transform="translateX(-50%)"
+        backgroundColor="#070"
+        width="80px"
+        height="170px"
+        textAlign="center"
+        pt={2}
+      >
+        USER
+      </Box>
       <h1>Screen: {screenNum}</h1>
       <h2>Status: {connectingStatus}</h2>
       {screenBodyRef.current && (
@@ -110,6 +124,7 @@ export const Screen = () => {
             );
           }
         })}
+
       <Button
         position="absolute"
         top={0}

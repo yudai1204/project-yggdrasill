@@ -34,10 +34,12 @@ export const connectWebSocket = (props: Props) => {
     // 初回・再接続時 接続処理
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       const manager: ManagerType = {
+        type: "manager",
+        uuid: crypto.randomUUID(),
         screens: [],
         devices: [],
       };
-      sendJson(wsRef.current, manager, "getAllData");
+      sendJson(wsRef.current, manager, "init");
       managerBodyRef.current = manager;
     }
   };

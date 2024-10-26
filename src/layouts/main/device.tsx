@@ -41,7 +41,8 @@ export const Device = () => {
     if (deviceBodyRef.current) {
       postUpdateDevice({
         ...deviceBodyRef.current,
-        size: windowSize,
+        position: { x: 0, y: 0 },
+        rotation: 0,
       });
     }
   };

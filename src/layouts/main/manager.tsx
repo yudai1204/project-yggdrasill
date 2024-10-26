@@ -153,20 +153,15 @@ export const Manager = () => {
       <Heading as="h3" size="md">
         All Devices: {devices?.length}
       </Heading>
+      <Heading as="h4" size="sm">
+        Connected : {devices?.filter((device) => device.isConnected).length}
+      </Heading>
       {devices && (
         <>
           <Items items={devices} />
         </>
       )}
-      <Heading as="h3" size="md">
-        Connected Devices:{" "}
-        {devices?.filter((device) => device.isConnected).length}
-      </Heading>
-      {devices && (
-        <>
-          <Items items={devices.filter((device) => device.isConnected)} />
-        </>
-      )}
+
       <Heading as="h3" size="md">
         Connected Screens: {screens?.length}
       </Heading>
