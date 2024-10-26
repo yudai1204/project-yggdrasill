@@ -1,11 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
-import { useEffect, useRef, useState, useLayoutEffect } from "react";
-import type { DeviceType } from "@/types/calibrate";
+import { Box } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import type { DeviceType, ScreenType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { DeviceCalibration } from "./useDevice/DeviceCalibration";
-import { AnimationBase } from "@/components/AnimationBase";
+import { DeviceAnimation } from "./useDevice/DeviceAnimation";
 
 export const Device = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
@@ -19,6 +19,10 @@ export const Device = () => {
     useState<string>("Connecting...");
   const [deviceNum, setDeviceNum] = useState<number | null>(null);
   const [deviceBody, setDeviceBody] = useState<DeviceType | null>(null);
+  const [screenSize, setScreenSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [isDebug, setIsDebug] = useState<boolean>(false);
 
@@ -63,6 +67,7 @@ export const Device = () => {
       reconnectTimeout,
       setMode,
       setIsDebug,
+      setScreenSize,
     });
 
     return () => {
@@ -93,7 +98,14 @@ export const Device = () => {
           deviceBody={deviceBody}
         />
       )}
-      {mode === "Operation" && <AnimationBase isDebug={isDebug} />}
+      {mode === "Operation" && (
+        <DeviceAnimation
+          screenSize={screenSize}
+          isDebug={isDebug}
+          deviceNum={deviceNum}
+          deviceBody={deviceBody}
+        />
+      )}
     </Box>
   );
 };

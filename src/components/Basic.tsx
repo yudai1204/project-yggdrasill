@@ -5,13 +5,15 @@ import { OrbitControls, useHelper, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 import { Flower } from "./Objects/Flower";
 import { Tree } from "./Objects/Tree";
+import { CameraOptions } from "@/types/camera";
 
 // 基本
 type Props = {
   isDebug: boolean;
+  cameraOptions: CameraOptions;
 };
 export const Basic = (props: Props) => {
-  const { isDebug } = props;
+  const { isDebug, cameraOptions } = props;
   const directionalLight = useRef<THREE.DirectionalLight>(null);
 
   // ダイレクト光のヘルパー（デバッグ用）
@@ -23,17 +25,11 @@ export const Basic = (props: Props) => {
     "red"
   );
 
-  console.log({ isDebug: isDebug });
-
   return (
     <>
       {/* コントロール */}
       {/* <OrbitControls makeDefault /> */}
-      <PerspectiveCamera
-        makeDefault
-        position={[0, 3, 16]}
-        rotation={[Math.PI / 24, 0, 0]}
-      />
+      <PerspectiveCamera makeDefault {...cameraOptions} />
 
       {/* パフォーマンスモニター */}
       {isDebug && <Perf position="top-left" />}
@@ -74,7 +70,7 @@ export const Basic = (props: Props) => {
           castShadow
           receiveShadow
           position={[0, 0, 0]}
-          scale={5}
+          scale={13}
           rotation={[0, -Math.PI / 2, 0]}
         >
           <Tree />

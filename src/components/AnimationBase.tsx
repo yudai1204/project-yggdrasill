@@ -3,13 +3,16 @@ import { P5Canvas } from "./P5Canvas";
 import { ThreeCanvas } from "./ThreeCanvas";
 import "@fontsource/kaisei-opti";
 import "@fontsource/zen-kaku-gothic-new/300.css";
+import { CameraOptions } from "@/types/camera";
+import { defaultCameraOptions } from "@/util/constants";
 
 type Props = {
   isDebug: boolean;
   logo?: boolean;
+  cameraOptions?: CameraOptions;
 };
 export const AnimationBase = (props: Props) => {
-  const { logo = false, isDebug } = props;
+  const { logo = false, isDebug, cameraOptions = defaultCameraOptions } = props;
   return (
     <>
       <Box width="100%" height="100lvh">
@@ -17,7 +20,7 @@ export const AnimationBase = (props: Props) => {
           <P5Canvas />
         </Box>
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
-          <ThreeCanvas isDebug={isDebug} />
+          <ThreeCanvas isDebug={isDebug} cameraOptions={cameraOptions} />
         </Box>
       </Box>
       {logo && (

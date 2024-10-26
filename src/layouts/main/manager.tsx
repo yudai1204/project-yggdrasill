@@ -27,6 +27,10 @@ export const Manager = () => {
 
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [displayDebugger, setDisplayDebugger] = useState<boolean>(false);
+  const [screenSize, setScreenSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   const toggleDisplayDebugger = (e: React.ChangeEvent<HTMLInputElement>) => {
     sendJson(wsRef.current, { debug: e.target.checked }, "setDebug");
@@ -57,6 +61,7 @@ export const Manager = () => {
       setDevices,
       setMode,
       setDisplayDebugger,
+      setScreenSize,
     });
 
     return () => {
@@ -108,6 +113,9 @@ export const Manager = () => {
       </FormControl>
 
       <Box mt={4} pt={4} borderTop="1px solid #777">
+        <Heading as="h3" size="md">
+          Screen Size: {screenSize?.width} x {screenSize?.height}
+        </Heading>
         <Heading as="h3" size="md">
           All Devices: {devices?.length}
         </Heading>

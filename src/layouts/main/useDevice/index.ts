@@ -31,6 +31,9 @@ type Props = {
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
   setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
   setIsDebug: React.Dispatch<React.SetStateAction<boolean>>;
+  setScreenSize: React.Dispatch<
+    React.SetStateAction<{ width: number; height: number } | null>
+  >;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -44,6 +47,7 @@ export const connectWebSocket = (props: Props) => {
     reconnectTimeout,
     setMode,
     setIsDebug,
+    setScreenSize,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -83,6 +87,8 @@ export const connectWebSocket = (props: Props) => {
         setDeviceNum(data.head.index);
         setDeviceBody(deviceBodyRef.current);
       }
+    } else if (data.head.type === "setMainScreen") {
+      setScreenSize(data.body);
     } else if (data.head.type === "setMode") {
       setMode(data.body.mode);
     } else if (data.head.type === "setDebug") {
@@ -90,6 +96,7 @@ export const connectWebSocket = (props: Props) => {
     } else if (data.head.type === "getCurrentSettings") {
       setMode(data.body.mode);
       setIsDebug(data.body.debug);
+      setScreenSize(data.body.screen);
     }
   };
 

@@ -12,6 +12,9 @@ type Props = {
   setScreens: React.Dispatch<React.SetStateAction<ScreenType[]>>;
   setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
   setDisplayDebugger: React.Dispatch<React.SetStateAction<boolean>>;
+  setScreenSize: React.Dispatch<
+    React.SetStateAction<{ width: number; height: number } | null>
+  >;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -25,6 +28,7 @@ export const connectWebSocket = (props: Props) => {
     setScreens,
     setMode,
     setDisplayDebugger,
+    setScreenSize,
   } = props;
 
   wsRef.current = new WebSocket(
@@ -60,10 +64,13 @@ export const connectWebSocket = (props: Props) => {
     } else if (data.head.type === "getCurrentSettings") {
       setMode(data.body.mode);
       setDisplayDebugger(data.body.debug);
+      setScreenSize(data.body.screen);
     } else if (data.head.type === "setMode") {
       setMode(data.body.mode);
     } else if (data.head.type === "setDebug") {
       setDisplayDebugger(data.body.debug);
+    } else if (data.head.type === "setMainScreen") {
+      setScreenSize(data.body);
     }
   };
 

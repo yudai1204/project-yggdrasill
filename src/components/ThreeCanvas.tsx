@@ -3,13 +3,16 @@ import { Canvas } from "@react-three/fiber";
 
 import * as THREE from "three";
 import { Basic } from "./Basic";
+import { CAMERA_POSITION, FAR, FOV, NEAR } from "@/util/constants";
+import { CameraOptions } from "@/types/camera";
 
 // メイン
 type Props = {
   isDebug: boolean;
+  cameraOptions: CameraOptions;
 };
 export const ThreeCanvas = (props: Props) => {
-  const { isDebug } = props;
+  const { isDebug, cameraOptions } = props;
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
@@ -22,14 +25,8 @@ export const ThreeCanvas = (props: Props) => {
             toneMapping: THREE.ACESFilmicToneMapping,
             // outputEncoding: THREE.sRGBEncoding,
           }}
-          camera={{
-            fov: 45, // 視野角
-            near: 0.1, // 最小距離
-            far: 100, // 最大距離
-            position: [0, 0, 4], // カメラ位置
-          }}
         >
-          <Basic isDebug={isDebug} />
+          <Basic isDebug={isDebug} cameraOptions={cameraOptions} />
         </Canvas>
       </StrictMode>
     </div>

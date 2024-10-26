@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup } from "@chakra-ui/react";
 import { CalibrationBox } from "@/components/CalibrationBox";
 import { sendJson } from "@/util/util";
 import type { DeviceType, ScreenType } from "@/types/calibrate";
@@ -100,17 +100,22 @@ export const ScreenCalibration = (props: Props) => {
           }
         })}
 
-      <Button
-        position="absolute"
-        top={0}
-        left={0}
-        zIndex={100}
-        onClick={() => {
-          sendJson(wsRef.current!, screenBodyRef.current, "get_devices");
-        }}
-      >
-        Refresh
-      </Button>
+      <ButtonGroup position="absolute" top={0} left={0} zIndex={100}>
+        <Button
+          onClick={() => {
+            sendJson(wsRef.current!, screenBodyRef.current, "get_devices");
+          }}
+        >
+          Refresh
+        </Button>
+        <Button
+          onClick={() => {
+            sendJson(wsRef.current!, screenBodyRef.current, "setMainScreen");
+          }}
+        >
+          SetScreenSize
+        </Button>
+      </ButtonGroup>
     </>
   );
 };

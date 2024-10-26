@@ -47,8 +47,11 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
           mesh.material.map = texture;
           mesh.material.needsUpdate = true;
         }
+        // 影を計算させる
         mesh.castShadow = true;
         mesh.receiveShadow = true;
+        //範囲外でも描画する
+        mesh.frustumCulled = false;
       }
     });
   }, [actions, scene, texture]);
