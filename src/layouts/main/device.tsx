@@ -1,9 +1,11 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import type { DeviceType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
+import { DeviceCalibration } from "./useDevice/DeviceCalibration";
+import { AnimationBase } from "@/components/AnimationBase";
 
 export const Device = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
@@ -17,6 +19,8 @@ export const Device = () => {
     useState<string>("Connecting...");
   const [deviceNum, setDeviceNum] = useState<number | null>(null);
   const [deviceBody, setDeviceBody] = useState<DeviceType | null>(null);
+  const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
+  const [isDebug, setIsDebug] = useState<boolean>(false);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -57,6 +61,8 @@ export const Device = () => {
       setDeviceBody,
       shouldReconnect,
       reconnectTimeout,
+      setMode,
+      setIsDebug,
     });
 
     return () => {
@@ -70,28 +76,24 @@ export const Device = () => {
   }, []);
 
   return (
-    <div ref={windowRef} style={{ width: "100%", height: "100svh" }}>
-      <h1>Device</h1>
-      <h2>Status: {connectingStatus}</h2>
-      {deviceBodyRef.current && deviceBody && (
-        <>
-          <h3>Device Information</h3>
-          <p style={{ fontWeight: "bold" }}>Device Number: {deviceNum}</p>
-          <p>Device UUID: {deviceBodyRef.current.uuid}</p>
-          <p>
-            Device Size: {deviceBodyRef.current.size.width}x
-            {deviceBodyRef.current.size.height}
-          </p>
-          <p>Device Rotation: {deviceBodyRef.current.rotation}</p>
-          <p>
-            Device Position: {deviceBodyRef.current.position.x},{" "}
-            {deviceBodyRef.current.position.y}
-          </p>
-          <p>Device Zoom: {deviceBodyRef.current.zoom}</p>
-          <p>Connected At: {deviceBodyRef.current.connectedAt}</p>
-        </>
+    <Box
+      w="100%"
+      h="100lvh"
+      position="relative"
+      overflow="hidden"
+      padding="60px 40px"
+      ref={windowRef}
+    >
+      {mode === "Calibration" && (
+        <DeviceCalibration
+          resetPos={resetPos}
+          deviceBodyRef={deviceBodyRef}
+          connectingStatus={connectingStatus}
+          deviceNum={deviceNum}
+          deviceBody={deviceBody}
+        />
       )}
-      <Button onClick={resetPos}>Reset Position</Button>
-    </div>
+      {mode === "Operation" && <AnimationBase isDebug={isDebug} />}
+    </Box>
   );
 };

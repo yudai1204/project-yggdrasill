@@ -12,7 +12,7 @@ export const AnimationBase = (props: Props) => {
   const { logo = false, isDebug } = props;
   return (
     <>
-      <Box width="100%" height="100svh">
+      <Box width="100%" height="100lvh">
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
           <P5Canvas />
         </Box>

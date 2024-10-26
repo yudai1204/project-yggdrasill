@@ -4,6 +4,7 @@ import { Screen } from "./screen";
 import { Device } from "./device";
 import { Manager } from "./manager";
 import { User } from "./user";
+import { Box } from "@chakra-ui/react";
 export default function Main() {
   const [device, setDevice] = useState<string>("screen");
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -13,7 +14,13 @@ export default function Main() {
   };
 
   return (
-    <>
+    <Box
+      bgColor="#1A202C"
+      color="#DCDDDD"
+      w="100%"
+      h="100lvh"
+      overflow="hidden"
+    >
       {isConnected ? (
         <>
           {device === "screen" && <Screen />}
@@ -28,6 +35,6 @@ export default function Main() {
           connect={connect}
         />
       )}
-    </>
+    </Box>
   );
 }

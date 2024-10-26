@@ -15,6 +15,7 @@ export const Basic = (props: Props) => {
   const directionalLight = useRef<THREE.DirectionalLight>(null);
 
   // ダイレクト光のヘルパー（デバッグ用）
+
   useHelper(
     directionalLight as React.MutableRefObject<THREE.DirectionalLight>,
     THREE.DirectionalLightHelper,
@@ -27,35 +28,36 @@ export const Basic = (props: Props) => {
   return (
     <>
       {/* コントロール */}
-      {isDebug ? (
-        <OrbitControls makeDefault />
-      ) : (
-        <PerspectiveCamera
-          makeDefault
-          position={[0, 3, 16]}
-          rotation={[Math.PI / 24, 0, 0]}
-        />
-      )}
+      {/* <OrbitControls makeDefault /> */}
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 3, 16]}
+        rotation={[Math.PI / 24, 0, 0]}
+      />
 
       {/* パフォーマンスモニター */}
       {isDebug && <Perf position="top-left" />}
 
       {/* 環境光 */}
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={0.5} />
 
       {/* 平行光 */}
       <directionalLight
+        position={[5, 10, 5]}
         castShadow
-        ref={directionalLight}
-        position={[10, 10, 0]}
-        intensity={0.5}
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
 
       <group position={[0, -1, 0]}>
         {/* 地面 */}
-        <mesh receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>
-          <planeGeometry />
+        <mesh receiveShadow rotation-x={-Math.PI * 0.5} scale={1}>
+          <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color="#204f0f" />
         </mesh>
 
@@ -70,6 +72,7 @@ export const Basic = (props: Props) => {
         </mesh>
         <mesh
           castShadow
+          receiveShadow
           position={[0, 0, 0]}
           scale={5}
           rotation={[0, -Math.PI / 2, 0]}

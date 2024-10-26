@@ -70,7 +70,7 @@ export const Manager = () => {
   }, []);
 
   return (
-    <Box>
+    <Box height="100%" overflow="auto" p={4}>
       <Heading as="h1" size="lg">
         Manager
       </Heading>

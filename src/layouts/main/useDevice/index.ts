@@ -1,13 +1,14 @@
 import type { DeviceType, ScreenType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { getScreenSize } from "@/util/util";
+import { v4 as uuidv4 } from "uuid";
 
 const initDevice = () => {
   const screenSize = getScreenSize();
   const device: DeviceType = {
     connectedAt: 0,
     type: "device",
-    uuid: crypto.randomUUID(),
+    uuid: uuidv4(),
     size: screenSize,
     rotation: 0,
     position: {
@@ -28,6 +29,8 @@ type Props = {
   setDeviceBody: React.Dispatch<React.SetStateAction<DeviceType | null>>;
   shouldReconnect: React.MutableRefObject<boolean>;
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
+  setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
+  setIsDebug: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -39,6 +42,8 @@ export const connectWebSocket = (props: Props) => {
     setDeviceBody,
     shouldReconnect,
     reconnectTimeout,
+    setMode,
+    setIsDebug,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -56,8 +61,10 @@ export const connectWebSocket = (props: Props) => {
         sendJson(wsRef.current, device, "init");
         deviceBodyRef.current = device;
         setDeviceBody(deviceBodyRef.current);
+        sendJson(wsRef.current, {}, "getCurrentSettings");
       } else {
         sendJson(wsRef.current, deviceBodyRef.current, "reconnect");
+        sendJson(wsRef.current, {}, "getCurrentSettings");
       }
     }
   };
@@ -76,6 +83,13 @@ export const connectWebSocket = (props: Props) => {
         setDeviceNum(data.head.index);
         setDeviceBody(deviceBodyRef.current);
       }
+    } else if (data.head.type === "setMode") {
+      setMode(data.body.mode);
+    } else if (data.head.type === "setDebug") {
+      setIsDebug(data.body.debug);
+    } else if (data.head.type === "getCurrentSettings") {
+      setMode(data.body.mode);
+      setIsDebug(data.body.debug);
     }
   };
 

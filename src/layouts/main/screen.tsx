@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import type { DeviceType, ScreenType } from "@/types/calibrate";
 import { connectWebSocket } from "./useScreen";
 import { ScreenCalibration } from "./useScreen/ScreenCalibration";
-import { AnimationBase } from "@/components/AnimationBase";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
+import { ScreenAnimation } from "./useScreen/ScreenAnimation";
 
 export const Screen = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -59,7 +59,7 @@ export const Screen = () => {
   return (
     <Box
       w="100%"
-      h="100svh"
+      h="100lvh"
       position="relative"
       overflow="hidden"
       padding="60px 40px"
@@ -75,7 +75,9 @@ export const Screen = () => {
           screenNum={screenNum}
         />
       )}
-      {mode === "Operation" && <AnimationBase isDebug={isDebug} />}
+      {mode === "Operation" && (
+        <ScreenAnimation isDebug={isDebug} devices={devices} />
+      )}
     </Box>
   );
 };

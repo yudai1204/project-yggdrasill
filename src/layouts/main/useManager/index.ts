@@ -1,5 +1,6 @@
 import type { DeviceType, ManagerType, ScreenType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   wsRef: React.MutableRefObject<WebSocket | null>;
@@ -39,7 +40,7 @@ export const connectWebSocket = (props: Props) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       const manager: ManagerType = {
         type: "manager",
-        uuid: crypto.randomUUID(),
+        uuid: uuidv4(),
         screens: [],
         devices: [],
       };

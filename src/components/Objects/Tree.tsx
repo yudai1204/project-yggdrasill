@@ -31,7 +31,7 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
     Object.values(actions).forEach((action) => {
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = 0.5; // アニメーションの速度を設定（適宜調整）
+      action!.timeScale = 2.5; // アニメーションの速度を設定（適宜調整）
       action?.play();
     });
 
@@ -47,6 +47,8 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
           mesh.material.map = texture;
           mesh.material.needsUpdate = true;
         }
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
       }
     });
   }, [actions, scene, texture]);

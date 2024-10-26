@@ -1,13 +1,14 @@
 import type { DeviceType, ScreenType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { getScreenSize } from "@/util/util";
+import { v4 as uuidv4 } from "uuid";
 
 const initScreen = () => {
   const screenSize = getScreenSize();
   const screen: ScreenType = {
     connectedAt: 0,
     type: "screen",
-    uuid: crypto.randomUUID(),
+    uuid: uuidv4(),
     size: screenSize,
     devices: [],
   };
