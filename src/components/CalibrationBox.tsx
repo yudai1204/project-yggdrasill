@@ -20,6 +20,8 @@ type Position = {
   height: number;
   zoom: number;
   rotate: number;
+  rawWidth: number;
+  rawHeight: number;
 };
 
 type Props = {
@@ -49,6 +51,8 @@ export const CalibrationBox = (props: Props) => {
       zoom: interact.position.width / position.width,
       x: interact.position.x,
       y: interact.position.y,
+      rawWidth: interact.position.width,
+      rawHeight: interact.position.height,
     });
   }, [interact.position]);
 

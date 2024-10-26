@@ -1,7 +1,8 @@
 import { Heading, Box } from "@chakra-ui/react";
 import { AnimationBase } from "@/components/AnimationBase";
 import { DeviceType, ScreenType } from "@/types/calibrate";
-import { FOV } from "@/util/constants";
+import { useState, useMemo, useEffect } from "react";
+import { defaultCameraOptions } from "@/util/constants";
 
 type Props = {
   isDebug: boolean;
@@ -13,8 +14,31 @@ type Props = {
 export const DeviceAnimation = (props: Props) => {
   const { isDebug, deviceNum, deviceBody, screenSize } = props;
 
-  const fovRatio =
-    (deviceBody?.size.height ?? 1920) / (screenSize?.height ?? 1920);
+  const [hoge, setHoge] = useState<number>(0);
+
+  // なぜか再レンダリングが走らないと座標計算に致命的なずが生じる
+  useEffect(() => {
+    setTimeout(() => {
+      setHoge((prev) => prev + 1);
+    }, 1000);
+  }, []);
+
+  // 高さから視野角を計算
+  const viewOffset = useMemo(() => {
+    if (!screenSize || !deviceBody?.size.width) {
+      return undefined;
+    }
+    return {
+      fullWidth: screenSize?.width,
+      fullHeight: screenSize?.height,
+      offsetX: deviceBody?.position.x,
+      offsetY: deviceBody?.position.y,
+      width: deviceBody?.rawSize.width,
+      height: deviceBody?.rawSize.height,
+      // width:  deviceBody?.size.width * deviceBody?.zoom,
+      // height: deviceBody?.size.height * deviceBody?.zoom,
+    };
+  }, [deviceBody, screenSize, hoge]);
 
   return (
     <>
@@ -32,16 +56,15 @@ export const DeviceAnimation = (props: Props) => {
           {deviceNum}
         </Heading>
       )}
-      <AnimationBase
-        isDebug={isDebug}
-        cameraOptions={{
-          position: [0, 15, 50],
-          rotation: [0, 0, 0],
-          far: 100,
-          fov: FOV * fovRatio,
-          near: 0.01,
-        }}
-      />
+      {
+        <AnimationBase
+          isDebug={isDebug}
+          cameraOptions={{
+            ...defaultCameraOptions,
+            viewOffset,
+          }}
+        />
+      }
     </>
   );
 };

@@ -64,6 +64,8 @@ export const ScreenCalibration = (props: Props) => {
               zoom: device.zoom,
               x: device.position.x,
               y: device.position.y,
+              rawWidth: device.rawSize.width,
+              rawHeight: device.rawSize.height,
             };
             const setPosition = (newPosition: typeof position) => {
               setDevices((prev) => {
@@ -75,6 +77,8 @@ export const ScreenCalibration = (props: Props) => {
                   target.position.x = newPosition.x;
                   target.position.y = newPosition.y;
                   target.zoom = newPosition.zoom;
+                  target.rawSize.width = newPosition.rawWidth;
+                  target.rawSize.height = newPosition.rawHeight;
                 }
                 screenBodyRef.current!.devices = prev;
                 return [...prev];

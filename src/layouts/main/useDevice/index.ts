@@ -10,6 +10,7 @@ const initDevice = () => {
     type: "device",
     uuid: uuidv4(),
     size: screenSize,
+    rawSize: screenSize,
     rotation: 0,
     position: {
       x: 0,

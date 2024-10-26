@@ -7,9 +7,11 @@ export const CAMERA_POSITION: [number, number, number] = [0, 15, 50]; // カメ�
 export const CAMERA_ROTATION: [number, number, number] = [0, 0, 0]; // カメラ回転
 
 export const defaultCameraOptions: CameraOptions = {
-  position: CAMERA_POSITION,
-  rotation: CAMERA_ROTATION,
-  far: FAR,
-  fov: FOV,
-  near: NEAR,
+  options: {
+    position: CAMERA_POSITION,
+    rotation: CAMERA_ROTATION,
+    far: FAR,
+    fov: FOV,
+    near: NEAR,
+  },
 };

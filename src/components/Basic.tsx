@@ -1,6 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Perf } from "r3f-perf";
-import { OrbitControls, useHelper, PerspectiveCamera } from "@react-three/drei";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  OrthographicCamera,
+} from "@react-three/drei";
 
 import * as THREE from "three";
 import { Flower } from "./Objects/Flower";
@@ -14,22 +18,33 @@ type Props = {
 };
 export const Basic = (props: Props) => {
   const { isDebug, cameraOptions } = props;
-  const directionalLight = useRef<THREE.DirectionalLight>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-  // ダイレクト光のヘルパー（デバッグ用）
-
-  useHelper(
-    directionalLight as React.MutableRefObject<THREE.DirectionalLight>,
-    THREE.DirectionalLightHelper,
-    1,
-    "red"
-  );
+  useEffect(() => {
+    if (cameraRef.current && cameraOptions.viewOffset) {
+      const { fullWidth, fullHeight, offsetX, offsetY, width, height } =
+        cameraOptions.viewOffset;
+      cameraRef.current.setViewOffset(
+        fullWidth,
+        fullHeight,
+        offsetX,
+        offsetY,
+        width,
+        height
+      );
+    }
+    return () => cameraRef.current?.clearViewOffset();
+  }, [cameraOptions.viewOffset]);
 
   return (
     <>
       {/* コントロール */}
       {/* <OrbitControls makeDefault /> */}
-      <PerspectiveCamera makeDefault {...cameraOptions} />
+      <PerspectiveCamera
+        ref={cameraRef}
+        makeDefault
+        {...cameraOptions.options}
+      />
 
       {/* パフォーマンスモニター */}
       {isDebug && <Perf position="top-left" />}
