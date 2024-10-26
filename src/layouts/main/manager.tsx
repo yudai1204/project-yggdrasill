@@ -12,6 +12,7 @@ import {
   Tr,
   Td,
   TableContainer,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import type { DeviceType, ScreenType, ManagerType } from "@/types/calibrate";
@@ -119,6 +120,16 @@ export const Manager = () => {
   const [screens, setScreens] = useState<ScreenType[]>([]);
   const [devices, setDevices] = useState<DeviceType[]>([]);
 
+  const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
+
+  const toggleMode = () => {
+    sendJson(
+      wsRef.current,
+      { mode: mode === "Calibration" ? "Operation" : "Calibration" },
+      "setMode"
+    );
+  };
+
   const getAllData = () => {
     sendJson(wsRef.current, managerBodyRef.current, "getAllData");
   };
@@ -133,6 +144,7 @@ export const Manager = () => {
       reconnectTimeout,
       setScreens,
       setDevices,
+      setMode,
     });
 
     return () => {
@@ -147,29 +159,42 @@ export const Manager = () => {
 
   return (
     <Box>
-      <h1>Manager</h1>
-      <h2>Status: {connectingStatus}</h2>
-      <Button onClick={getAllData}>Refresh</Button>
-      <Heading as="h3" size="md">
-        All Devices: {devices?.length}
+      <Heading as="h1" size="lg">
+        Manager
       </Heading>
-      <Heading as="h4" size="sm">
-        Connected : {devices?.filter((device) => device.isConnected).length}
+      <Heading as="h2" size="md">
+        Status: {connectingStatus}
       </Heading>
-      {devices && (
-        <>
-          <Items items={devices} />
-        </>
-      )}
+      <Heading as="h2" size="md">
+        Mode: {mode}
+      </Heading>
 
-      <Heading as="h3" size="md">
-        Connected Screens: {screens?.length}
-      </Heading>
-      {screens && (
-        <>
-          <Items items={screens} />
-        </>
-      )}
+      <ButtonGroup>
+        <Button onClick={getAllData}>Refresh</Button>
+        <Button onClick={toggleMode}>Toggle Mode</Button>
+      </ButtonGroup>
+
+      <Box mt={4} pt={4} borderTop="1px solid #777">
+        <Heading as="h3" size="md">
+          All Devices: {devices?.length}
+        </Heading>
+        <Heading as="h4" size="sm">
+          Connected : {devices?.filter((device) => device.isConnected).length}
+        </Heading>
+        {devices && (
+          <>
+            <Items items={devices} />
+          </>
+        )}
+        <Heading as="h3" size="md">
+          Connected Screens: {screens?.length}
+        </Heading>
+        {screens && (
+          <>
+            <Items items={screens} />
+          </>
+        )}
+      </Box>
     </Box>
   );
 };

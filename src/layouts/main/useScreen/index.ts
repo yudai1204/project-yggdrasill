@@ -22,6 +22,7 @@ type Props = {
   shouldReconnect: React.MutableRefObject<boolean>;
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
   setScreenNum: React.Dispatch<React.SetStateAction<number | null>>;
+  setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -33,6 +34,7 @@ export const connectWebSocket = (props: Props) => {
     shouldReconnect,
     reconnectTimeout,
     setScreenNum,
+    setMode,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -70,6 +72,8 @@ export const connectWebSocket = (props: Props) => {
         setDevices([...screenBodyRef.current.devices]);
         setScreenNum(data.head.index);
       }
+    } else if (data.head.type === "setMode") {
+      setMode(data.body.mode);
     }
   };
 

@@ -9,6 +9,7 @@ type Props = {
   reconnectTimeout: React.MutableRefObject<NodeJS.Timeout | null>;
   setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
   setScreens: React.Dispatch<React.SetStateAction<ScreenType[]>>;
+  setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -20,6 +21,7 @@ export const connectWebSocket = (props: Props) => {
     reconnectTimeout,
     setDevices,
     setScreens,
+    setMode,
   } = props;
 
   wsRef.current = new WebSocket(
@@ -51,6 +53,8 @@ export const connectWebSocket = (props: Props) => {
       managerBodyRef.current = data.body;
       setDevices([...data.body.devices]);
       setScreens([...data.body.screens]);
+    } else if (data.head.type === "setMode") {
+      setMode(data.body.mode);
     }
   };
 
