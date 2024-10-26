@@ -22,6 +22,7 @@ export const ScreenAnimation = (props: Props) => {
                 left={device.position.x}
                 width={device.size.width * device.zoom}
                 height={device.size.height * device.zoom}
+                transform={`rotate(${device.rotation}deg)`}
                 border="2px solid #fff"
                 color="#fff"
                 opacity={0.4}
