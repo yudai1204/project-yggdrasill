@@ -1,10 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
-import { use, useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
+import { Box } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import type { UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useUser";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
-import { QRCodeSVG } from "qrcode.react";
+import { UserQR } from "./useUser/UserQR";
+import { SeedWatering } from "./useUser/SeedWatering";
 
 export const User = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
@@ -21,7 +22,9 @@ export const User = () => {
     width: number;
     height: number;
   } | null>(null);
-  const [displayQR, setDisplayQR] = useState<boolean>(false);
+  const [qrZoom, setQRZoom] = useState<number>(0);
+
+  const [displayStep, setDisplayStep] = useState<number>(0);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -44,6 +47,7 @@ export const User = () => {
       shouldReconnect,
       reconnectTimeout,
       setScreenSize,
+      setQRZoom,
     });
 
     return () => {
@@ -64,33 +68,24 @@ export const User = () => {
       overflow="hidden"
       ref={windowRef}
     >
-      <Button
-        onClick={() => setDisplayQR(!displayQR)}
-        position="absolute"
-        top={0}
-        left={0}
-      >
-        Toggle QR
-      </Button>
-      <Box position="absolute" top={20} left={0} color="white">
-        接続状態: {connectingStatus}
+      <Box position="absolute" bottom={2} right={3} color="#666">
+        {connectingStatus}
       </Box>
-      <Box
-        display={displayQR ? "flex" : "none"}
-        justifyContent="center"
-        alignItems="center"
-        height="100%"
-        width="100%"
-      >
-        <QRCodeSVG
-          style={{ width: "100%", height: "auto", maxHeight: "100%" }}
-          value={userBody?.uuid ?? ""}
-          marginSize={4}
-          bgColor="#eee"
-          fgColor="#000"
-          size={400}
+      {displayStep === 0 && (
+        <UserQR
+          userBody={userBody}
+          qrZoom={qrZoom}
+          connectingStatus={connectingStatus}
+          onReady={() => {
+            setDisplayStep(1);
+          }}
         />
-      </Box>
+      )}
+      {displayStep === 1 && (
+        <Box position="absolute" top={0} left={0} w="100%" h="100%">
+          <SeedWatering />
+        </Box>
+      )}
     </Box>
   );
 };

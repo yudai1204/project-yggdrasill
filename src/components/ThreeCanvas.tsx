@@ -3,7 +3,6 @@ import { Canvas } from "@react-three/fiber";
 
 import * as THREE from "three";
 import { Basic } from "./Basic";
-import { CAMERA_POSITION, FAR, FOV, NEAR } from "@/util/constants";
 import { CameraOptions } from "@/types/camera";
 
 // メイン

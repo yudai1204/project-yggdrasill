@@ -39,6 +39,7 @@ type Props = {
   setScreenSize: React.Dispatch<
     React.SetStateAction<{ width: number; height: number } | null>
   >;
+  setQRZoom: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -50,6 +51,7 @@ export const connectWebSocket = (props: Props) => {
     shouldReconnect,
     reconnectTimeout,
     setScreenSize,
+    setQRZoom,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -86,6 +88,8 @@ export const connectWebSocket = (props: Props) => {
       setScreenSize(data.body);
     } else if (data.head.type === "getCurrentSettings") {
       setScreenSize(data.body.screen);
+    } else if (data.head.type === "qrRead") {
+      setQRZoom(data.body.zoom);
     }
   };
 
