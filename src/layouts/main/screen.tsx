@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType } from "@/types/calibrate";
+import type { DeviceType, ScreenType, SpPos } from "@/types/calibrate";
 import { connectWebSocket } from "./useScreen";
 import { ScreenCalibration } from "./useScreen/ScreenCalibration";
 import { useWindowSize } from "@/util/hooks";
@@ -21,6 +21,13 @@ export const Screen = () => {
   const [screenNum, setScreenNum] = useState<number | null>(null);
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [isDebug, setIsDebug] = useState<boolean>(false);
+
+  const [spPos, setSpPos] = useState<SpPos>({
+    translateX: 0,
+    translateY: 0,
+    width: 80,
+    height: 170,
+  });
 
   const windowSize = useWindowSize(windowRef);
 
@@ -44,6 +51,7 @@ export const Screen = () => {
       setScreenNum,
       setMode,
       setIsDebug,
+      setSpPos,
     });
 
     return () => {
@@ -73,6 +81,7 @@ export const Screen = () => {
           connectingStatus={connectingStatus}
           devices={devices}
           screenNum={screenNum}
+          spPos={spPos}
         />
       )}
       {mode === "Operation" && (

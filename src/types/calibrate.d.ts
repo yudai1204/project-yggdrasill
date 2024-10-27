@@ -63,3 +63,10 @@ export interface ManagerType {
   screens: ScreenType[];
   devices: DeviceType[];
 }
+
+export interface SpPos {
+  translateX: number;
+  translateY: number;
+  width: number;
+  height: number;
+}

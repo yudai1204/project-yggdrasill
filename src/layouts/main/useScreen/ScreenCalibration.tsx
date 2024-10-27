@@ -1,7 +1,7 @@
-import { Box, Button, ButtonGroup } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Input } from "@chakra-ui/react";
 import { CalibrationBox } from "@/components/CalibrationBox";
 import { sendJson } from "@/util/util";
-import type { DeviceType, ScreenType } from "@/types/calibrate";
+import type { DeviceType, ScreenType, SpPos } from "@/types/calibrate";
 
 type Props = {
   screenNum: number | null;
@@ -10,6 +10,7 @@ type Props = {
   screenBodyRef: React.MutableRefObject<ScreenType | null>;
   wsRef: React.MutableRefObject<WebSocket | null>;
   setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
+  spPos: SpPos;
 };
 export const ScreenCalibration = (props: Props) => {
   const {
@@ -19,41 +20,29 @@ export const ScreenCalibration = (props: Props) => {
     screenBodyRef,
     wsRef,
     setDevices,
+    spPos,
   } = props;
   return (
     <>
       {/* User Pos */}
       <Box
         position="absolute"
-        bottom={1}
+        bottom={5}
         left="50%"
         transform="translateX(-50%)"
         backgroundColor="#070"
-        width="80px"
-        height="170px"
+        width={spPos.width}
+        height={spPos.height}
         textAlign="center"
         pt={2}
       >
         USER
       </Box>
-      <h1>Screen: {screenNum}</h1>
-      <h2>Status: {connectingStatus}</h2>
-      {screenBodyRef.current && (
-        <>
-          <h3>Connected Devices</h3>
-          {devices &&
-            screenBodyRef.current.devices.map(
-              (device, idx) =>
-                device.isConnected && (
-                  <div key={device.uuid}>
-                    <p>
-                      {idx} : UUID: {device.uuid}
-                    </p>
-                  </div>
-                )
-            )}
-        </>
-      )}
+      <Box mt={20}>
+        <h1>Screen: {screenNum}</h1>
+        <h2>Status: {connectingStatus}</h2>
+      </Box>
+
       {devices &&
         screenBodyRef.current?.devices.map((device, idx) => {
           if (device.isConnected) {
@@ -104,22 +93,24 @@ export const ScreenCalibration = (props: Props) => {
           }
         })}
 
-      <ButtonGroup position="absolute" top={0} left={0} zIndex={100}>
-        <Button
-          onClick={() => {
-            sendJson(wsRef.current!, screenBodyRef.current, "get_devices");
-          }}
-        >
-          Refresh
-        </Button>
-        <Button
-          onClick={() => {
-            sendJson(wsRef.current!, screenBodyRef.current, "setMainScreen");
-          }}
-        >
-          SetScreenSize
-        </Button>
-      </ButtonGroup>
+      <Box position="absolute" top={0} left={0} zIndex={100}>
+        <ButtonGroup mb={1}>
+          <Button
+            onClick={() => {
+              sendJson(wsRef.current!, screenBodyRef.current, "get_devices");
+            }}
+          >
+            Refresh
+          </Button>
+          <Button
+            onClick={() => {
+              sendJson(wsRef.current!, screenBodyRef.current, "setMainScreen");
+            }}
+          >
+            スクリーンサイズを同期
+          </Button>
+        </ButtonGroup>
+      </Box>
     </>
   );
 };

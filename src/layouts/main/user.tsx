@@ -72,6 +72,9 @@ export const User = () => {
       >
         Toggle QR
       </Button>
+      <Box position="absolute" top={20} left={0} color="white">
+        接続状態: {connectingStatus}
+      </Box>
       <Box
         display={displayQR ? "flex" : "none"}
         justifyContent="center"
@@ -80,7 +83,7 @@ export const User = () => {
         width="100%"
       >
         <QRCodeSVG
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto", maxHeight: "100%" }}
           value={userBody?.uuid ?? ""}
           marginSize={4}
           bgColor="#eee"
