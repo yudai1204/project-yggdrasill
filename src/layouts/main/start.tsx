@@ -15,6 +15,7 @@ export const StartCalibration = ({ setDevice, device, connect }: Props) => {
           <option value="manager">管理画面</option>
           <option value="device">マスク(タブレット端末)</option>
           <option value="user">ユーザ端末</option>
+          <option value="qrReader">QRリーダー</option>
         </Select>
         <Button onClick={connect}>接続開始</Button>
       </VStack>

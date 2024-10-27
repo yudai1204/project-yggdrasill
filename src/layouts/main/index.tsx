@@ -5,6 +5,7 @@ import { Device } from "./device";
 import { Manager } from "./manager";
 import { User } from "./user";
 import { Box } from "@chakra-ui/react";
+import QrScanner from "./qrReader";
 export default function Main() {
   const [device, setDevice] = useState<string>("screen");
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -27,6 +28,7 @@ export default function Main() {
           {device === "device" && <Device />}
           {device === "manager" && <Manager />}
           {device === "user" && <User />}
+          {device === "qrReader" && <QrScanner />}
         </>
       ) : (
         <StartCalibration

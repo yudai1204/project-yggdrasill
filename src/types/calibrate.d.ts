@@ -70,3 +70,11 @@ export interface SpPos {
   width: number;
   height: number;
 }
+
+export type QrReaderType = {
+  type: "qrReader";
+  uuid: string;
+  value: string;
+  size: number;
+  coordinates: { x: number; y: number }[];
+};
