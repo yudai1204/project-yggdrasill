@@ -47,19 +47,22 @@ const QrScanner = () => {
     useState<string>("Connecting...");
   const [uuid, setUuid] = useState<string>("None");
 
+  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
+
   useEffect(() => {
-    const startVideo = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        console.error("Error accessing the camera", error);
-      }
-    };
+    // const startVideo = async () => {
+    //   try {
+    //     const stream = await navigator.mediaDevices.getUserMedia({
+    //       video: { facingMode: "environment" },
+    //     });
+    //     if (videoRef.current) {
+    //       videoRef.current.srcObject = stream;
+    //     }
+    //   } catch (error) {
+    //     console.error("Error accessing the camera", error);
+    //   }
+    // };
 
     const connectWebSocket = async () => {
       wsRef.current = new WebSocket(
@@ -94,10 +97,42 @@ const QrScanner = () => {
         wsRef.current?.close();
       };
     };
+    const fetchVideoDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(
+          (device) => device.kind === "videoinput"
+        );
+        setVideoDevices(videoDevices);
+        if (videoDevices.length > 0) {
+          setSelectedDeviceId(videoDevices[0].deviceId);
+        }
+      } catch (error) {
+        console.error("Error fetching video devices", error);
+      }
+    };
 
+    fetchVideoDevices();
     connectWebSocket();
-    startVideo();
   }, []);
+
+  useEffect(() => {
+    const startVideo = async () => {
+      if (!selectedDeviceId) return;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { deviceId: selectedDeviceId },
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error("Error accessing the camera", error);
+      }
+    };
+
+    startVideo();
+  }, [selectedDeviceId]);
 
   const scanQRCode = () => {
     if (videoRef.current && canvasRef.current) {
@@ -190,11 +225,30 @@ const QrScanner = () => {
       <Heading as="h1" size="lg">
         QR Code Scanner
       </Heading>
-
-      <Box width={640} height={480} bg="gray.200" position="relative">
+      <Box my={3}>
+        カメラを選択:
+        <select
+          onChange={(e) => setSelectedDeviceId(e.target.value)}
+          value={selectedDeviceId || ""}
+        >
+          {videoDevices.map((device) => (
+            <option key={device.deviceId} value={device.deviceId}>
+              {device.label || `Camera ${device.deviceId}`}
+            </option>
+          ))}
+        </select>
+      </Box>
+      <Box width={640} bg="gray.200" position="relative">
         <canvas
           ref={canvasRef}
-          style={{ display: "block", position: "absolute", top: 0, left: 0 }}
+          style={{
+            display: "block",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: 640,
+            height: "auto",
+          }}
         ></canvas>
         <video
           ref={videoRef}
@@ -203,11 +257,8 @@ const QrScanner = () => {
           style={{
             display: "block",
             width: 640,
-            height: 480,
+            height: "auto",
             opacity: 0.6,
-            position: "absolute",
-            top: 0,
-            left: 0,
           }}
         ></video>
       </Box>
