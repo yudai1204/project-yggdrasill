@@ -9,7 +9,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType, ManagerType } from "@/types/calibrate";
+import type {
+  DeviceType,
+  ScreenType,
+  ManagerType,
+  UserType,
+} from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { connectWebSocket } from "./useManager";
 import { AccordionList } from "@/components/AccordionList";
@@ -24,6 +29,7 @@ export const Manager = () => {
     useState<string>("Connecting...");
   const [screens, setScreens] = useState<ScreenType[]>([]);
   const [devices, setDevices] = useState<DeviceType[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
 
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [displayDebugger, setDisplayDebugger] = useState<boolean>(false);
@@ -49,6 +55,8 @@ export const Manager = () => {
     sendJson(wsRef.current, {}, "getCurrentSettings");
   };
 
+  const readQR = () => {};
+
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
     connectWebSocket({
@@ -59,6 +67,7 @@ export const Manager = () => {
       reconnectTimeout,
       setScreens,
       setDevices,
+      setUsers,
       setMode,
       setDisplayDebugger,
       setScreenSize,
@@ -89,6 +98,7 @@ export const Manager = () => {
       <ButtonGroup>
         <Button onClick={getAllData}>Refresh</Button>
         <Button onClick={toggleMode}>Toggle Mode</Button>
+        <Button onClick={readQR}>Read QR</Button>
       </ButtonGroup>
 
       <FormControl display="flex" alignItems="center">
@@ -116,25 +126,39 @@ export const Manager = () => {
         <Heading as="h3" size="md">
           Screen Size: {screenSize?.width} x {screenSize?.height}
         </Heading>
-        <Heading as="h3" size="md">
-          All Devices: {devices?.length}
-        </Heading>
-        <Heading as="h4" size="sm">
-          Connected : {devices?.filter((device) => device.isConnected).length}
-        </Heading>
-        {devices && (
-          <>
-            <AccordionList items={devices} />
-          </>
-        )}
-        <Heading as="h3" size="md">
-          Connected Screens: {screens?.length}
-        </Heading>
-        {screens && (
-          <>
-            <AccordionList items={screens} />
-          </>
-        )}
+        <Box mt={3}>
+          <Heading as="h3" size="md">
+            All Devices: {devices?.length}
+          </Heading>
+          <Heading as="h4" size="sm">
+            Connected : {devices?.filter((device) => device.isConnected).length}
+          </Heading>
+          {devices && (
+            <>
+              <AccordionList items={devices} />
+            </>
+          )}
+        </Box>
+        <Box mt={3}>
+          <Heading as="h3" size="md">
+            Connected Screens: {screens?.length}
+          </Heading>
+          {screens && (
+            <>
+              <AccordionList items={screens} />
+            </>
+          )}
+        </Box>
+        <Box mt={3}>
+          <Heading as="h3" size="md">
+            Connected Users: {users?.length}
+          </Heading>
+          {users && (
+            <>
+              <AccordionList items={users} />
+            </>
+          )}
+        </Box>
       </Box>
     </Box>
   );

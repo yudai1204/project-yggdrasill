@@ -20,7 +20,16 @@ export const DeviceAnimation = (props: Props) => {
   useEffect(() => {
     setTimeout(() => {
       setHoge((prev) => prev + 1);
+    }, 100);
+    setTimeout(() => {
+      setHoge((prev) => prev + 1);
+    }, 500);
+    setTimeout(() => {
+      setHoge((prev) => prev + 1);
     }, 1000);
+    setTimeout(() => {
+      setHoge((prev) => prev + 1);
+    }, 5000);
   }, []);
 
   // 高さから視野角を計算

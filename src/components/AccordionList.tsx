@@ -33,11 +33,13 @@ export const AccordionList = (props: ItemsProps) => {
                 flex="1"
                 textAlign="left"
                 color={
-                  !item?.position || item.isConnected ? "green.500" : "red.500"
+                  item?.type !== "device" || item.isConnected
+                    ? "green.500"
+                    : "red.500"
                 }
               >
                 {idx}: {item.uuid} :{" "}
-                {!item?.position || item.isConnected
+                {item?.type !== "device" || item.isConnected
                   ? "Connected"
                   : "Disconnected"}
               </Box>
@@ -93,6 +95,32 @@ export const AccordionList = (props: ItemsProps) => {
                       )}
                     </Td>
                   </Tr>
+                  {item.ua && (
+                    <>
+                      <Tr>
+                        <Td>Browser</Td>
+                        <Td>{item.ua.browser}</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>Device</Td>
+                        <Td>{item.ua.device}</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>Engine</Td>
+                        <Td>{item.ua.engine}</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>OS</Td>
+                        <Td>{item.ua.os}</Td>
+                      </Tr>
+                    </>
+                  )}
+                  {item.ip && (
+                    <Tr>
+                      <Td>IP</Td>
+                      <Td>{item.ip}</Td>
+                    </Tr>
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>

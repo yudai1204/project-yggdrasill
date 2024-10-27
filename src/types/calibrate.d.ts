@@ -38,12 +38,23 @@ export interface UserType {
     width: number;
     height: number;
   };
+  rawSize: {
+    width: number;
+    height: number;
+  };
   rotation: number;
   position: {
     x: number;
     y: number;
   };
   zoom: number;
+  ua?: {
+    browser: string | undefined;
+    device: string | undefined;
+    engine: string | undefined;
+    os: string | undefined;
+  };
+  ip?: string;
 }
 
 export interface ManagerType {
