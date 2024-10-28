@@ -21,6 +21,7 @@ type Props = {
   setScreenSize: React.Dispatch<
     React.SetStateAction<{ width: number; height: number } | null>
   >;
+  setConnectingCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -36,6 +37,7 @@ export const connectWebSocket = (props: Props) => {
     setMode,
     setDisplayDebugger,
     setScreenSize,
+    setConnectingCount,
   } = props;
 
   wsRef.current = new WebSocket(
@@ -69,6 +71,7 @@ export const connectWebSocket = (props: Props) => {
       setDevices([...data.body.devices]);
       setScreens([...data.body.screens]);
       setUsers([...data.body.users]);
+      setConnectingCount(data.body.connectingCount);
     } else if (data.head.type === "getCurrentSettings") {
       setMode(data.body.mode);
       setDisplayDebugger(data.body.debug);

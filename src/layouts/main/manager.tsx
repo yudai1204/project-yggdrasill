@@ -30,6 +30,7 @@ export const Manager = () => {
   const [screens, setScreens] = useState<ScreenType[]>([]);
   const [devices, setDevices] = useState<DeviceType[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
+  const [connectingCount, setConnectingCount] = useState<number>(0);
 
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [displayDebugger, setDisplayDebugger] = useState<boolean>(false);
@@ -71,6 +72,7 @@ export const Manager = () => {
       setMode,
       setDisplayDebugger,
       setScreenSize,
+      setConnectingCount,
     });
 
     return () => {
@@ -125,6 +127,9 @@ export const Manager = () => {
       <Box mt={4} pt={4} borderTop="1px solid #777">
         <Heading as="h3" size="md">
           Screen Size: {screenSize?.width} x {screenSize?.height}
+        </Heading>
+        <Heading as="h3" size="md">
+          Connecting Count: {connectingCount}
         </Heading>
         <Box mt={3}>
           <Heading as="h3" size="md">
