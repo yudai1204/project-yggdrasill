@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, useColorMode } from "@chakra-ui/react";
 import { FormBody } from "./FormBody";
 import { FormBlooming } from "./FormBlooming";
-import { questionSummary } from "./questions";
+import { questions } from "./questions";
 import type { GptAnalysis } from "@/types/metaData";
 import { User } from "../main/user";
 
@@ -14,7 +14,7 @@ export const Form = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [answers, setAnswers] = useState<(string | undefined)[]>(
-    Array(5).fill(undefined)
+    Array(questions.en.length).fill(undefined)
   );
   const [language, setLanguage] = useState<"en" | "jp">("jp");
 
@@ -43,13 +43,12 @@ export const Form = () => {
 
   const submitAnswers = async () => {
     setIsLoading(true);
-    const answerObject = questionSummary.en.reduce(
-      (acc: Record<string, any>, key, index) => {
-        acc[key.toLowerCase().replace(/\s+/g, "_")] = answers[index];
-        return acc;
-      },
-      {}
-    );
+    const answerString = questions.en.reduce((acc, key, index) => {
+      const answer = answers[index] || "未回答";
+      return acc + `${key}: ${answer}\n`;
+    }, "");
+
+    console.log(answerString);
 
     try {
       const chatResponse = await fetch("/api/chat", {
@@ -57,9 +56,12 @@ export const Form = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: answerObject }),
+        body: JSON.stringify({ prompt: answerString }),
       });
       const chatData = await chatResponse.json();
+      if (chatData.error) {
+        throw new Error(chatData.error);
+      }
       console.log(chatData);
       setGptAnalysis(chatData.response);
     } catch (error) {

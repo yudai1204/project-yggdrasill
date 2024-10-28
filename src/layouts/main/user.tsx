@@ -14,6 +14,8 @@ type Props = {
 export const User = (props: Props) => {
   const { gptAnalysis } = props;
 
+  console.log(gptAnalysis);
+
   const windowRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const userBodyRef = useRef<UserType | null>(null);

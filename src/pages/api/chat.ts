@@ -24,15 +24,32 @@ const handler = async (
   });
 
   // レスポンスフォーマット
+  // GptAnalysisの型
   const responseFormat = z.object({
     userName: z.string(),
     season: z.enum(["Spring", "Summer", "Autumn", "Winter"]),
+    location: z.enum([
+      "MagicalWonderland",
+      "Game",
+      "City",
+      "Forest",
+      "Beach",
+      "Moon",
+      "UnderTheSea",
+    ]),
+    time: z.enum(["Noon", "Evening", "Night"]),
+    weather: z.enum(["VerySunny", "Sunny", "Rainy", "Cloudy", "Snowy"]),
     flowerName: z.string(),
     flowerColor: z.array(
       z.string().refine((color) => /^#[0-9A-Fa-f]{6}$/.test(color), {
         message: "Invalid color format",
       })
     ),
+    flowerSize: z.enum(["small", "medium", "large"]),
+    treeType: z.enum(["broadleaf", "conifer"]), // 紅葉樹・針葉樹
+    treeHeight: z.enum(["small", "large"]),
+    treeTexture: z.enum(["realistic", "cartoon", "pixel"]),
+    treeAge: z.enum(["young", "old", "ancient"]),
   });
 
   try {
@@ -43,9 +60,9 @@ const handler = async (
         {
           role: "system",
           content:
-            "ユーザアンケートの結果から、ユーザに適した季節と花の名前、提案できる複数の花の色(カラーコード)を教えてください。",
+            "メディアアートとして、ユーザごとにオリジナルの木と花をアニメーションで表示します。入力されたアンケートの結果から、ユーザに適した情報を教えてください。flowerColorは、#000000 〜 #FFFFFF の範囲で指定してください。",
         },
-        { role: "user", content: JSON.stringify(prompt) },
+        { role: "user", content: prompt },
       ],
     });
 
