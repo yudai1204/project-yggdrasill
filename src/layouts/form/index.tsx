@@ -56,7 +56,10 @@ export const Form = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: answerString }),
+        body: JSON.stringify({
+          prompt: answerString,
+          language: language === "jp" ? "日本語" : "English",
+        }),
       });
       const chatData = await chatResponse.json();
       if (chatData.error) {
@@ -75,7 +78,7 @@ export const Form = () => {
   return (
     <>
       {gptAnalysis ? (
-        <User gptAnalysis={gptAnalysis} />
+        <User gptAnalysis={gptAnalysis} answers={answers} />
       ) : (
         <Box
           w="100%"

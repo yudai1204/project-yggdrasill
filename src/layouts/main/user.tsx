@@ -10,9 +10,10 @@ import type { GptAnalysis } from "@/types/metaData";
 
 type Props = {
   gptAnalysis: GptAnalysis;
+  answers: (string | undefined)[];
 };
 export const User = (props: Props) => {
-  const { gptAnalysis } = props;
+  const { gptAnalysis, answers } = props;
 
   console.log(gptAnalysis);
 
@@ -56,6 +57,8 @@ export const User = (props: Props) => {
       reconnectTimeout,
       setScreenSize,
       setQRZoom,
+      answers,
+      gptAnalysis,
     });
 
     return () => {

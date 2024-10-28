@@ -9,10 +9,18 @@ import QrScanner from "./qrReader";
 import type { GptAnalysis } from "@/types/metaData";
 
 const sampleGptAnalysis: GptAnalysis = {
-  flowerColor: ["#FF69B4", "#FF1493", "#C71585"],
-  flowerName: "シクラメン",
-  season: "Winter",
-  userName: "yudai",
+  userName: "侑大",
+  season: "Summer",
+  location: "Moon",
+  time: "Noon",
+  weather: "Sunny",
+  flowerName: "Lunar Blossom",
+  flowerColor: ["#FFD700", "#FF69B4", "#FF4500"],
+  flowerSize: "large",
+  treeType: "broadleaf",
+  treeHeight: "large",
+  treeTexture: "realistic",
+  treeAge: "ancient",
 };
 export default function Main() {
   const [device, setDevice] = useState<string>("screen");
@@ -35,7 +43,9 @@ export default function Main() {
           {device === "screen" && <Screen />}
           {device === "device" && <Device />}
           {device === "manager" && <Manager />}
-          {device === "user" && <User gptAnalysis={sampleGptAnalysis} />}
+          {device === "user" && (
+            <User gptAnalysis={sampleGptAnalysis} answers={[]} />
+          )}
           {device === "qrReader" && <QrScanner />}
         </>
       ) : (

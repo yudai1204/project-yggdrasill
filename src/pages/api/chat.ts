@@ -18,6 +18,7 @@ const handler = async (
   if (!prompt) {
     return res.status(400).json({ error: "Missing Body" });
   }
+  const language = req.body.language ?? "英語";
 
   const openai = new OpenAI({
     apiKey: process.env.NEXT_OPENAI_API_KEY,
@@ -59,8 +60,7 @@ const handler = async (
       messages: [
         {
           role: "system",
-          content:
-            "メディアアートとして、ユーザごとにオリジナルの木と花をアニメーションで表示します。入力されたアンケートの結果から、ユーザに適した情報を教えてください。flowerColorは、#000000 〜 #FFFFFF の範囲で指定してください。",
+          content: `メディアアートとして、ユーザごとにオリジナルの木と花をアニメーションで表示します。入力されたアンケートの結果から、ユーザに適した情報を教えてください。flowerColorは、#000000 〜 #FFFFFF の範囲で指定してください。なお、flowerNameは${language}で指定してください。`,
         },
         { role: "user", content: prompt },
       ],

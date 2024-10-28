@@ -1,3 +1,5 @@
+import type { GptAnalysis } from "./metaData";
+
 export interface DeviceType {
   type: "device";
   connectedAt: number;
@@ -55,6 +57,10 @@ export interface UserType {
     os: string | undefined;
   };
   ip?: string;
+  metadata?: {
+    gptAnalysis: GptAnalysis;
+    answers: (string | undefined)[];
+  };
 }
 
 export interface ManagerType {

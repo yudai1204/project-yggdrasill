@@ -13,9 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { getColor, dispNum } from "@/util/util";
+import { DeviceType, ScreenType, UserType } from "@/types/calibrate";
+import { questionSummary } from "@/layouts/form/questions";
 
 type ItemsProps = {
-  items: any[];
+  items: (UserType | ScreenType | DeviceType)[];
 };
 export const AccordionList = (props: ItemsProps) => {
   const { items } = props;
@@ -56,7 +58,7 @@ export const AccordionList = (props: ItemsProps) => {
                       {item.size.width} x {item.size.height}
                     </Td>
                   </Tr>
-                  {item?.position && (
+                  {item.type !== "screen" && (
                     <>
                       <Tr>
                         <Td>Position</Td>
@@ -95,7 +97,7 @@ export const AccordionList = (props: ItemsProps) => {
                       )}
                     </Td>
                   </Tr>
-                  {item.ua && (
+                  {item.type === "user" && item.ua && (
                     <>
                       <Tr>
                         <Td>Browser</Td>
@@ -115,11 +117,57 @@ export const AccordionList = (props: ItemsProps) => {
                       </Tr>
                     </>
                   )}
-                  {item.ip && (
+                  {item.type === "user" && item.ip && (
                     <Tr>
                       <Td>IP</Td>
                       <Td>{item.ip}</Td>
                     </Tr>
+                  )}
+                  {item.type === "user" && item.metadata && (
+                    <>
+                      <Tr>
+                        <Td>GPT Analysis</Td>
+                        <Td>
+                          {Object.entries(item.metadata.gptAnalysis).map(
+                            ([key, value]: [string, string | string[]]) =>
+                              typeof value === "string" ? (
+                                <Box key={key}>
+                                  {key}: {value}
+                                </Box>
+                              ) : (
+                                <Box key={key}>
+                                  {key}:{" "}
+                                  <Box display="flex">
+                                    {value.map((v) => (
+                                      <Box
+                                        key={v}
+                                        bgColor={v}
+                                        color="#fff"
+                                        fontWeight="bold"
+                                        style={{
+                                          WebkitTextStroke: "1px black",
+                                        }}
+                                      >
+                                        {v}
+                                      </Box>
+                                    ))}
+                                  </Box>
+                                </Box>
+                              )
+                          )}
+                        </Td>
+                      </Tr>
+                      <Tr>
+                        <Td>Answers</Td>
+                        <Td>
+                          {item.metadata.answers.map((answer, idx) => (
+                            <Box key={idx}>
+                              {questionSummary.jp[idx]}: {answer}
+                            </Box>
+                          ))}
+                        </Td>
+                      </Tr>
+                    </>
                   )}
                 </Tbody>
               </Table>
