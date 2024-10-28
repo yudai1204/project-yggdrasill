@@ -6,6 +6,14 @@ import { Manager } from "./manager";
 import { User } from "./user";
 import { Box } from "@chakra-ui/react";
 import QrScanner from "./qrReader";
+import type { GptAnalysis } from "@/types/metaData";
+
+const sampleGptAnalysis: GptAnalysis = {
+  flowerColor: ["#FF69B4", "#FF1493", "#C71585"],
+  flowerName: "シクラメン",
+  season: "Winter",
+  userName: "yudai",
+};
 export default function Main() {
   const [device, setDevice] = useState<string>("screen");
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -27,7 +35,7 @@ export default function Main() {
           {device === "screen" && <Screen />}
           {device === "device" && <Device />}
           {device === "manager" && <Manager />}
-          {device === "user" && <User />}
+          {device === "user" && <User gptAnalysis={sampleGptAnalysis} />}
           {device === "qrReader" && <QrScanner />}
         </>
       ) : (

@@ -6,8 +6,14 @@ import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { UserQR } from "./useUser/UserQR";
 import { SeedWatering } from "./useUser/SeedWatering";
+import type { GptAnalysis } from "@/types/metaData";
 
-export const User = () => {
+type Props = {
+  gptAnalysis: GptAnalysis;
+};
+export const User = (props: Props) => {
+  const { gptAnalysis } = props;
+
   const windowRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const userBodyRef = useRef<UserType | null>(null);

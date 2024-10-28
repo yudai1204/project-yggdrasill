@@ -15,3 +15,10 @@ export interface TreeMetaData {
   treeType: string;
   flowerTypes: FlowerMetaData[];
 }
+
+export interface GptAnalysis {
+  userName: string;
+  season: "Spring" | "Summer" | "Autumn" | "Winter";
+  flowerName: string;
+  flowerColor: string[];
+}

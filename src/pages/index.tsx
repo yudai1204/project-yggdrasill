@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { User } from "@/layouts/main/user";
-
+import { Form } from "@/layouts/form";
 export default function Home() {
   return (
     <Box
@@ -10,7 +9,7 @@ export default function Home() {
       h="100lvh"
       overflow="hidden"
     >
-      <User />
+      <Form />
     </Box>
   );
 }

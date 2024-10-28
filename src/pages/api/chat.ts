@@ -1,11 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  const prompt = req.query.prompt as string;
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed" });
+  }
+
+  const prompt = req.body.prompt;
 
   console.log("prompt", prompt);
 
@@ -17,23 +23,35 @@ const handler = async (
     apiKey: process.env.NEXT_OPENAI_API_KEY,
   });
 
-  console.log(process.env.NEXT_OPENAI_API_KEY);
+  // レスポンスフォーマット
+  const responseFormat = z.object({
+    userName: z.string(),
+    season: z.enum(["Spring", "Summer", "Autumn", "Winter"]),
+    flowerName: z.string(),
+    flowerColor: z.array(
+      z.string().refine((color) => /^#[0-9A-Fa-f]{6}$/.test(color), {
+        message: "Invalid color format",
+      })
+    ),
+  });
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // 画像生成モデル
-      max_tokens: 200,
+    const completion = await openai.beta.chat.completions.parse({
+      model: "gpt-4o-mini", // モデル
+      response_format: zodResponseFormat(responseFormat, "originalFlower"), // レスポンスフォーマット
       messages: [
         {
           role: "system",
           content:
-            "必ず日本語で返答してください。あなたは吟遊詩人です。ユーザーが入力した単語から、短い詩を作成してください。",
+            "ユーザアンケートの結果から、ユーザに適した季節と花の名前、提案できる複数の花の色(カラーコード)を教えてください。",
         },
-        { role: "user", content: prompt },
+        { role: "user", content: JSON.stringify(prompt) },
       ],
     });
 
-    const response = completion.choices[0].message.content;
+    const response = completion.choices[0].message.parsed;
+
+    console.log("response", response);
 
     return res.status(200).json({ response });
   } catch (error) {
