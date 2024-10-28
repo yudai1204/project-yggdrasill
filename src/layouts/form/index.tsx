@@ -57,6 +57,7 @@ export const Form = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          key: "eyJhbGciOHiJIUzI1NiasInR5ckpXVCJ9.eyJ1vc2VyFIjoiYQisOjE2MzQwNjYwNzJ9",
           prompt: answerString,
           language: language === "jp" ? "日本語" : "English",
         }),
