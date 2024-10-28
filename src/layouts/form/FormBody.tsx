@@ -81,6 +81,7 @@ export const FormBody = (props: Props) => {
       backgroundColor="#1A202C"
       pt={8}
       px={5}
+      overflow="auto"
     >
       <Heading
         as="h2"
@@ -162,6 +163,7 @@ export const FormBody = (props: Props) => {
       {activeQuestion === questions.en.length - 1 && (
         <Button
           isLoading={isLoading}
+          mb={5}
           colorScheme="teal"
           width="100%"
           marginTop="5"
