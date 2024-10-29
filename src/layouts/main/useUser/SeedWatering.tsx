@@ -26,7 +26,7 @@ const Model = ({ url, doAnimation }: ModelProps) => {
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
       if (action?.time === 0) {
         const duration = action!.getClip().duration;
-        action!.time = (duration * 2) / 7;
+        action!.time = (duration * 2) / 7; // 開始時刻を調整（モデルの問題）
       }
       action!.timeScale = doAnimation ? 0.8 : 0;
       action?.play();

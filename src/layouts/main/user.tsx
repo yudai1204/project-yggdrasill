@@ -7,6 +7,7 @@ import { sendJson } from "@/util/util";
 import { UserQR } from "./useUser/UserQR";
 import { SeedWatering } from "./useUser/SeedWatering";
 import type { GptAnalysis } from "@/types/metaData";
+import { UserAnimation } from "./useUser/UserAnimation";
 
 type Props = {
   gptAnalysis: GptAnalysis;
@@ -46,21 +47,32 @@ export const User = (props: Props) => {
     }
   }, [windowSize]);
 
+  // x,yポジションの設定
+  useEffect(() => {
+    if (userBodyRef.current && screenSize) {
+      userBodyRef.current.position = {
+        x: screenSize.width / 2 - (userBodyRef.current.size.width * qrZoom) / 2,
+        y: screenSize.height - userBodyRef.current.size.height * qrZoom - 20,
+      };
+      setUserBody({ ...userBodyRef.current });
+    }
+  }, [screenSize, qrZoom]);
+
   useEffect(() => {
     if (displayStep === 1 && animationCount > 0) {
       setAdjustedAnimationCount((prev) => prev + 1);
       if (animationCount === 3) {
-        sendJson(
-          wsRef.current,
-          {
+        if (userBodyRef.current) {
+          userBodyRef.current = {
             ...userBodyRef.current,
             animationStartFrom: new Date().getTime() + 3000,
-          },
-          "animation_start"
-        );
+          };
+          setUserBody({ ...userBodyRef.current });
+          sendJson(wsRef.current, userBodyRef.current, "animation_start");
+        }
       }
     }
-  }, [animationCount, displayStep]);
+  }, [animationCount, displayStep, userBodyRef]);
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -127,6 +139,15 @@ export const User = (props: Props) => {
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
           <SeedWatering animationCount={adjustedAnimationCount} />
+          <UserAnimation
+            userBody={userBody}
+            screenSize={screenSize}
+            animationStartFrom={
+              userBody?.animationStartFrom ??
+              new Date().getTime() + 1000 * 60 * 60 * 24
+            }
+            currentUser={userBody}
+          />
         </Box>
       )}
     </Box>

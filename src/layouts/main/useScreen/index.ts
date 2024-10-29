@@ -101,8 +101,8 @@ export const connectWebSocket = (props: Props) => {
       const newPos = {
         translateX: 0,
         translateY: 0,
-        width: 80 * (data.body.zoom ?? 1),
-        height: 170 * (data.body.zoom ?? 1),
+        width: data.body.size.width * data.body.zoom,
+        height: data.body.size.height * data.body.zoom,
       };
       setSpPos(newPos);
       console.log("spPosition", newPos);
@@ -112,6 +112,11 @@ export const connectWebSocket = (props: Props) => {
     } else if (data.head.type === "animation_start") {
       setAnimationStartFrom(data.body.animationStartFrom);
       setIsJoroMode(false);
+    } else if (data.head.type === "reset_to_waiting") {
+      setCurrentUser(null);
+      setIsJoroMode(false);
+      setAnimationStartFrom(new Date().getTime() + 1000 * 60 * 60 * 24);
+      setSpPos((prev) => ({ ...prev, width: 84, height: 170 }));
     }
   };
 

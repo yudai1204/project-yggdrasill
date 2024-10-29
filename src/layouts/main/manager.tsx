@@ -56,7 +56,9 @@ export const Manager = () => {
     sendJson(wsRef.current, {}, "getCurrentSettings");
   };
 
-  const readQR = () => {};
+  const resetToWaiting = () => {
+    sendJson(wsRef.current, {}, "resetToWaiting");
+  };
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -109,7 +111,7 @@ export const Manager = () => {
       <ButtonGroup>
         <Button onClick={getAllData}>Refresh</Button>
         <Button onClick={toggleMode}>Toggle Mode</Button>
-        <Button onClick={readQR}>Read QR</Button>
+        <Button onClick={resetToWaiting}>Reset</Button>
       </ButtonGroup>
 
       <FormControl display="flex" alignItems="center">

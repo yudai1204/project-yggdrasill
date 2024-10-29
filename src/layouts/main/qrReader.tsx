@@ -5,6 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 import type { QrReaderType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 
+// 倍率
+// 数字を大きくすると、screenに表示されるスマホサイズが小さくなる
+const ZOOM_CONSTANT = 60;
+
 const initQRReader = () => {
   const qrReader: QrReaderType = {
     type: "qrReader",
@@ -173,7 +177,7 @@ const QrScanner = () => {
 
           // QRコードのサイズを計算
           // /50を変更することで適宜調整
-          const size = (width + height) / 2 / 50;
+          const size = (width + height) / 2 / ZOOM_CONSTANT;
           sendJson(
             wsRef.current,
             {
