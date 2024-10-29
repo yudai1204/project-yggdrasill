@@ -52,7 +52,7 @@ const Model: React.FC<ModelProps> = ({ url }) => {
 type Props = {};
 export const WaitingAnimation = () => {
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
+    <div style={{ width: "100%", height: "100vh", opacity: 0.3 }}>
       <StrictMode>
         <Canvas
           flat
@@ -67,7 +67,11 @@ export const WaitingAnimation = () => {
           <ambientLight intensity={5} />
           <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
           <OrbitControls makeDefault />
-          <mesh position={[0, -1, 0]} scale={1} rotation={[0, -Math.PI / 5, 0]}>
+          <mesh
+            position={[0, 0, 0]}
+            scale={0.3}
+            rotation={[0, -Math.PI / 5, 0]}
+          >
             <Model url="/gltf/flowers/simple_flower_loop.glb" />
           </mesh>
         </Canvas>

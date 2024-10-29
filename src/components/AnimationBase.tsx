@@ -28,8 +28,9 @@ export const AnimationBase = (props: Props) => {
     p5 = false,
     isJoroMode = false,
     animationStartFrom,
-    currentUser = null,
+    currentUser,
   } = props;
+
   return (
     <>
       <Box width="100%" height="100lvh">
@@ -40,6 +41,7 @@ export const AnimationBase = (props: Props) => {
         )}
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
           <ThreeCanvas
+            currentUser={currentUser}
             isDebug={isDebug}
             cameraOptions={cameraOptions}
             isJoroMode={isJoroMode}

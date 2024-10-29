@@ -4,8 +4,10 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { Basic } from "./Basic";
 import { CameraOptions } from "@/types/camera";
+import type { UserType } from "@/types/calibrate";
 
 type Props = {
+  currentUser: UserType | null;
   isDebug: boolean;
   cameraOptions: CameraOptions;
   isJoroMode: boolean;
@@ -13,7 +15,13 @@ type Props = {
 };
 
 export const ThreeCanvas = (props: Props) => {
-  const { isDebug, cameraOptions, isJoroMode, animationStartFrom } = props;
+  const {
+    isDebug,
+    cameraOptions,
+    currentUser,
+    isJoroMode,
+    animationStartFrom,
+  } = props;
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
