@@ -1,11 +1,17 @@
 import { Box } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType, SpPos } from "@/types/calibrate";
+import {
+  UserType,
+  type DeviceType,
+  type ScreenType,
+  type SpPos,
+} from "@/types/calibrate";
 import { connectWebSocket } from "./useScreen";
 import { ScreenCalibration } from "./useScreen/ScreenCalibration";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { ScreenAnimation } from "./useScreen/ScreenAnimation";
+import { WaitingScreen } from "./useScreen/WaitingScreen";
 
 export const Screen = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -25,9 +31,14 @@ export const Screen = () => {
   const [spPos, setSpPos] = useState<SpPos>({
     translateX: 0,
     translateY: 0,
-    width: 80,
+    width: 84,
     height: 170,
   });
+
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
+  const [animationStartFrom, setAnimationStartFrom] =
+    useState<number>(Infinity);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -52,6 +63,8 @@ export const Screen = () => {
       setMode,
       setIsDebug,
       setSpPos,
+      setCurrentUser,
+      setIsJoroMode,
     });
 
     return () => {
@@ -85,7 +98,19 @@ export const Screen = () => {
         />
       )}
       {mode === "Operation" && (
-        <ScreenAnimation isDebug={isDebug} devices={devices} />
+        <>
+          {!currentUser ? (
+            <WaitingScreen spPos={spPos} />
+          ) : (
+            <ScreenAnimation
+              isDebug={isDebug}
+              devices={devices}
+              isJoroMode={isJoroMode}
+              currentUser={currentUser}
+              animationStartFrom={animationStartFrom}
+            />
+          )}
+        </>
       )}
     </Box>
   );

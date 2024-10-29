@@ -61,7 +61,22 @@ export interface UserType {
     gptAnalysis: GptAnalysis;
     answers: (string | undefined)[];
   };
+  ready: boolean;
 }
+
+export type JoroType = {
+  type: "joro";
+  uuid: string;
+  isWatering: boolean; // 注いでいるかどうか
+};
+
+export type QrReaderType = {
+  type: "qrReader";
+  uuid: string;
+  value: string;
+  size: number;
+  coordinates: { x: number; y: number }[];
+};
 
 export interface ManagerType {
   type: "manager";
@@ -76,11 +91,3 @@ export interface SpPos {
   width: number;
   height: number;
 }
-
-export type QrReaderType = {
-  type: "qrReader";
-  uuid: string;
-  value: string;
-  size: number;
-  coordinates: { x: number; y: number }[];
-};

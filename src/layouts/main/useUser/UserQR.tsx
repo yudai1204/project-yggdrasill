@@ -14,6 +14,7 @@ type Props = {
 export const UserQR = (props: Props) => {
   const { connectingStatus, userBody, qrZoom, onReady } = props;
   const [opacity, setOpacity] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <Box
       display="block"
@@ -43,7 +44,7 @@ export const UserQR = (props: Props) => {
       </Box>
       <QRCodeSVG
         style={{
-          width: "calc(100% - 40px)",
+          width: "min(42svh, 100vw)",
           height: "auto",
           maxHeight: "70%",
           margin: "40px auto",
@@ -68,7 +69,9 @@ export const UserQR = (props: Props) => {
         _active={{ bgColor: "#528" }}
         transition="opacity 0.3s, background-color 0.2s"
         opacity={connectingStatus !== "Connected" || qrZoom === 0 ? 0 : 1}
+        isLoading={isLoading}
         onClick={() => {
+          setIsLoading(true);
           setOpacity(0);
           setTimeout(() => {
             onReady();

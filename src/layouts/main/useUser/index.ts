@@ -33,6 +33,7 @@ const initUserDevice = (
       gptAnalysis,
       answers: answers,
     },
+    ready: false,
   };
   return userDevice;
 };
@@ -102,6 +103,10 @@ export const connectWebSocket = (props: Props) => {
       setScreenSize(data.body.screen);
     } else if (data.head.type === "qrRead") {
       setQRZoom(data.body.zoom);
+    } else if (data.head.type === "joro_status") {
+      // TODO: ジョウロからStatusが送られてきた時の処理
+      // 3回wateringがtrueの状態で送られてきたら、animation_startを送る
+      // animation_startは要実装
     }
   };
 

@@ -1,4 +1,4 @@
-import type { DeviceType, ScreenType } from "@/types/calibrate";
+import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { getScreenSize } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
@@ -35,6 +35,8 @@ type Props = {
   setScreenSize: React.Dispatch<
     React.SetStateAction<{ width: number; height: number } | null>
   >;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  setIsJoroMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -49,6 +51,8 @@ export const connectWebSocket = (props: Props) => {
     setMode,
     setIsDebug,
     setScreenSize,
+    setCurrentUser,
+    setIsJoroMode,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -98,6 +102,9 @@ export const connectWebSocket = (props: Props) => {
       setMode(data.body.mode);
       setIsDebug(data.body.debug);
       setScreenSize(data.body.screen);
+    } else if (data.head.type === "user_ready") {
+      setCurrentUser(data.body.user);
+      setIsJoroMode(true);
     }
   };
 

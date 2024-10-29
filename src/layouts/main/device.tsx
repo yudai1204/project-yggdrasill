@@ -1,11 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType } from "@/types/calibrate";
+import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
 import { useWindowSize } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { DeviceCalibration } from "./useDevice/DeviceCalibration";
 import { DeviceAnimation } from "./useDevice/DeviceAnimation";
+import { WaitingDevice } from "./useDevice/WaitingDevice";
 
 export const Device = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
@@ -25,6 +26,11 @@ export const Device = () => {
   } | null>(null);
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [isDebug, setIsDebug] = useState<boolean>(false);
+
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
+  const [animationStartFrom, setAnimationStartFrom] =
+    useState<number>(Infinity);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -68,6 +74,8 @@ export const Device = () => {
       setMode,
       setIsDebug,
       setScreenSize,
+      setCurrentUser,
+      setIsJoroMode,
     });
 
     return () => {
@@ -99,12 +107,21 @@ export const Device = () => {
         />
       )}
       {mode === "Operation" && (
-        <DeviceAnimation
-          screenSize={screenSize}
-          isDebug={isDebug}
-          deviceNum={deviceNum}
-          deviceBody={deviceBody}
-        />
+        <>
+          {!currentUser ? (
+            <WaitingDevice />
+          ) : (
+            <DeviceAnimation
+              screenSize={screenSize}
+              isDebug={isDebug}
+              deviceNum={deviceNum}
+              deviceBody={deviceBody}
+              isJoroMode={isJoroMode}
+              currentUser={currentUser}
+              animationStartFrom={animationStartFrom}
+            />
+          )}
+        </>
       )}
     </Box>
   );

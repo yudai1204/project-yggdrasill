@@ -15,8 +15,6 @@ type Props = {
 export const User = (props: Props) => {
   const { gptAnalysis, answers } = props;
 
-  console.log(gptAnalysis);
-
   const windowRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const userBodyRef = useRef<UserType | null>(null);
@@ -61,7 +59,13 @@ export const User = (props: Props) => {
       gptAnalysis,
     });
 
+    // 30分で再接続を行わなくする
+    const timeout = setTimeout(() => {
+      shouldReconnect.current = false;
+    }, 30 * 60000);
+
     return () => {
+      clearTimeout(timeout);
       // コンポーネントのアンマウント時に手動でWebSocketを閉じる
       // shouldReconnect.current = false;
       // clearTimeout(reconnectTimeout.current ?? undefined);
@@ -89,6 +93,15 @@ export const User = (props: Props) => {
           connectingStatus={connectingStatus}
           onReady={() => {
             setDisplayStep(1);
+            if (userBodyRef.current) {
+              userBodyRef.current = {
+                ...userBodyRef.current,
+                zoom: qrZoom,
+                ready: true,
+              };
+              setUserBody({ ...userBodyRef.current });
+              sendJson(wsRef.current, userBodyRef.current, "user_ready");
+            }
           }}
         />
       )}

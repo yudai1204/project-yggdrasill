@@ -27,7 +27,7 @@ export const SeedWatering = () => {
             castShadow
             receiveShadow
             position={[0, -1, 0]}
-            scale={2.4}
+            scale={1.8}
             rotation={[0, -Math.PI / 5, 0]}
           >
             <Seed />

@@ -18,9 +18,10 @@ type GLTFResult = {
 interface ModelProps {
   url: string;
   textureUrl: string;
+  doAnimation: boolean;
 }
 
-const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
+const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF(url) as unknown as GLTFResult;
   const { actions } = useAnimations(animations, group);
@@ -31,8 +32,33 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
     Object.values(actions).forEach((action) => {
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = 2.5; // アニメーションの速度を設定（適宜調整）
-      action?.play();
+      action!.timeScale = 1.5; // アニメーションの速度を設定（適宜調整）
+      if (doAnimation) {
+        action?.play();
+        // doAnimationがtrueのとき、透明度を元に戻す
+        scene.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            if (mesh.material instanceof MeshStandardMaterial) {
+              mesh.material.transparent = false;
+              mesh.material.opacity = 1;
+              mesh.material.needsUpdate = true;
+            }
+          }
+        });
+      } else {
+        // doAnimationがfalseのとき、全体を透明にする
+        scene.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            if (mesh.material instanceof MeshStandardMaterial) {
+              mesh.material.transparent = true;
+              mesh.material.opacity = 0;
+              mesh.material.needsUpdate = true;
+            }
+          }
+        });
+      }
     });
 
     // テクスチャの繰り返し設定
@@ -48,23 +74,28 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
           mesh.material.needsUpdate = true;
         }
         // 影を計算させる
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+        mesh.castShadow = doAnimation;
+        mesh.receiveShadow = doAnimation;
         //範囲外でも描画する
         mesh.frustumCulled = false;
       }
     });
-  }, [actions, scene, texture]);
+  }, [actions, scene, texture, doAnimation]);
 
   return <primitive ref={group} object={scene} />;
 };
 
-export const Tree = () => {
+type Props = {
+  doAnimation?: boolean;
+};
+export const Tree = (props: Props) => {
+  const { doAnimation = true } = props;
   return (
     <>
       <Model
         url="/gltf/tree_grow_curve.glb"
         textureUrl="/textures/minecraft.png"
+        doAnimation={doAnimation}
       />
     </>
   );

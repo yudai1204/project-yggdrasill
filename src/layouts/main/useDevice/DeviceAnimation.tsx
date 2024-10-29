@@ -1,6 +1,6 @@
 import { Heading, Box } from "@chakra-ui/react";
 import { AnimationBase } from "@/components/AnimationBase";
-import { DeviceType, ScreenType } from "@/types/calibrate";
+import { DeviceType, ScreenType, UserType } from "@/types/calibrate";
 import { useState, useMemo, useEffect } from "react";
 import { defaultCameraOptions } from "@/util/constants";
 
@@ -9,10 +9,21 @@ type Props = {
   deviceNum: number | null;
   deviceBody: DeviceType | null;
   screenSize: { width: number; height: number } | null;
+  isJoroMode: boolean;
+  animationStartFrom: number; // UnixTime
+  currentUser: UserType | null;
 };
 
 export const DeviceAnimation = (props: Props) => {
-  const { isDebug, deviceNum, deviceBody, screenSize } = props;
+  const {
+    isDebug,
+    deviceNum,
+    deviceBody,
+    screenSize,
+    isJoroMode,
+    animationStartFrom,
+    currentUser,
+  } = props;
 
   const [hoge, setHoge] = useState<number>(0);
 
@@ -68,6 +79,9 @@ export const DeviceAnimation = (props: Props) => {
       {
         <AnimationBase
           isDebug={isDebug}
+          isJoroMode={isJoroMode}
+          animationStartFrom={animationStartFrom}
+          currentUser={currentUser}
           cameraOptions={{
             ...defaultCameraOptions,
             viewOffset,

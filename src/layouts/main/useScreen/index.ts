@@ -1,4 +1,9 @@
-import type { DeviceType, ScreenType, SpPos } from "@/types/calibrate";
+import type {
+  DeviceType,
+  ScreenType,
+  UserType,
+  SpPos,
+} from "@/types/calibrate";
 import { sendJson } from "@/util/util";
 import { getScreenSize } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
@@ -26,6 +31,8 @@ type Props = {
   setMode: React.Dispatch<React.SetStateAction<"Calibration" | "Operation">>;
   setIsDebug: React.Dispatch<React.SetStateAction<boolean>>;
   setSpPos: React.Dispatch<React.SetStateAction<SpPos>>;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  setIsJoroMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -40,6 +47,8 @@ export const connectWebSocket = (props: Props) => {
     setMode,
     setIsDebug,
     setSpPos,
+    setCurrentUser,
+    setIsJoroMode,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -95,6 +104,9 @@ export const connectWebSocket = (props: Props) => {
       };
       setSpPos(newPos);
       console.log("spPosition", newPos);
+    } else if (data.head.type === "user_ready") {
+      setCurrentUser(data.body.user);
+      setIsJoroMode(true);
     }
   };
 

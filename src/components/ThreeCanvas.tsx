@@ -5,13 +5,15 @@ import * as THREE from "three";
 import { Basic } from "./Basic";
 import { CameraOptions } from "@/types/camera";
 
-// メイン
 type Props = {
   isDebug: boolean;
   cameraOptions: CameraOptions;
+  isJoroMode: boolean;
+  animationStartFrom: number;
 };
+
 export const ThreeCanvas = (props: Props) => {
-  const { isDebug, cameraOptions } = props;
+  const { isDebug, cameraOptions, isJoroMode, animationStartFrom } = props;
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
@@ -25,7 +27,11 @@ export const ThreeCanvas = (props: Props) => {
             // outputEncoding: THREE.sRGBEncoding,
           }}
         >
-          <Basic isDebug={isDebug} cameraOptions={cameraOptions} />
+          <Basic
+            isDebug={isDebug}
+            cameraOptions={cameraOptions}
+            animationStartFrom={animationStartFrom}
+          />
         </Canvas>
       </StrictMode>
     </div>
