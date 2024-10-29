@@ -133,6 +133,7 @@ export const FormBody = (props: Props) => {
                     onChange={(e) => handleTextInput(index, e.target.value)}
                     fontFamily="Kaisei Opti"
                     borderRightRadius={0}
+                    maxLength={language === "en" ? 20 : 12}
                   />
                   <Button
                     onClick={() => setActiveQuestion(index + 1)}
@@ -169,7 +170,19 @@ export const FormBody = (props: Props) => {
           marginTop="5"
           opacity={answers.includes(undefined) ? 0.5 : 1}
           onClick={() => {
-            !answers.includes(undefined) && submitAnswers();
+            if (!answers.includes(undefined)) {
+              if (
+                answers[0]?.match(
+                  /[無視|命令|ください|プロンプト|ignore|command|prompt|]/i
+                )
+              ) {
+                alert(
+                  "申し訳ありませんが、その名前は使用できません。\nSorry, that name is not allowed."
+                );
+                return;
+              }
+              submitAnswers();
+            }
           }}
           fontFamily="Kaisei Opti"
         >

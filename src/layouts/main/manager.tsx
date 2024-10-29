@@ -75,7 +75,16 @@ export const Manager = () => {
       setConnectingCount,
     });
 
+    // 接続維持のためのping pong
+    const pingPongInterval = setInterval(
+      () => {
+        sendJson(wsRef.current, {}, "getCurrentSettings");
+      },
+      2 * 60 * 1000
+    );
+
     return () => {
+      clearInterval(pingPongInterval);
       // コンポーネントのアンマウント時に手動でWebSocketを閉じる
       // shouldReconnect.current = false;
       // clearTimeout(reconnectTimeout.current ?? undefined);
