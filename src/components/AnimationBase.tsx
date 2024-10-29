@@ -27,7 +27,7 @@ export const AnimationBase = (props: Props) => {
     cameraOptions = defaultCameraOptions,
     p5 = false,
     isJoroMode = false,
-    animationStartFrom = 0,
+    animationStartFrom,
     currentUser = null,
   } = props;
   return (

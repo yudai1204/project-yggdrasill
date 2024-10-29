@@ -37,6 +37,7 @@ type Props = {
   >;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   setIsJoroMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnimationStartFrom: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -53,6 +54,7 @@ export const connectWebSocket = (props: Props) => {
     setScreenSize,
     setCurrentUser,
     setIsJoroMode,
+    setAnimationStartFrom,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -105,6 +107,9 @@ export const connectWebSocket = (props: Props) => {
     } else if (data.head.type === "user_ready") {
       setCurrentUser(data.body.user);
       setIsJoroMode(true);
+    } else if (data.head.type === "animation_start") {
+      setAnimationStartFrom(data.body.animationStartFrom);
+      setIsJoroMode(false);
     }
   };
 

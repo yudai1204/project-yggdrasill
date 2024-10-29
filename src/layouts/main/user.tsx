@@ -30,8 +30,10 @@ export const User = (props: Props) => {
     height: number;
   } | null>(null);
   const [qrZoom, setQRZoom] = useState<number>(0);
-
   const [displayStep, setDisplayStep] = useState<number>(0);
+  const [animationCount, setAnimationCount] = useState<number>(0);
+  const [adjustedAnimationCount, setAdjustedAnimationCount] =
+    useState<number>(0);
 
   const windowSize = useWindowSize(windowRef);
 
@@ -43,6 +45,22 @@ export const User = (props: Props) => {
       sendJson(wsRef.current, userBodyRef.current, "user_update");
     }
   }, [windowSize]);
+
+  useEffect(() => {
+    if (displayStep === 1 && animationCount > 0) {
+      setAdjustedAnimationCount((prev) => prev + 1);
+      if (animationCount === 3) {
+        sendJson(
+          wsRef.current,
+          {
+            ...userBodyRef.current,
+            animationStartFrom: new Date().getTime() + 3000,
+          },
+          "animation_start"
+        );
+      }
+    }
+  }, [animationCount, displayStep]);
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
@@ -57,6 +75,7 @@ export const User = (props: Props) => {
       setQRZoom,
       answers,
       gptAnalysis,
+      setAnimationCount,
     });
 
     // 30分で再接続を行わなくする
@@ -107,7 +126,7 @@ export const User = (props: Props) => {
       )}
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
-          <SeedWatering />
+          <SeedWatering animationCount={adjustedAnimationCount} />
         </Box>
       )}
     </Box>

@@ -171,16 +171,16 @@ export const FormBody = (props: Props) => {
           opacity={answers.includes(undefined) ? 0.5 : 1}
           onClick={() => {
             if (!answers.includes(undefined)) {
-              if (
-                answers[0]?.match(
-                  /[無視|命令|ください|プロンプト|ignore|command|prompt|]/i
-                )
-              ) {
-                alert(
-                  "申し訳ありませんが、その名前は使用できません。\nSorry, that name is not allowed."
-                );
-                return;
-              }
+              // if (
+              //   answers[0]?.match(
+              //     /無視|命令|ください|プロンプト|ignore|command|prompt|/i
+              //   )
+              // ) {
+              //   alert(
+              //     "申し訳ありませんが、その名前は使用できません。\nSorry, that name is not allowed."
+              //   );
+              //   return;
+              // }
               submitAnswers();
             }
           }}

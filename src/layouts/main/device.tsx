@@ -29,8 +29,9 @@ export const Device = () => {
 
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
-  const [animationStartFrom, setAnimationStartFrom] =
-    useState<number>(Infinity);
+  const [animationStartFrom, setAnimationStartFrom] = useState<number>(
+    new Date().getTime() + 1000 * 60 * 60 * 24
+  );
 
   const windowSize = useWindowSize(windowRef);
 
@@ -76,6 +77,7 @@ export const Device = () => {
       setScreenSize,
       setCurrentUser,
       setIsJoroMode,
+      setAnimationStartFrom,
     });
 
     return () => {

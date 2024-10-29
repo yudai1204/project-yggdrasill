@@ -46,10 +46,13 @@ export const Basic = (props: Props) => {
     // もしすでにアニメーション開始時刻を過ぎていたら、すぐにアニメーションを開始する
     // 本当はズレている分を考慮する必要があるが、今回は簡略化
     if (now >= animationStartFrom) {
+      console.log("start animation now");
       setDoAnimation(true);
     } else {
+      console.log("wait for animation start");
       // まだアニメーション開始時刻が来ていない場合は、アニメーション開始時刻まで待機する
       const timer = setTimeout(() => {
+        console.log("start animation!!");
         setDoAnimation(true);
       }, animationStartFrom - now);
       return () => clearTimeout(timer);

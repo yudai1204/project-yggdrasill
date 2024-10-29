@@ -86,8 +86,6 @@ export const Form = () => {
           h="100svh"
           margin="auto"
           padding="5"
-          borderWidth="1px"
-          borderRadius="md"
           boxShadow="lg"
           position="relative"
           fontFamily={"Zen Maru Gothic"}

@@ -41,7 +41,7 @@ export const DeviceAnimation = (props: Props) => {
     setTimeout(() => {
       setHoge((prev) => prev + 1);
     }, 5000);
-  }, []);
+  }, [isJoroMode, animationStartFrom]);
 
   // 高さから視野角を計算
   const viewOffset = useMemo(() => {

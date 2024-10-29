@@ -90,6 +90,7 @@ type Props = {
 };
 export const Tree = (props: Props) => {
   const { doAnimation = true } = props;
+
   return (
     <>
       <Model

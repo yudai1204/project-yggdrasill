@@ -51,6 +51,7 @@ type Props = {
   setQRZoom: React.Dispatch<React.SetStateAction<number>>;
   answers: (string | undefined)[];
   gptAnalysis: GptAnalysis;
+  setAnimationCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -65,6 +66,7 @@ export const connectWebSocket = (props: Props) => {
     setQRZoom,
     answers,
     gptAnalysis,
+    setAnimationCount,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -104,9 +106,7 @@ export const connectWebSocket = (props: Props) => {
     } else if (data.head.type === "qrRead") {
       setQRZoom(data.body.zoom);
     } else if (data.head.type === "joro_status") {
-      // TODO: ジョウロからStatusが送られてきた時の処理
-      // 3回wateringがtrueの状態で送られてきたら、animation_startを送る
-      // animation_startは要実装
+      setAnimationCount((prev) => prev + 1);
     }
   };
 
