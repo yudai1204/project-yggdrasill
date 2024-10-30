@@ -7,7 +7,6 @@ import { sendJson } from "@/util/util";
 
 // 倍率
 // 数字を大きくすると、screenに表示されるスマホサイズが小さくなる
-const ZOOM_CONSTANT = 60;
 
 const initQRReader = () => {
   const qrReader: QrReaderType = {
@@ -53,6 +52,8 @@ const QrScanner = () => {
 
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
+
+  const [zoomConstant, setZoomConstant] = useState<number>(100);
 
   useEffect(() => {
     // const startVideo = async () => {
@@ -177,7 +178,7 @@ const QrScanner = () => {
 
           // QRコードのサイズを計算
           // /50を変更することで適宜調整
-          const size = (width + height) / 2 / ZOOM_CONSTANT;
+          const size = (width + height) / 2 / zoomConstant;
           sendJson(
             wsRef.current,
             {
@@ -222,7 +223,7 @@ const QrScanner = () => {
   useEffect(() => {
     const interval = setInterval(scanQRCode, 1000); // 1000msごとにQRコードをスキャン
     return () => clearInterval(interval);
-  }, []);
+  }, [zoomConstant]);
 
   return (
     <Box>
@@ -241,6 +242,18 @@ const QrScanner = () => {
             </option>
           ))}
         </select>
+      </Box>
+      <Box my={3}>
+        ZOOM倍率:
+        <input
+          type="number"
+          value={zoomConstant}
+          onChange={(e) =>
+            setZoomConstant(
+              parseInt(e.target.value) <= 0 ? 1 : parseInt(e.target.value)
+            )
+          }
+        />
       </Box>
       <Box width={640} bg="gray.200" position="relative">
         <canvas
@@ -266,7 +279,9 @@ const QrScanner = () => {
           }}
         ></video>
       </Box>
-      <p>Status: {connectingStatus}</p>
+      <p style={{ color: connectingStatus === "Connected" ? "#2a4" : "#a24" }}>
+        Status: {connectingStatus}
+      </p>
       <p>UUID: {uuid}</p>
       {!qrData && <p>QRコードが見つかりません</p>}
       {qrData && <p>QRコードデータ: {qrData}</p>}

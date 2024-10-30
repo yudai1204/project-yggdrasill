@@ -1,5 +1,6 @@
 export const questions = {
   en: [
+    "Select your favorite colors",
     "What is your name?",
     "What is your favorite animal?",
     "What is your favorite season?",
@@ -10,6 +11,7 @@ export const questions = {
     "What do you want to do or like to do in this list?",
   ],
   jp: [
+    "好きな色を選択してください",
     "あなたの名前はなんですか？",
     "好きな動物はなんですか？",
     "好きな季節はなんですか？",
@@ -23,6 +25,7 @@ export const questions = {
 
 export const questionSummary = {
   en: [
+    "Colors",
     "Your Name",
     "Favorite Animal",
     "Favorite Season",
@@ -33,6 +36,7 @@ export const questionSummary = {
     "Favorite Activity",
   ],
   jp: [
+    "好きな色",
     "名前",
     "好きな動物",
     "好きな季節",
@@ -46,6 +50,7 @@ export const questionSummary = {
 
 export const options = {
   en: [
+    [""],
     [""],
     ["Dog", "Cat", "Panda", "Rabbit", "Fish", "Bird", "Hamster"],
     ["Spring", "Summer", "Autumn", "Winter"],
@@ -94,6 +99,7 @@ export const options = {
     ],
   ],
   jp: [
+    [""],
     [""],
     ["犬", "猫", "パンダ", "うさぎ", "魚", "鳥", "ハムスター"],
     ["春", "夏", "秋", "冬"],

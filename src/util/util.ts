@@ -1,3 +1,6 @@
+import colorNameList from "color-name-list";
+import nearestColor from "nearest-color";
+
 export const getScreenSize = () => {
   return {
     width: window.innerWidth,
@@ -43,4 +46,23 @@ export const getColor = (num: number) => {
     ["#03852e", "#f5a9ca"],
   ];
   return colors[num % colors.length];
+};
+
+export const calculateTimeOffset = (timeOffset: {
+  value: number;
+  begin: number;
+  serverTime: number;
+}) => {
+  return (
+    new Date().getTime() / 2 - timeOffset.serverTime + timeOffset.begin / 2
+  );
+};
+
+export const getNearestColor = (hex: string) => {
+  const colors = colorNameList.reduce(
+    (o, { name, hex }) => Object.assign(o, { [name]: hex }),
+    {}
+  );
+  const nearest = nearestColor.from(colors);
+  return nearest(hex);
 };

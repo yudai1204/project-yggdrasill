@@ -9,6 +9,7 @@ export default function Home() {
       h="100lvh"
       overflow="hidden"
     >
+      <title>Project Yggdrasil</title>
       <Form />
     </Box>
   );

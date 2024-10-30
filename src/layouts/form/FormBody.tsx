@@ -16,9 +16,10 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { TbLanguageHiragana } from "react-icons/tb";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "@fontsource/kaisei-opti";
 import { questions, options, questionSummary } from "./questions";
+import { ColorPicker } from "@/components/ColorPicker";
 
 type Props = {
   submitAnswers: () => void;
@@ -39,6 +40,7 @@ export const FormBody = (props: Props) => {
     language,
     opacity,
   } = props;
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   const [activeQuestion, setActiveQuestion] = useState<number | undefined>(
     undefined
@@ -48,11 +50,31 @@ export const FormBody = (props: Props) => {
     setActiveQuestion(0);
   }, []);
 
+  useEffect(() => {
+    // スクロールする
+    const timeout = setTimeout(() => {
+      if (activeQuestion !== undefined && formRef.current) {
+        console.log("activeQuestion", activeQuestion);
+        const target = activeQuestion * 120;
+        const current = formRef.current.scrollTop;
+        console.log("current", current);
+        formRef.current.scrollTo({
+          top: target,
+          // behavior: "smooth",
+        });
+      }
+    }, 0);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [activeQuestion, formRef.current]);
+
   const handleAnswer = (index: number, value: string) => {
     const newAnswers = [...answers];
     newAnswers[index] = value;
     setAnswers(newAnswers);
-    if (index < questions.en.length - 1) {
+    if (index < questions.en.length - 1 && index !== 0) {
       setTimeout(() => {
         setActiveQuestion(index + 1);
       }, 100);
@@ -70,6 +92,7 @@ export const FormBody = (props: Props) => {
   };
   return (
     <Box
+      ref={formRef}
       position="absolute"
       top={0}
       left={0}
@@ -105,61 +128,117 @@ export const FormBody = (props: Props) => {
         <Text marginLeft="2">{language === "en" ? "日本語" : "English"}</Text>
       </Button>
       <Accordion allowToggle index={activeQuestion}>
-        {questions[language].map((question, index) => (
-          <AccordionItem key={index}>
-            <AccordionButton onClick={() => setActiveQuestion(index)}>
-              <Box
-                flex="1"
-                textAlign="left"
-                fontWeight={activeQuestion === index ? "bold" : "normal"}
-                opacity={index === activeQuestion || !answers[index] ? 1 : 0.7}
-                fontFamily="Kaisei Opti"
-              >
-                {index + 1}.{" "}
-                {index === activeQuestion || !answers[index]
-                  ? question
-                  : `${questionSummary[language][index]}: ${answers[index]}`}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              {index === 0 ? ( // 例として1番目の質問を自由入力に変更
-                <HStack spacing={0}>
-                  <Input
-                    placeholder={
-                      language === "en" ? "Type your answer" : "回答を入力"
-                    }
-                    value={answers[index] || ""}
-                    onChange={(e) => handleTextInput(index, e.target.value)}
-                    fontFamily="Kaisei Opti"
-                    borderRightRadius={0}
-                    maxLength={language === "en" ? 20 : 12}
-                  />
-                  <Button
-                    onClick={() => setActiveQuestion(index + 1)}
-                    fontFamily="Kaisei Opti"
-                    borderLeftRadius={0}
-                  >
-                    {language === "en" ? "Next" : "次へ"}
-                  </Button>
-                </HStack> // 追加
-              ) : (
-                <RadioGroup
-                  onChange={(value) => handleAnswer(index, value)}
-                  value={answers[index]}
+        {questions[language].map((question, index) => {
+          const style =
+            index === activeQuestion || !answers[index] ? {} : { opacity: 0.8 };
+          return (
+            <AccordionItem key={index}>
+              <AccordionButton onClick={() => setActiveQuestion(index)}>
+                <Box
+                  flex="1"
+                  textAlign="left"
+                  fontWeight={activeQuestion === index ? "bold" : "normal"}
+                  fontFamily="Kaisei Opti"
                 >
-                  <VStack align="start">
-                    {options[language][index].map((option, idx) => (
-                      <Radio key={idx} value={option}>
-                        <Text fontFamily="Kaisei Opti">{option}</Text>
-                      </Radio>
-                    ))}
-                  </VStack>
-                </RadioGroup>
-              )}
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
+                  <span style={style}>{index + 1}. </span>
+                  {index === activeQuestion || !answers[index] ? (
+                    <span style={style}>{question}</span>
+                  ) : (
+                    <>
+                      <span style={style}>
+                        {questionSummary[language][index]}:{" "}
+                      </span>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          borderRadius: "5px",
+                          fontWeight: index === 0 ? "bold" : "normal",
+                          backgroundColor:
+                            index === 0 ? answers[index] : "inherit",
+                          color:
+                            index === 0 &&
+                            parseInt(answers[index].slice(1), 16) > 0x7fffff
+                              ? "#000"
+                              : "#FFF",
+                          opacity: index === 0 ? 1 : style.opacity,
+                          padding: index === 0 ? "0 5px" : "0",
+                        }}
+                      >
+                        {answers[index]}
+                      </span>
+                    </>
+                  )}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                {index === 0 && (
+                  <Box>
+                    <Box width="fit-content" margin="auto">
+                      <ColorPicker
+                        onChange={(color) => handleAnswer(index, color)}
+                        onClickOk={() => setActiveQuestion(index + 1)}
+                      />
+                    </Box>
+                    <Button
+                      onClick={() => setActiveQuestion(index + 1)}
+                      fontFamily="Kaisei Opti"
+                      marginTop="5"
+                      w="100%"
+                    >
+                      {language === "en" ? "Next" : "次へ"}
+                    </Button>
+                  </Box>
+                )}
+                {index === 1 && (
+                  <HStack spacing={0}>
+                    <Input
+                      placeholder={
+                        language === "en" ? "Type your answer" : "回答を入力"
+                      }
+                      value={answers[index] || ""}
+                      onChange={(e) => handleTextInput(index, e.target.value)}
+                      fontFamily="Kaisei Opti"
+                      borderRightRadius={0}
+                      maxLength={language === "en" ? 20 : 12}
+                      onKeyDown={(e) => {
+                        const event =
+                          e as React.KeyboardEvent<HTMLInputElement>;
+                        if (
+                          event.key === "Enter" &&
+                          !event.nativeEvent.isComposing
+                        ) {
+                          setActiveQuestion(index + 1);
+                        }
+                      }}
+                    />
+                    <Button
+                      onClick={() => setActiveQuestion(index + 1)}
+                      fontFamily="Kaisei Opti"
+                      borderLeftRadius={0}
+                    >
+                      {language === "en" ? "Next" : "次へ"}
+                    </Button>
+                  </HStack> // 追加
+                )}
+                {index > 1 && (
+                  <RadioGroup
+                    onChange={(value) => handleAnswer(index, value)}
+                    value={answers[index]}
+                  >
+                    <VStack align="start">
+                      {options[language][index].map((option, idx) => (
+                        <Radio key={idx} value={option}>
+                          <Text fontFamily="Kaisei Opti">{option}</Text>
+                        </Radio>
+                      ))}
+                    </VStack>
+                  </RadioGroup>
+                )}
+              </AccordionPanel>
+            </AccordionItem>
+          );
+        })}
       </Accordion>
       {activeQuestion === questions.en.length - 1 && (
         <Button

@@ -22,6 +22,7 @@ export const ThreeCanvas = (props: Props) => {
     isJoroMode,
     animationStartFrom,
   } = props;
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
@@ -38,7 +39,9 @@ export const ThreeCanvas = (props: Props) => {
           <Basic
             isDebug={isDebug}
             cameraOptions={cameraOptions}
-            animationStartFrom={animationStartFrom}
+            animationStartFrom={
+              animationStartFrom - (currentUser?.timeOffset.value ?? 0)
+            }
           />
         </Canvas>
       </StrictMode>

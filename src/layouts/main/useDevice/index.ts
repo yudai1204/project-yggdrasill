@@ -1,6 +1,5 @@
 import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
-import { sendJson } from "@/util/util";
-import { getScreenSize } from "@/util/util";
+import { sendJson, getScreenSize, calculateTimeOffset } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
 
 const initDevice = () => {
@@ -93,7 +92,7 @@ export const connectWebSocket = (props: Props) => {
         ...data.body,
         timeOffset: {
           ...data.body.timeOffset,
-          value: (new Date().getTime() - data.body.timeOffset.begin) / 2,
+          value: calculateTimeOffset(data.body.timeOffset),
         },
       };
       setDeviceBody(deviceBodyRef.current);

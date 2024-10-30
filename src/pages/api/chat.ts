@@ -64,7 +64,7 @@ const handler = async (
       messages: [
         {
           role: "system",
-          content: `メディアアートとして、ユーザごとにオリジナルの木と花をアニメーションで表示します。入力されたアンケートの結果から、ユーザに適した情報を教えてください。flowerColorは、#000000 〜 #FFFFFF の範囲で指定してください。なお、flowerNameは${language}で指定してください。`,
+          content: `メディアアートとして、ユーザごとにオリジナルの木と花をアニメーションで表示します。入力されたアンケートの結果から、ユーザに適した情報を教えてください。flowerColorは、#000000 〜 #FFFFFF の範囲で、3つ指定してください。なお、flowerNameは${language}で指定してください。`,
         },
         { role: "user", content: prompt },
       ],
