@@ -66,3 +66,36 @@ export const getNearestColor = (hex: string) => {
   const nearest = nearestColor.from(colors);
   return nearest(hex);
 };
+
+export const generateTintColors = (
+  hex: string,
+  numberOfTints: number
+): string[] => {
+  const hexToRgb = (hex: string) => {
+    const bigint = parseInt(hex.slice(1), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return [r, g, b];
+  };
+
+  const rgbToHex = (r: number, g: number, b: number) => {
+    return (
+      "#" +
+      ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
+    );
+  };
+
+  const [r, g, b] = hexToRgb(hex);
+  const tints = [];
+
+  for (let i = 1; i <= numberOfTints; i++) {
+    const factor = (0.9 * i) / (numberOfTints + 1);
+    const newR = Math.round(r + (255 - r) * factor);
+    const newG = Math.round(g + (255 - g) * factor);
+    const newB = Math.round(b + (255 - b) * factor);
+    tints.push(rgbToHex(newR, newG, newB));
+  }
+
+  return tints;
+};

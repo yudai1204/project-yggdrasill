@@ -15,7 +15,6 @@ type Props = {
   isDebug: boolean;
   logo?: boolean;
   cameraOptions?: CameraOptions;
-  p5?: boolean;
   isJoroMode: boolean;
   animationStartFrom: number; // UnixTime
   currentUser: UserType | null;
@@ -25,7 +24,6 @@ export const AnimationBase = (props: Props) => {
     logo = false,
     isDebug,
     cameraOptions = defaultCameraOptions,
-    p5 = false,
     isJoroMode = false,
     animationStartFrom,
     currentUser,
@@ -34,11 +32,6 @@ export const AnimationBase = (props: Props) => {
   return (
     <>
       <Box width="100%" height="100svh">
-        {p5 && (
-          <Box position="absolute" top="0" left="0" width="100%" height="100%">
-            <P5Canvas />
-          </Box>
-        )}
         <Box position="absolute" top="0" left="0" width="100%" height="100%">
           <ThreeCanvas
             currentUser={currentUser}
