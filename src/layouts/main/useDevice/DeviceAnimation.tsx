@@ -29,19 +29,12 @@ export const DeviceAnimation = (props: Props) => {
 
   // なぜか再レンダリングが走らないと座標計算に致命的なずが生じる
   useEffect(() => {
-    setTimeout(() => {
+    setHoge(0);
+    const interval = setInterval(() => {
       setHoge((prev) => prev + 1);
-    }, 100);
-    setTimeout(() => {
-      setHoge((prev) => prev + 1);
-    }, 500);
-    setTimeout(() => {
-      setHoge((prev) => prev + 1);
-    }, 1000);
-    setTimeout(() => {
-      setHoge((prev) => prev + 1);
-    }, 5000);
-  }, [isJoroMode, animationStartFrom]);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isJoroMode, animationStartFrom, currentUser]);
 
   // 高さから視野角を計算
   const viewOffset = useMemo(() => {
