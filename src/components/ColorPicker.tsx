@@ -3,7 +3,7 @@ import {
   CirclePicker,
   type ColorChangeHandler,
 } from "react-color";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Center,
@@ -23,9 +23,10 @@ import { getNearestColor } from "@/util/util";
 type Props = {
   onChange: (color: string) => void;
   onClickOk?: () => void;
+  setFontColor?: React.Dispatch<React.SetStateAction<string>>;
 };
 export const ColorPicker = (props: Props) => {
-  const { onChange, onClickOk = () => {} } = props;
+  const { onChange, onClickOk = () => {}, setFontColor } = props;
   const [color, setColor] = useState<string>("#fe5060");
   const [colorName, setColorName] = useState<string | null>(null);
   const [textColor, setTextColor] = useState<string>("#000000");
@@ -45,6 +46,12 @@ export const ColorPicker = (props: Props) => {
   useEffect(() => {
     onChange(color);
   }, [color]);
+
+  useEffect(() => {
+    if (setFontColor) {
+      setFontColor(textColor);
+    }
+  }, [textColor, setFontColor]);
 
   const handleChange: ColorChangeHandler = (color, event) => {
     setTextColor(color.hsl.l > 0.55 ? "#000" : "#fff");

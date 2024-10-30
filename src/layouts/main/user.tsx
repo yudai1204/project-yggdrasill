@@ -118,6 +118,20 @@ export const User = (props: Props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (userBody?.animationStartFrom === undefined) return;
+    const timeout = setTimeout(
+      () => {
+        shouldReconnect.current = false;
+      },
+      userBody.animationStartFrom - new Date().getTime() + 60000
+    );
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [userBody?.animationStartFrom]);
+
   return (
     <Box
       w="100%"

@@ -45,6 +45,7 @@ export const FormBody = (props: Props) => {
   const [activeQuestion, setActiveQuestion] = useState<number | undefined>(
     undefined
   );
+  const [fontColor, setFontColor] = useState<string>("#000000");
 
   useEffect(() => {
     setActiveQuestion(0);
@@ -157,6 +158,7 @@ export const FormBody = (props: Props) => {
                             index === 0 ? answers[index] : "inherit",
                           opacity: index === 0 ? 1 : style.opacity,
                           padding: index === 0 ? "0 5px" : "0",
+                          color: index === 0 ? fontColor : "inherit",
                         }}
                       >
                         {answers[index]}
@@ -173,6 +175,7 @@ export const FormBody = (props: Props) => {
                       <ColorPicker
                         onChange={(color) => handleAnswer(index, color)}
                         onClickOk={() => setActiveQuestion(index + 1)}
+                        setFontColor={setFontColor}
                       />
                     </Box>
                     <Button
