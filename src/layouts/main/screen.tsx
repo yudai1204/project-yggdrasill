@@ -1,14 +1,14 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import {
+import type {
   UserType,
-  type DeviceType,
-  type ScreenType,
-  type SpPos,
+  DeviceType,
+  ScreenType,
+  SpPos,
 } from "@/types/calibrate";
 import { connectWebSocket } from "./useScreen";
 import { ScreenCalibration } from "./useScreen/ScreenCalibration";
-import { useWindowSize } from "@/util/hooks";
+import { useWindowSize, useNetworkStatus } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { ScreenAnimation } from "./useScreen/ScreenAnimation";
 import { WaitingScreen } from "./useScreen/WaitingScreen";
@@ -42,6 +42,18 @@ export const Screen = () => {
   );
 
   const windowSize = useWindowSize(windowRef);
+  const toast = useToast();
+  const isOnline = useNetworkStatus();
+
+  useEffect(() => {
+    if (wsRef.current && toast) {
+      toast({
+        title: isOnline ? "Network Connected" : "Network Error",
+        status: isOnline ? "success" : "error",
+        duration: isOnline ? 2000 : 5000,
+      });
+    }
+  }, [isOnline, wsRef.current, toast]);
 
   // resize時の挙動
   useEffect(() => {

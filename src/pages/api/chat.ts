@@ -11,10 +11,7 @@ const handler = async (
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  if (
-    req.body.key !==
-    "eyJhbGciOHiJIUzI1NiasInR5ckpXVCJ9.eyJ1vc2VyFIjoiYQisOjE2MzQwNjYwNzJ9"
-  ) {
+  if (req.body.key !== "magic") {
     return res.status(401).json({ error: "Unauthorized" });
   }
 

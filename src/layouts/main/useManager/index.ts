@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import type {
   DeviceType,
   ManagerType,
@@ -22,6 +23,7 @@ type Props = {
     React.SetStateAction<{ width: number; height: number } | null>
   >;
   setConnectingCount: React.Dispatch<React.SetStateAction<number>>;
+  toast: ReturnType<typeof useToast>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -38,6 +40,7 @@ export const connectWebSocket = (props: Props) => {
     setDisplayDebugger,
     setScreenSize,
     setConnectingCount,
+    toast,
   } = props;
 
   wsRef.current = new WebSocket(
@@ -71,17 +74,75 @@ export const connectWebSocket = (props: Props) => {
       setDevices([...data.body.devices]);
       setScreens([...data.body.screens]);
       setUsers([...data.body.users]);
-      setConnectingCount(data.body.connectingCount);
+      setConnectingCount((prev) => {
+        if (prev > data.body.connectingCount) {
+          toast({
+            title: "接続が切断されました",
+            description: "接続数: " + data.body.connectingCount,
+            status: "warning",
+            duration: 1500,
+            isClosable: true,
+          });
+        } else if (prev < data.body.connectingCount) {
+          toast({
+            title: "新しい接続が確立されました",
+            description: "接続数: " + data.body.connectingCount,
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "デバイス情報が変更されました",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        }
+        return data.body.connectingCount;
+      });
     } else if (data.head.type === "getCurrentSettings") {
       setMode(data.body.mode);
       setDisplayDebugger(data.body.debug);
       setScreenSize(data.body.screen);
+      toast({
+        title: "設定を更新しました",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
     } else if (data.head.type === "setMode") {
       setMode(data.body.mode);
+      toast({
+        title: `${data.body.mode}に切り替えました`,
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
     } else if (data.head.type === "setDebug") {
       setDisplayDebugger(data.body.debug);
+      toast({
+        title: `デバッグ表示: ${data.body.debug ? "ON" : "OFF"}`,
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
     } else if (data.head.type === "setMainScreen") {
       setScreenSize(data.body);
+      toast({
+        title: "スクリーンサイズを更新しました",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "不明なメッセージ",
+        description: data.head.type,
+        status: "info",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 

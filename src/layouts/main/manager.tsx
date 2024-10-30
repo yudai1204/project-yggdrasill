@@ -7,6 +7,7 @@ import {
   FormControl,
   FormLabel,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import type {
@@ -38,6 +39,8 @@ export const Manager = () => {
     width: number;
     height: number;
   } | null>(null);
+
+  const toast = useToast();
 
   const toggleDisplayDebugger = (e: React.ChangeEvent<HTMLInputElement>) => {
     sendJson(wsRef.current, { debug: e.target.checked }, "setDebug");
@@ -75,6 +78,7 @@ export const Manager = () => {
       setDisplayDebugger,
       setScreenSize,
       setConnectingCount,
+      toast,
     });
 
     // 接続維持のためのping pong

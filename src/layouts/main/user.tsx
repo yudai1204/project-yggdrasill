@@ -1,8 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import type { UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useUser";
-import { useWindowSize } from "@/util/hooks";
+import { useWindowSize, useNetworkStatus } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { UserQR } from "./useUser/UserQR";
 import { SeedWatering } from "./useUser/SeedWatering";
@@ -37,6 +37,18 @@ export const User = (props: Props) => {
     useState<number>(0);
 
   const windowSize = useWindowSize(windowRef);
+  const toast = useToast();
+  const isOnline = useNetworkStatus();
+
+  useEffect(() => {
+    if (wsRef.current && toast) {
+      toast({
+        title: isOnline ? "Network Connected" : "Network Error",
+        status: isOnline ? "success" : "error",
+        duration: isOnline ? 2000 : 5000,
+      });
+    }
+  }, [isOnline, wsRef.current, toast]);
 
   // resize時の挙動
   useEffect(() => {

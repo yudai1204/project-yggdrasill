@@ -1,8 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
-import { useWindowSize } from "@/util/hooks";
+import { useWindowSize, useNetworkStatus } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { DeviceCalibration } from "./useDevice/DeviceCalibration";
 import { DeviceAnimation } from "./useDevice/DeviceAnimation";
@@ -34,6 +34,18 @@ export const Device = () => {
   );
 
   const windowSize = useWindowSize(windowRef);
+  const toast = useToast();
+  const isOnline = useNetworkStatus();
+
+  useEffect(() => {
+    if (wsRef.current && toast) {
+      toast({
+        title: isOnline ? "Network Connected" : "Network Error",
+        status: isOnline ? "success" : "error",
+        duration: isOnline ? 2000 : 5000,
+      });
+    }
+  }, [isOnline, wsRef.current, toast]);
 
   const postUpdateDevice = (newDevice: DeviceType) => {
     deviceBodyRef.current = newDevice;
