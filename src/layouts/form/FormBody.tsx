@@ -155,11 +155,6 @@ export const FormBody = (props: Props) => {
                           fontWeight: index === 0 ? "bold" : "normal",
                           backgroundColor:
                             index === 0 ? answers[index] : "inherit",
-                          color:
-                            index === 0 &&
-                            parseInt(answers[index].slice(1), 16) > 0x7fffff
-                              ? "#000"
-                              : "#FFF",
                           opacity: index === 0 ? 1 : style.opacity,
                           padding: index === 0 ? "0 5px" : "0",
                         }}
