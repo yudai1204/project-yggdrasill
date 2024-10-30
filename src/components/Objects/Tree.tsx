@@ -8,6 +8,7 @@ import {
   RepeatWrapping,
 } from "three";
 import * as THREE from "three";
+import type { TreeType } from "@/types/metaData";
 
 // GLTF型の独自定義
 type GLTFResult = {
@@ -32,7 +33,7 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
     Object.values(actions).forEach((action) => {
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = 1.5; // アニメーションの速度を設定（適宜調整）
+      action!.timeScale = 3; // アニメーションの速度を設定（適宜調整）
       if (doAnimation) {
         action?.play();
         // doAnimationがtrueのとき、透明度を元に戻す
@@ -70,8 +71,12 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (mesh.material instanceof MeshStandardMaterial) {
+          mesh.material.color = new THREE.Color(0xb5997f); // 暗めの色に設定
           mesh.material.map = texture;
           mesh.material.needsUpdate = true;
+          mesh.material.envMapIntensity = 1; // 環境光の影響を減らす
+          mesh.material.roughness = 1.8; // 表面を粗くして光の反射を抑える
+          mesh.material.metalness = 0.1; // 金属感を減らす
         }
         // 影を計算させる
         mesh.castShadow = doAnimation;
@@ -87,15 +92,20 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
 
 type Props = {
   doAnimation?: boolean;
+  type?: TreeType;
 };
 export const Tree = (props: Props) => {
-  const { doAnimation = true } = props;
+  const { doAnimation = true, type = "conifer" } = props;
 
   return (
     <>
       <Model
-        url="/gltf/tree_grow_curve.glb"
-        textureUrl="/textures/minecraft.png"
+        url={
+          type === "conifer"
+            ? "/gltf/tree_grow2.glb"
+            : "/gltf/mominoki_tree.glb"
+        }
+        textureUrl="/textures/tree_texture_normal.jpg"
         doAnimation={doAnimation}
       />
     </>

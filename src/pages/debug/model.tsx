@@ -58,7 +58,7 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl }) => {
 
 // メイン
 type Props = {};
-const SeedWatering = () => {
+const Modeling = () => {
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <StrictMode>
@@ -91,4 +91,4 @@ const SeedWatering = () => {
   );
 };
 
-export default SeedWatering;
+export default Modeling;

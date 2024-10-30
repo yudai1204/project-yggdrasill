@@ -42,6 +42,7 @@ export const ThreeCanvas = (props: Props) => {
             animationStartFrom={
               animationStartFrom - (currentUser?.timeOffset.value ?? 0)
             }
+            currentUser={currentUser}
           />
         </Canvas>
       </StrictMode>

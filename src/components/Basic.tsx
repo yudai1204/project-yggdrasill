@@ -1,26 +1,29 @@
 import { useEffect, useRef } from "react";
 import { Perf } from "r3f-perf";
-import {
-  OrbitControls,
-  PerspectiveCamera,
-  OrthographicCamera,
-} from "@react-three/drei";
+import { PerspectiveCamera, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-
+import {
+  CAMERA_POSITION,
+  CAMERA_ROTATION,
+  defaultCameraOptions,
+} from "@/util/constants";
 import * as THREE from "three";
 import { Flower } from "./Objects/Flower";
 import { Tree } from "./Objects/Tree";
 import { CameraOptions } from "@/types/camera";
 import { useState } from "react";
+import type { UserType } from "@/types/calibrate";
+import { Weather } from "./Objects/Weather";
 
 // 基本
 type Props = {
   isDebug: boolean;
   cameraOptions: CameraOptions;
   animationStartFrom: number;
+  currentUser: UserType | null;
 };
 export const Basic = (props: Props) => {
-  const { isDebug, cameraOptions, animationStartFrom } = props;
+  const { isDebug, cameraOptions, animationStartFrom, currentUser } = props;
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
   const [doAnimation, setDoAnimation] = useState<boolean>(false);
@@ -63,17 +66,19 @@ export const Basic = (props: Props) => {
   useFrame(() => {
     if (doAnimation && cameraRef.current) {
       // [0, 15, 50]; デフォルトカメラ位置
-      if (cameraRef.current.position.z > 50) {
+      if (cameraRef.current.position.z > CAMERA_POSITION[2]) {
         cameraRef.current.position.z -=
-          (cameraRef.current.position.z - 45) * 0.03;
+          (cameraRef.current.position.z - CAMERA_POSITION[2] * 0.95) * 0.03;
       } else {
-        cameraRef.current.position.z = 50;
+        cameraRef.current.position.z = CAMERA_POSITION[2];
       }
-      if (cameraRef.current.position.y < 15) {
+      if (cameraRef.current.position.y < CAMERA_POSITION[1]) {
         cameraRef.current.position.y +=
-          (16 - cameraRef.current.position.y) * 0.04;
+          (defaultCameraOptions.options.position[1] -
+            cameraRef.current.position.y) *
+          0.04;
       } else {
-        cameraRef.current.position.y = 15;
+        cameraRef.current.position.y = CAMERA_POSITION[1];
       }
       // [0, 0 , 0]; デフォルトカメラ回転
       if (cameraRef.current.rotation.x < -Math.PI / 8) {
@@ -99,28 +104,36 @@ export const Basic = (props: Props) => {
       {/* パフォーマンスモニター */}
       {isDebug && <Perf position="top-left" />}
 
-      {/* 環境光 */}
-      <ambientLight intensity={0.5} />
-
-      {/* 平行光 */}
-      <directionalLight
-        position={[5, 10, 5]}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={50}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-      />
-
       <group position={[0, -1, 0]}>
         {/* 地面 */}
         <mesh receiveShadow rotation-x={-Math.PI * 0.5} scale={1}>
           <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color="#204f0f" />
         </mesh>
+
+        {/* 天気 */}
+        {currentUser?.metadata && (
+          <Weather
+            weather={currentUser.metadata.gptAnalysis.weather}
+            time={currentUser.metadata.gptAnalysis.time}
+          />
+        )}
+
+        {/* テキスト */}
+        {currentUser && (
+          <Text
+            font="/fonts/ZenKakuGothicNew-Regular.ttf"
+            fontSize={1}
+            color="orange"
+            position={[0, 1, 10]}
+            anchorX="center" // テキストのX軸方向の基準位置
+            anchorY="middle" // テキストのY軸方向の基準位置
+            castShadow
+            receiveShadow
+          >
+            {currentUser.metadata?.gptAnalysis.userName}の木
+          </Text>
+        )}
 
         {/* 3Dモデル */}
         <mesh
@@ -131,14 +144,11 @@ export const Basic = (props: Props) => {
         >
           <Flower />
         </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          position={[0, 0, 0]}
-          scale={13}
-          rotation={[0, -Math.PI / 2, 0]}
-        >
-          <Tree doAnimation={doAnimation} />
+        <mesh position={[0, -0.1, 0]} scale={5} rotation={[0, -Math.PI / 2, 0]}>
+          <Tree
+            doAnimation={doAnimation}
+            type={currentUser?.metadata?.gptAnalysis.treeType}
+          />
         </mesh>
       </group>
     </>

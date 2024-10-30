@@ -172,7 +172,6 @@ export const User = (props: Props) => {
               userBody?.animationStartFrom ??
               new Date().getTime() + 1000 * 60 * 60 * 24
             }
-            currentUser={userBody}
           />
         </Box>
       )}

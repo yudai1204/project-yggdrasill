@@ -8,11 +8,10 @@ type Props = {
   userBody: UserType | null;
   screenSize: { width: number; height: number } | null;
   animationStartFrom: number; // UnixTime
-  currentUser: UserType | null;
 };
 
 export const UserAnimation = (props: Props) => {
-  const { userBody, screenSize, animationStartFrom, currentUser } = props;
+  const { userBody, screenSize, animationStartFrom } = props;
 
   const [hoge, setHoge] = useState<number>(0);
 
@@ -55,7 +54,7 @@ export const UserAnimation = (props: Props) => {
         isDebug={false}
         isJoroMode={false}
         animationStartFrom={animationStartFrom}
-        currentUser={currentUser}
+        currentUser={userBody}
         cameraOptions={{
           ...defaultCameraOptions,
           viewOffset,
