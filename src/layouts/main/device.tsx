@@ -105,7 +105,7 @@ export const Device = () => {
   return (
     <Box
       w="100%"
-      h="100lvh"
+      h="100svh"
       position="relative"
       overflow="hidden"
       padding="60px 40px"

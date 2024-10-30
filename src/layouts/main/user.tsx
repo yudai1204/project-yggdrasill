@@ -121,7 +121,7 @@ export const User = (props: Props) => {
   return (
     <Box
       w="100%"
-      h="100lvh"
+      h="100svh"
       position="relative"
       overflow="hidden"
       ref={windowRef}

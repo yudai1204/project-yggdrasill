@@ -33,7 +33,7 @@ export const AnimationBase = (props: Props) => {
 
   return (
     <>
-      <Box width="100%" height="100lvh">
+      <Box width="100%" height="100svh">
         {p5 && (
           <Box position="absolute" top="0" left="0" width="100%" height="100%">
             <P5Canvas />

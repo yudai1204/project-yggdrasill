@@ -6,7 +6,7 @@ export default function Home() {
       bgColor="#1A202C"
       color="#DCDDDD"
       w="100%"
-      h="100lvh"
+      h="100svh"
       overflow="hidden"
     >
       <title>Project Yggdrasil</title>

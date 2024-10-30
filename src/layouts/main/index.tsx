@@ -35,7 +35,7 @@ export default function Main() {
       bgColor="#1A202C"
       color="#DCDDDD"
       w="100%"
-      h="100lvh"
+      h="100svh"
       overflow="hidden"
     >
       {isConnected ? (
