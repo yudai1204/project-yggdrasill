@@ -12,6 +12,11 @@ const initScreen = () => {
   const screenSize = getScreenSize();
   const screen: ScreenType = {
     connectedAt: 0,
+    timeOffset: {
+      value: 0,
+      serverTime: 0,
+      begin: new Date().getTime(),
+    },
     type: "screen",
     uuid: uuidv4(),
     size: screenSize,
@@ -79,7 +84,13 @@ export const connectWebSocket = (props: Props) => {
     console.log("Message received: ", e.data);
     const data = JSON.parse(e.data);
     if (data.head.type === "init") {
-      screenBodyRef.current = data.body;
+      screenBodyRef.current = {
+        ...data.body,
+        timeOffset: {
+          ...data.body.timeOffset,
+          value: (new Date().getTime() - data.body.timeOffset.begin) / 2,
+        },
+      };
       setDevices([...(screenBodyRef.current?.devices ?? [])]);
       setScreenNum(data.head.index);
       console.log("init done");

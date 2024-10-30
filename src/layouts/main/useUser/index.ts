@@ -13,6 +13,11 @@ const initUserDevice = (
   const ua = parser(navigator.userAgent);
   const userDevice: UserType = {
     connectedAt: 0,
+    timeOffset: {
+      value: 0,
+      serverTime: 0,
+      begin: new Date().getTime(),
+    },
     type: "user",
     uuid: uuidv4(),
     size: screenSize,
@@ -96,7 +101,13 @@ export const connectWebSocket = (props: Props) => {
     console.log("Message received: ", e.data);
     const data = JSON.parse(e.data);
     if (data.head.type === "init") {
-      userBodyRef.current = data.body;
+      userBodyRef.current = {
+        ...data.body,
+        timeOffset: {
+          ...data.body.timeOffset,
+          value: (new Date().getTime() - data.body.timeOffset.begin) / 2,
+        },
+      };
       setUserBody(userBodyRef.current);
       console.log("init done");
     } else if (data.head.type === "setMainScreen") {
