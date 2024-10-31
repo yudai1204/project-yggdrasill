@@ -1,5 +1,5 @@
-import { Box, useToast } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { Box, Button, useToast } from "@chakra-ui/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useUser";
 import { useWindowSize, useNetworkStatus } from "@/util/hooks";
@@ -8,6 +8,8 @@ import { UserQR } from "./useUser/UserQR";
 import { SeedWatering } from "./useUser/SeedWatering";
 import type { GptAnalysis } from "@/types/metaData";
 import { UserAnimation } from "./useUser/UserAnimation";
+import { ViewResult } from "./useUser/ViewResult";
+import { saveToLocalStorage } from "./useUser/saveToLocalStorage";
 
 type Props = {
   gptAnalysis: GptAnalysis;
@@ -36,6 +38,7 @@ export const User = (props: Props) => {
   const [adjustedAnimationCount, setAdjustedAnimationCount] =
     useState<number>(0);
   const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
+  const [displayEndButton, setDisplayEndButton] = useState<boolean>(false);
 
   const windowSize = useWindowSize(windowRef);
   const toast = useToast();
@@ -71,7 +74,7 @@ export const User = (props: Props) => {
     }
   }, [screenSize, qrZoom]);
 
-  // アニメーション開始時刻の決定
+  // アニメーション開始時刻の決定と、LocalStorageへの保存
   useEffect(() => {
     if (displayStep === 1 && animationCount > 0) {
       setAdjustedAnimationCount((prev) => prev + 1);
@@ -86,6 +89,7 @@ export const User = (props: Props) => {
           setTimeout(() => {
             setIsJoroMode(false);
           }, 2000);
+          saveToLocalStorage(userBodyRef.current);
         }
       }
     }
@@ -123,13 +127,15 @@ export const User = (props: Props) => {
     };
   }, []);
 
+  // アニメーションが終わったら再接続を行わなくする
   useEffect(() => {
     if (userBody?.animationStartFrom === undefined) return;
     const timeout = setTimeout(
       () => {
         shouldReconnect.current = false;
+        setDisplayEndButton(true);
       },
-      userBody.animationStartFrom - new Date().getTime() + 60000
+      userBody.animationStartFrom - new Date().getTime() + 10000
     );
 
     return () => {
@@ -186,8 +192,30 @@ export const User = (props: Props) => {
               }
             />
           </Box>
+          {displayEndButton && (
+            <Box
+              position="absolute"
+              bottom={2}
+              left={2}
+              right={2}
+              textAlign="center"
+              zIndex={1000000}
+            >
+              <Button
+                onClick={() => {
+                  setDisplayStep(2);
+                }}
+                size="lg"
+              >
+                {navigator.language.includes("ja")
+                  ? "結果を見る"
+                  : "View Result"}
+              </Button>
+            </Box>
+          )}
         </Box>
       )}
+      {displayStep === 2 && <ViewResult currentUser={userBody} />}
     </Box>
   );
 };

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import parser from "ua-parser-js";
 import type { GptAnalysis } from "@/types/metaData";
 
-const initUserDevice = (
+export const initUserDevice = (
   gptAnalysis: GptAnalysis,
   answers: (string | undefined)[]
 ) => {
