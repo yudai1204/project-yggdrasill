@@ -12,6 +12,7 @@ type Props = {
   cameraOptions: CameraOptions;
   isJoroMode: boolean;
   animationStartFrom: number;
+  noAnimation: boolean;
 };
 
 export const ThreeCanvas = (props: Props) => {
@@ -21,6 +22,7 @@ export const ThreeCanvas = (props: Props) => {
     currentUser,
     isJoroMode,
     animationStartFrom,
+    noAnimation,
   } = props;
 
   return (
@@ -43,6 +45,7 @@ export const ThreeCanvas = (props: Props) => {
               animationStartFrom - (currentUser?.timeOffset.value ?? 0)
             }
             currentUser={currentUser}
+            noAnimation={noAnimation}
           />
         </Canvas>
       </StrictMode>

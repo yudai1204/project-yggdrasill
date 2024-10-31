@@ -21,9 +21,15 @@ interface ModelProps {
   url: string;
   textureUrl: string;
   doAnimation: boolean;
+  noAnimation: boolean;
 }
 
-const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
+const Model: React.FC<ModelProps> = ({
+  url,
+  textureUrl,
+  doAnimation,
+  noAnimation,
+}) => {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF(url) as unknown as GLTFResult;
   const { actions } = useAnimations(animations, group);
@@ -32,34 +38,39 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
 
   useEffect(() => {
     Object.values(actions).forEach((action) => {
-      action!.loop = THREE.LoopOnce; // ループを一度だけに設定
-      action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = ANIMATION_SPEED; // アニメーションの速度を設定（適宜調整）
-      if (doAnimation) {
-        action?.play();
-        // doAnimationがtrueのとき、透明度を元に戻す
-        scene.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            if (mesh.material instanceof MeshStandardMaterial) {
-              mesh.material.transparent = false;
-              mesh.material.opacity = 1;
-              mesh.material.needsUpdate = true;
-            }
-          }
-        });
+      // アニメーションなしの場合
+      if (noAnimation) {
       } else {
-        // doAnimationがfalseのとき、全体を透明にする
-        scene.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            if (mesh.material instanceof MeshStandardMaterial) {
-              mesh.material.transparent = true;
-              mesh.material.opacity = 0;
-              mesh.material.needsUpdate = true;
+        // アニメーションありの場合
+        action!.loop = THREE.LoopOnce; // ループを一度だけに設定
+        action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
+        action!.timeScale = ANIMATION_SPEED; // アニメーションの速度を設定（適宜調整）
+        if (doAnimation) {
+          action?.play();
+          // doAnimationがtrueのとき、透明度を元に戻す
+          scene.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              if (mesh.material instanceof MeshStandardMaterial) {
+                mesh.material.transparent = false;
+                mesh.material.opacity = 1;
+                mesh.material.needsUpdate = true;
+              }
             }
-          }
-        });
+          });
+        } else {
+          // doAnimationがfalseのとき、全体を透明にする
+          scene.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              if (mesh.material instanceof MeshStandardMaterial) {
+                mesh.material.transparent = true;
+                mesh.material.opacity = 0;
+                mesh.material.needsUpdate = true;
+              }
+            }
+          });
+        }
       }
     });
 
@@ -86,7 +97,7 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
         mesh.frustumCulled = false;
       }
     });
-  }, [actions, scene, texture, doAnimation]);
+  }, [actions, scene, texture, doAnimation, noAnimation]);
 
   return <primitive ref={group} object={scene} />;
 };
@@ -94,9 +105,10 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
 type Props = {
   doAnimation?: boolean;
   type?: TreeType;
+  noAnimation?: boolean;
 };
 export const Tree = (props: Props) => {
-  const { doAnimation = true, type = "conifer" } = props;
+  const { doAnimation = true, type = "conifer", noAnimation = false } = props;
   // const type = "conifer";
   // const type = "deciduous";
 
@@ -110,6 +122,7 @@ export const Tree = (props: Props) => {
         }
         textureUrl="/textures/tree_texture_normal.jpg"
         doAnimation={doAnimation}
+        noAnimation={noAnimation}
       />
     </mesh>
   );

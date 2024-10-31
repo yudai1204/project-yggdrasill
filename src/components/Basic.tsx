@@ -23,9 +23,16 @@ type Props = {
   cameraOptions: CameraOptions;
   animationStartFrom: number;
   currentUser: UserType | null;
+  noAnimation: boolean;
 };
 export const Basic = (props: Props) => {
-  const { isDebug, cameraOptions, animationStartFrom, currentUser } = props;
+  const {
+    isDebug,
+    cameraOptions,
+    animationStartFrom,
+    currentUser,
+    noAnimation,
+  } = props;
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
   const [doAnimation, setDoAnimation] = useState<boolean>(false);
@@ -121,15 +128,30 @@ export const Basic = (props: Props) => {
     <>
       {/* コントロール */}
       {/* <OrbitControls makeDefault /> */}
+      {noAnimation && (
+        <OrbitControls
+          target={[0, 11.4, 0]}
+          enablePan={false}
+          maxAzimuthAngle={Math.PI / 6}
+          minAzimuthAngle={-Math.PI / 6}
+          maxPolarAngle={(Math.PI * 5) / 8}
+          minPolarAngle={Math.PI / 3}
+        />
+      )}
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
-        {...cameraOptions.options}
+        {...(noAnimation
+          ? {
+              ...defaultCameraOptions.options,
+              position: CAMERA_POSITION,
+              rotation: [0, 0, 0],
+            }
+          : cameraOptions.options)}
       />
 
       {/* パフォーマンスモニター */}
       {isDebug && <Perf position="top-left" />}
-
       {analysis && (
         <group position={[0, 0, 0]}>
           {/* 天気 */}
@@ -171,7 +193,10 @@ export const Basic = (props: Props) => {
                   castShadow
                   scale={0.4}
                 >
-                  <Flower flowerType={analysis.flowerType} />
+                  <Flower
+                    flowerType={analysis.flowerType}
+                    noAnimation={noAnimation}
+                  />
                 </mesh>
               </group>
             ))}
@@ -182,7 +207,11 @@ export const Basic = (props: Props) => {
             rotation={[0, -Math.PI / 2, 0]}
             receiveShadow
           >
-            <Tree doAnimation={doAnimation} type={analysis.treeType} />
+            <Tree
+              noAnimation={noAnimation}
+              doAnimation={doAnimation}
+              type={analysis.treeType}
+            />
           </mesh>
           <Stage
             location={analysis.location}

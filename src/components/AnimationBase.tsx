@@ -18,6 +18,7 @@ type Props = {
   isJoroMode: boolean;
   animationStartFrom: number; // UnixTime
   currentUser: UserType | null;
+  noAnimation?: boolean;
 };
 export const AnimationBase = (props: Props) => {
   const {
@@ -27,6 +28,7 @@ export const AnimationBase = (props: Props) => {
     isJoroMode = false,
     animationStartFrom,
     currentUser,
+    noAnimation = false,
   } = props;
 
   return (
@@ -39,6 +41,7 @@ export const AnimationBase = (props: Props) => {
             cameraOptions={cameraOptions}
             isJoroMode={isJoroMode}
             animationStartFrom={animationStartFrom}
+            noAnimation={noAnimation}
           />
         </Box>
       </Box>

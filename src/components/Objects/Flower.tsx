@@ -5,11 +5,6 @@ import * as THREE from "three";
 import type { FlowerType } from "@/types/metaData";
 import { ANIMATION_SPEED } from "@/util/constants";
 
-type Props = {
-  colors?: [THREE.Color, THREE.Color];
-  flowerType?: FlowerType;
-};
-
 const makeGradation = (
   shader: THREE.WebGLProgramParametersWithUniforms,
   color1: THREE.Color,
@@ -40,8 +35,17 @@ const makeGradation = (
   );
 };
 
+const animationSpeed = 0.5 * (1 + ANIMATION_SPEED);
+const animationSpeedOnNoAnimation = 1.8;
+
+type Props = {
+  colors?: [THREE.Color, THREE.Color];
+  flowerType?: FlowerType;
+  noAnimation?: boolean;
+};
+
 export const CherryBlossom = (props: Props) => {
-  const { colors } = props;
+  const { colors, noAnimation } = props;
   const { scene, animations } = useGLTF("/gltf/flowers/cherryBlossom.gltf");
   const mixer = new THREE.AnimationMixer(scene);
   // マテリアルの色を変更
@@ -65,7 +69,9 @@ export const CherryBlossom = (props: Props) => {
     const action = mixer.clipAction(clip);
     action.setLoop(THREE.LoopOnce, 0); // ループを1度だけに設定
     action.clampWhenFinished = true; // 最後のフレームで止める
-    action.timeScale = ANIMATION_SPEED; // アニメーション速度を1にする
+    action.timeScale = noAnimation
+      ? animationSpeedOnNoAnimation
+      : animationSpeed; // アニメーション速度を1にする
     action.play();
   });
 
@@ -91,7 +97,7 @@ type GLTFResult = {
 };
 
 export const Hibiscus = (props: Props) => {
-  const { colors } = props;
+  const { colors, noAnimation } = props;
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(
     "/gltf/flowers/haibisukasu.glb"
@@ -100,9 +106,15 @@ export const Hibiscus = (props: Props) => {
 
   useEffect(() => {
     Object.values(actions).forEach((action) => {
+      if (noAnimation) {
+        action!.reset();
+        return;
+      }
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = ANIMATION_SPEED; // アニメーションの速度を設定（適宜調整）
+      action!.timeScale = noAnimation
+        ? animationSpeedOnNoAnimation
+        : animationSpeed; // アニメーションの速度を設定（適宜調整）
       action?.play();
     });
 
@@ -124,7 +136,7 @@ export const Hibiscus = (props: Props) => {
         mesh.frustumCulled = false;
       }
     });
-  }, [actions, scene]);
+  }, [actions, scene, colors, noAnimation]);
 
   return (
     <mesh scale={2}>
@@ -134,7 +146,7 @@ export const Hibiscus = (props: Props) => {
 };
 
 export const Sunflower = (props: Props) => {
-  const { colors } = props;
+  const { colors, noAnimation } = props;
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(
     "/gltf/flowers/sunflower.glb"
@@ -143,9 +155,15 @@ export const Sunflower = (props: Props) => {
 
   useEffect(() => {
     Object.values(actions).forEach((action) => {
+      if (noAnimation) {
+        action!.reset();
+        return;
+      }
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = ANIMATION_SPEED; // アニメーションの速度を設定（適宜調整）
+      action!.timeScale = noAnimation
+        ? animationSpeedOnNoAnimation
+        : animationSpeed; // アニメーションの速度を設定（適宜調整）
       action?.play();
     });
 
@@ -167,7 +185,7 @@ export const Sunflower = (props: Props) => {
         mesh.frustumCulled = false;
       }
     });
-  }, [actions, scene]);
+  }, [actions, scene, colors, noAnimation]);
 
   return <primitive ref={group} object={scene} />;
 };
@@ -178,14 +196,14 @@ export const Flower = (props: Props) => {
   //   THREE.Color,
   // ];
 
-  const { flowerType = "CherryBlossom", colors } = props;
+  const { flowerType = "CherryBlossom", colors, noAnimation = false } = props;
 
   if (flowerType === "CherryBlossom") {
-    return <CherryBlossom colors={colors} />;
+    return <CherryBlossom colors={colors} noAnimation={noAnimation} />;
   } else if (flowerType === "Hibiscus") {
-    return <Hibiscus colors={colors} />;
+    return <Hibiscus colors={colors} noAnimation={noAnimation} />;
   } else if (flowerType === "Sunflower") {
-    return <Sunflower colors={colors} />;
+    return <Sunflower colors={colors} noAnimation={noAnimation} />;
   }
 
   return <Hibiscus colors={colors} />;
