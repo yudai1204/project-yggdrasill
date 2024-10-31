@@ -40,6 +40,8 @@ export const User = (props: Props) => {
   const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
   const [displayEndButton, setDisplayEndButton] = useState<boolean>(false);
 
+  const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
+
   const windowSize = useWindowSize(windowRef);
   const toast = useToast();
   const isOnline = useNetworkStatus();
@@ -127,6 +129,27 @@ export const User = (props: Props) => {
     };
   }, []);
 
+  // 常に画面をONにする  Screen Wake Lock API
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      try {
+        const wl = await navigator.wakeLock.request("screen");
+        setWakeLock(wl);
+        console.log("%cScreen Wake Lock is active", "color: blue");
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    handleVisibilityChange();
+
+    // document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // return () => {
+    //   document.removeEventListener("visibilitychange", handleVisibilityChange);
+    // };
+  }, []);
+
   // アニメーションが終わったら再接続を行わなくする
   useEffect(() => {
     if (userBody?.animationStartFrom === undefined) return;
@@ -134,6 +157,9 @@ export const User = (props: Props) => {
       () => {
         shouldReconnect.current = false;
         setDisplayEndButton(true);
+        wakeLock?.release();
+        console.log("%cScreen Wake Lock is released", "color: blue");
+        setWakeLock(null);
       },
       userBody.animationStartFrom - new Date().getTime() + 10000
     );

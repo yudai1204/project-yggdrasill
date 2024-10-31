@@ -127,7 +127,7 @@ export const Basic = (props: Props) => {
   return (
     <>
       {/* コントロール */}
-      {/* <OrbitControls makeDefault /> */}
+      {isDebug && <OrbitControls />}
       {noAnimation && (
         <OrbitControls
           target={[0, 11.4, 0]}
@@ -163,7 +163,7 @@ export const Basic = (props: Props) => {
             time={analysis.location === "Moon" ? "Night" : analysis.time}
           />
           {/* テキスト */}
-          {/* <Text
+          <Text
             font={
               analysis.treeTexture === "pixel"
                 ? "/fonts/DotGothic16-Regular.ttf"
@@ -180,9 +180,9 @@ export const Basic = (props: Props) => {
             receiveShadow
           >
             {analysis.userName}の木
-          </Text> */}
+          </Text>
 
-          {/* 3Dモデル */}
+          {/* 花 */}
           <group>
             {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => (
               <group
@@ -198,11 +198,19 @@ export const Basic = (props: Props) => {
                   <Flower
                     flowerType={analysis.flowerType}
                     noAnimation={noAnimation}
+                    colors={[
+                      new THREE.Color(
+                        currentUser?.metadata?.answers?.[0] ??
+                          analysis.flowerColor[1]
+                      ),
+                      new THREE.Color(analysis.flowerColor[0]),
+                    ]}
                   />
                 </mesh>
               </group>
             ))}
           </group>
+          {/* 木 */}
           <mesh
             position={[0, -0.1, 0]}
             scale={10}
@@ -215,6 +223,7 @@ export const Basic = (props: Props) => {
               type={analysis.treeType}
             />
           </mesh>
+          {/* 背景 */}
           <Stage
             location={analysis.location}
             season={analysis.season}
