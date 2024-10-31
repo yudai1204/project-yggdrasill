@@ -21,6 +21,7 @@ const sampleGptAnalysis: GptAnalysis = {
   treeHeight: "large",
   treeTexture: "realistic",
   treeAge: "ancient",
+  flowerType: "Hibiscus",
 };
 export default function Main() {
   const [device, setDevice] = useState<string>("screen");

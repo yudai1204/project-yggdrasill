@@ -7,15 +7,8 @@ import "@fontsource/kaisei-opti";
 import "@fontsource/charmonman";
 import { ResultCard } from "@/components/ResultCard";
 
-const summaryKeys = {
-  ja: [],
-};
-
-// あなたにぴったりの花
-// あなたが選んだ色
-
 type Props = {
-  currentUser: UserType | null;
+  currentUser: UserType;
 };
 export const Result = (props: Props) => {
   const { currentUser } = props;
