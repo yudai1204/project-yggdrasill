@@ -1,7 +1,9 @@
 import { AnimationBase } from "@/components/AnimationBase";
 import type { UserType } from "@/types/calibrate";
+import { Time } from "@/types/metaData";
+import { useEffect, useState } from "react";
 
-const currentUser: UserType = {
+const user: UserType = {
   connectedAt: 1730302409787,
   timeOffset: {
     value: 6,
@@ -33,9 +35,9 @@ const currentUser: UserType = {
   metadata: {
     gptAnalysis: {
       userName: "aaa",
-      season: "Spring",
-      location: "MagicalWonderland",
-      time: "Evening",
+      season: "Winter",
+      location: "Moon",
+      time: "Noon",
       weather: "Sunny",
       flowerName: "桜",
       flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
@@ -47,7 +49,7 @@ const currentUser: UserType = {
     },
     answers: [
       "#673ab7",
-      "aaa",
+      "侑大",
       "魚",
       "春",
       "おとぎの国",
@@ -62,6 +64,30 @@ const currentUser: UserType = {
 };
 
 const App = () => {
+  const [currentUser, setCurrentUser] = useState<UserType>(user);
+
+  const times: Time[] = ["Noon", "Evening", "Night"];
+
+  let timeIndex = 0;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentUser({
+        ...user,
+        // @ts-ignore
+        metadata: {
+          ...user.metadata,
+          gptAnalysis: {
+            // @ts-ignore
+            ...user.metadata.gptAnalysis,
+            time: times[timeIndex++ % 3],
+          },
+        },
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <AnimationBase

@@ -10,7 +10,7 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 import type { Time, Weather as WeatherType } from "@/types/metaData";
-import { CustomSpotLight } from "./CustomSpotLight";
+// import { CustomSpotLight } from "./CustomSpotLight";
 
 const Rain = () => {
   const ref = useRef<THREE.LineSegments>(null);
@@ -146,7 +146,7 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
               ? [100, 2, 100]
               : [100, -10, 100]
         }
-        distance={450000}
+        distance={4500}
         inclination={isDaytime ? 0 : isEvening ? 0.5 : 0.9}
         azimuth={0.25}
       />
@@ -176,10 +176,10 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
             saturation={1} // 星の彩度
             speed={3} // 点滅のスピード
           />
-          <CustomSpotLight
+          {/* <CustomSpotLight
             position={new THREE.Vector3(3, 5, 0)}
             targetPos={new THREE.Vector3(0, 1, -0.8)}
-          />
+          /> */}
         </>
       )}
       <ambientLight color={ambientColor} intensity={isNight ? 1 : 0.8} />
@@ -190,11 +190,11 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
         intensity={isNight ? 0.8 : 1.5}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
-        shadow-camera-far={150}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
+        shadow-camera-far={100}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-10}
       />
 
       {weather === "Cloudy" && (

@@ -1,18 +1,24 @@
 export type Weather = "VerySunny" | "Sunny" | "Rainy" | "Cloudy" | "Snowy";
 export type Time = "Noon" | "Evening" | "Night";
 export type TreeType = "broadleaf" | "conifer"; // 紅葉樹・針葉樹
+export type Location =
+  | "MagicalWonderland"
+  | "Game"
+  | "City"
+  | "VastLand"
+  | "CountryTown"
+  | "Forest"
+  | "Beach"
+  | "Moon"
+  | "UnderTheSea"
+  | "BaldMountain";
+export type Season = "Spring" | "Summer" | "Autumn" | "Winter";
+export type TreeTexture = "realistic" | "cartoon" | "pixel";
 
 export interface GptAnalysis {
   userName: string;
-  season: "Spring" | "Summer" | "Autumn" | "Winter";
-  location:
-    | "MagicalWonderland"
-    | "Game"
-    | "City"
-    | "Forest"
-    | "Beach"
-    | "Moon"
-    | "UnderTheSea";
+  season: SetStateAction;
+  location: Location;
   time: Time;
   weather: Weather;
   flowerName: string;
@@ -20,6 +26,6 @@ export interface GptAnalysis {
   flowerSize: "small" | "medium" | "large";
   treeType: TreeType;
   treeHeight: "small" | "large";
-  treeTexture: "realistic" | "cartoon" | "pixel";
+  treeTexture: TreeTexture;
   treeAge: "young" | "old" | "ancient";
 }
