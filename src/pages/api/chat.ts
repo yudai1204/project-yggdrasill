@@ -37,10 +37,13 @@ const handler = async (
       "MagicalWonderland",
       "Game",
       "City",
+      "VastLand",
+      "CountryTown",
       "Forest",
       "Beach",
       "Moon",
       "UnderTheSea",
+      "BaldMountain",
     ]),
     time: z.enum(["Noon", "Evening", "Night"]),
     weather: z.enum(["VerySunny", "Sunny", "Rainy", "Cloudy", "Snowy"]),
@@ -51,6 +54,7 @@ const handler = async (
       })
     ),
     flowerSize: z.enum(["small", "medium", "large"]),
+    flowerType: z.enum(["Hibiscus", "CherryBlossom", "Sunflower"]),
     treeType: z.enum(["broadleaf", "conifer"]), // 紅葉樹・針葉樹
     treeHeight: z.enum(["small", "large"]),
     treeTexture: z.enum(["realistic", "cartoon", "pixel"]),

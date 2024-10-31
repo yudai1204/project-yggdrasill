@@ -9,7 +9,7 @@ export default function Home() {
       h="100svh"
       overflow="hidden"
     >
-      <title>Project Yggdrasil</title>
+      <title>Project Yggdrasil - ShibaLab</title>
       <Form />
     </Box>
   );

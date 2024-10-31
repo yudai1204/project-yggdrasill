@@ -39,7 +39,12 @@ const ResultPage = () => {
     }
   }, []);
 
-  return <Result gptAnalysis={gptAnalysis} answers={answers} />;
+  return (
+    <>
+      <title>Project Yggdrasil - ShibaLab</title>
+      <Result gptAnalysis={gptAnalysis} answers={answers} />
+    </>
+  );
 };
 
 export default ResultPage;

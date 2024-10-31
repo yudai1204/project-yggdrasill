@@ -132,6 +132,8 @@ export const Basic = (props: Props) => {
         <OrbitControls
           target={[0, 11.4, 0]}
           enablePan={false}
+          maxDistance={60}
+          minDistance={10}
           maxAzimuthAngle={Math.PI / 6}
           minAzimuthAngle={-Math.PI / 6}
           maxPolarAngle={(Math.PI * 5) / 8}
