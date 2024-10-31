@@ -9,6 +9,7 @@ import {
 } from "three";
 import * as THREE from "three";
 import type { TreeType } from "@/types/metaData";
+import { ANIMATION_SPEED } from "@/util/constants";
 
 // GLTF型の独自定義
 type GLTFResult = {
@@ -33,7 +34,7 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
     Object.values(actions).forEach((action) => {
       action!.loop = THREE.LoopOnce; // ループを一度だけに設定
       action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = 3; // アニメーションの速度を設定（適宜調整）
+      action!.timeScale = ANIMATION_SPEED; // アニメーションの速度を設定（適宜調整）
       if (doAnimation) {
         action?.play();
         // doAnimationがtrueのとき、透明度を元に戻す
@@ -96,18 +97,20 @@ type Props = {
 };
 export const Tree = (props: Props) => {
   const { doAnimation = true, type = "conifer" } = props;
+  // const type = "conifer";
+  // const type = "deciduous";
 
   return (
-    <>
+    <mesh scale={type === "conifer" ? 1.2 : 1}>
       <Model
         url={
           type === "conifer"
-            ? "/gltf/tree_grow2.glb"
-            : "/gltf/mominoki_tree.glb"
+            ? "/gltf/mominoki_tree.glb"
+            : "/gltf/tree_grow2.glb"
         }
         textureUrl="/textures/tree_texture_normal.jpg"
         doAnimation={doAnimation}
       />
-    </>
+    </mesh>
   );
 };

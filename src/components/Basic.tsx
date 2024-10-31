@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import {
   CAMERA_POSITION,
   CAMERA_ROTATION,
+  FLOWER_POSITIONS,
   defaultCameraOptions,
 } from "@/util/constants";
 import * as THREE from "three";
@@ -79,7 +80,6 @@ export const Basic = (props: Props) => {
   // カメラアニメーション
   useFrame(() => {
     if (doAnimation && cameraRef.current) {
-      // [0, 15, 50]; デフォルトカメラ位置
       if (!animationState.z) {
         if (cameraRef.current.position.z > CAMERA_POSITION[2]) {
           cameraRef.current.position.z -=
@@ -136,7 +136,7 @@ export const Basic = (props: Props) => {
           <Weather
             doAnimation={doAnimation}
             weather={analysis.weather}
-            time={analysis.time}
+            time={analysis.location === "Moon" ? "Night" : analysis.time}
           />
           {/* テキスト */}
           {/* <Text
@@ -159,24 +159,30 @@ export const Basic = (props: Props) => {
           </Text> */}
 
           {/* 3Dモデル */}
-          <mesh
-            castShadow
-            position={[2, 10, 2]}
-            scale={0.4}
-            rotation={[0, -Math.PI / 2, -Math.PI / 2]}
-          >
-            <Flower />
-          </mesh>
+          <group>
+            {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => (
+              <group
+                key={index}
+                position={pos.position}
+                rotation={pos.rotation}
+              >
+                <mesh
+                  rotation={[0, -Math.PI / 2, -Math.PI / 2]}
+                  castShadow
+                  scale={0.4}
+                >
+                  <Flower flowerType={analysis.flowerType} />
+                </mesh>
+              </group>
+            ))}
+          </group>
           <mesh
             position={[0, -0.1, 0]}
             scale={10}
             rotation={[0, -Math.PI / 2, 0]}
             receiveShadow
           >
-            <Tree
-              doAnimation={doAnimation}
-              type={currentUser?.metadata?.gptAnalysis.treeType}
-            />
+            <Tree doAnimation={doAnimation} type={analysis.treeType} />
           </mesh>
           <Stage
             location={analysis.location}

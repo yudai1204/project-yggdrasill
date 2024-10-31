@@ -20,9 +20,9 @@ export const Hageyama = () => {
 
   return (
     <mesh
-      position={[-3, 25, -32]}
+      position={[5, 16, -21.5]}
       scale={0.4}
-      rotation={[0, (Math.PI / 8) * 7, 0]}
+      rotation={[0, (Math.PI / 8) * 2, 0]}
     >
       <primitive object={scene} />
     </mesh>
