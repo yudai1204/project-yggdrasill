@@ -35,6 +35,7 @@ export const User = (props: Props) => {
   const [animationCount, setAnimationCount] = useState<number>(0);
   const [adjustedAnimationCount, setAdjustedAnimationCount] =
     useState<number>(0);
+  const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
 
   const windowSize = useWindowSize(windowRef);
   const toast = useToast();
@@ -70,6 +71,7 @@ export const User = (props: Props) => {
     }
   }, [screenSize, qrZoom]);
 
+  // アニメーション開始時刻の決定
   useEffect(() => {
     if (displayStep === 1 && animationCount > 0) {
       setAdjustedAnimationCount((prev) => prev + 1);
@@ -81,6 +83,9 @@ export const User = (props: Props) => {
           };
           setUserBody({ ...userBodyRef.current });
           sendJson(wsRef.current, userBodyRef.current, "animation_start");
+          setTimeout(() => {
+            setIsJoroMode(false);
+          }, 2000);
         }
       }
     }
@@ -157,6 +162,7 @@ export const User = (props: Props) => {
                 ready: true,
               };
               setUserBody({ ...userBodyRef.current });
+              setIsJoroMode(true);
               sendJson(wsRef.current, userBodyRef.current, "user_ready");
             }
           }}
@@ -165,14 +171,21 @@ export const User = (props: Props) => {
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
           <SeedWatering animationCount={adjustedAnimationCount} />
-          <UserAnimation
-            userBody={userBody}
-            screenSize={screenSize}
-            animationStartFrom={
-              userBody?.animationStartFrom ??
-              new Date().getTime() + 1000 * 60 * 60 * 24
-            }
-          />
+          <Box
+            w="100%"
+            h="100%"
+            opacity={isJoroMode ? 0 : 1}
+            transition="all 1s"
+          >
+            <UserAnimation
+              userBody={userBody}
+              screenSize={screenSize}
+              animationStartFrom={
+                userBody?.animationStartFrom ??
+                new Date().getTime() + 1000 * 60 * 60 * 24
+              }
+            />
+          </Box>
         </Box>
       )}
     </Box>

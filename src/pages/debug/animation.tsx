@@ -35,7 +35,7 @@ const currentUser: UserType = {
       userName: "aaa",
       season: "Spring",
       location: "MagicalWonderland",
-      time: "Noon",
+      time: "Evening",
       weather: "Sunny",
       flowerName: "桜",
       flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],

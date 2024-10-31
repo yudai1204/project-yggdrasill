@@ -74,13 +74,13 @@ const Model: React.FC<ModelProps> = ({ url, textureUrl, doAnimation }) => {
           mesh.material.color = new THREE.Color(0xb5997f); // 暗めの色に設定
           mesh.material.map = texture;
           mesh.material.needsUpdate = true;
-          mesh.material.envMapIntensity = 1; // 環境光の影響を減らす
+          mesh.material.envMapIntensity = 0; // 環境光の影響を減らす
           mesh.material.roughness = 1.8; // 表面を粗くして光の反射を抑える
           mesh.material.metalness = 0.1; // 金属感を減らす
         }
         // 影を計算させる
         mesh.castShadow = doAnimation;
-        mesh.receiveShadow = doAnimation;
+        // mesh.receiveShadow = doAnimation;
         //範囲外でも描画する
         mesh.frustumCulled = false;
       }

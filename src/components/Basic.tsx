@@ -14,6 +14,7 @@ import { CameraOptions } from "@/types/camera";
 import { useState } from "react";
 import type { UserType } from "@/types/calibrate";
 import { Weather } from "./Objects/Weather";
+import { FBXModel } from "./Objects/Stage/Hageyama";
 
 // 基本
 type Props = {
@@ -107,13 +108,14 @@ export const Basic = (props: Props) => {
       <group position={[0, -1, 0]}>
         {/* 地面 */}
         <mesh receiveShadow rotation-x={-Math.PI * 0.5} scale={1}>
-          <planeGeometry args={[100, 100]} />
+          <planeGeometry args={[10, 10]} />
           <meshStandardMaterial color="#204f0f" />
         </mesh>
 
         {/* 天気 */}
         {currentUser?.metadata && (
           <Weather
+            doAnimation={doAnimation}
             weather={currentUser.metadata.gptAnalysis.weather}
             time={currentUser.metadata.gptAnalysis.time}
           />
@@ -122,7 +124,13 @@ export const Basic = (props: Props) => {
         {/* テキスト */}
         {currentUser && (
           <Text
-            font="/fonts/ZenKakuGothicNew-Regular.ttf"
+            font={
+              currentUser.metadata?.gptAnalysis.treeTexture === "pixel"
+                ? "/fonts/DotGothic16-Regular.ttf"
+                : currentUser.metadata?.gptAnalysis.treeTexture === "realistic"
+                  ? "/fonts/ZenKakuGothicNew-Regular.ttf"
+                  : "/fonts/ZenMaruGothicNew-Regular.ttf"
+            }
             fontSize={1}
             color="orange"
             position={[0, 1, 10]}
@@ -144,12 +152,20 @@ export const Basic = (props: Props) => {
         >
           <Flower />
         </mesh>
-        <mesh position={[0, -0.1, 0]} scale={5} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh
+          position={[0, -0.1, 0]}
+          scale={10}
+          rotation={[0, -Math.PI / 2, 0]}
+          receiveShadow
+        >
           <Tree
             doAnimation={doAnimation}
             type={currentUser?.metadata?.gptAnalysis.treeType}
           />
         </mesh>
+        {/* <mesh position={[0, 0, 0]} scale={0.1} rotation={[0, 0, 0]}>
+          <FBXModel />
+        </mesh> */}
       </group>
     </>
   );

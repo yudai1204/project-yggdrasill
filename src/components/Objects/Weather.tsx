@@ -1,8 +1,16 @@
 import React, { useState, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Cloud, Sky, Points, PointMaterial } from "@react-three/drei";
+import {
+  Cloud,
+  Sky,
+  Points,
+  PointMaterial,
+  Stars,
+  SpotLight,
+} from "@react-three/drei";
 import * as THREE from "three";
 import type { Time, Weather as WeatherType } from "@/types/metaData";
+import { CustomSpotLight } from "./CustomSpotLight";
 
 const Rain = () => {
   const ref = useRef<THREE.LineSegments>(null);
@@ -131,11 +139,49 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
   return (
     <>
       <Sky
-        sunPosition={[100, 20, 100]}
+        sunPosition={
+          isDaytime
+            ? [100, 20, 100]
+            : isEvening
+              ? [100, 2, 100]
+              : [100, -10, 100]
+        }
         distance={450000}
-        inclination={isDaytime ? 0 : isEvening ? 0.5 : 0.8}
+        inclination={isDaytime ? 0 : isEvening ? 0.5 : 0.9}
         azimuth={0.25}
       />
+      {isNight && (
+        <>
+          <Stars
+            radius={100} // 星の点滅(拡大)度合い
+            depth={50} // 星の深さ
+            count={1000} // 星の数
+            factor={4} // 星の大きさ
+            saturation={9} // 星の彩度
+            speed={5} // 点滅のスピード
+          />
+          <Stars
+            radius={110} // 星の点滅(拡大)度合い
+            depth={50} // 星の深さ
+            count={1000} // 星の数
+            factor={4} // 星の大きさ
+            saturation={9} // 星の彩度
+            speed={2} // 点滅のスピード
+          />
+          <Stars
+            radius={100} // 星の点滅(拡大)度合い
+            depth={50} // 星の深さ
+            count={1000} // 星の数
+            factor={4} // 星の大きさ
+            saturation={1} // 星の彩度
+            speed={3} // 点滅のスピード
+          />
+          <CustomSpotLight
+            position={new THREE.Vector3(3, 5, 0)}
+            targetPos={new THREE.Vector3(0, 1, -0.8)}
+          />
+        </>
+      )}
       <ambientLight color={ambientColor} intensity={isNight ? 1 : 0.8} />
       <directionalLight
         castShadow
@@ -166,9 +212,14 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
 type Props = {
   weather: WeatherType;
   time: Time;
+  doAnimation: boolean;
 };
 export const Weather = (props: Props) => {
-  const { weather, time } = props;
+  const { weather, time, doAnimation } = props;
 
-  return <WeatherScene weather={weather} time={time} />;
+  return (
+    <mesh>
+      <WeatherScene weather={weather} time={time} />
+    </mesh>
+  );
 };
