@@ -53,7 +53,7 @@ const ResultPage = () => {
           gptAnalysis={gptAnalysis}
           answers={answers}
           isShared
-          shareUrl={`https://yggdrasil.shibalab.com/share?uuid=${uuid}`}
+          shareUrl={`https://yggdrasill.shibalab.com/share?uuid=${uuid}`}
         />
       )}
     </>
