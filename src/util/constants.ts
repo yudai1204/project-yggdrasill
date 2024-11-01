@@ -9,8 +9,8 @@ type FlowerPositions = {
 export const FOV = 45; // 視野角
 export const NEAR = 0.1; // 最小距離
 export const FAR = 1000; // 最大距離
-export const CAMERA_POSITION: [number, number, number] = [0, 14, 30]; // 最終的なカメラ位置
-export const FIRST_CAMERA_POSITION: [number, number, number] = [0, 14, 600]; // 初期カメラ位置
+export const CAMERA_POSITION: [number, number, number] = [0, 10, 50]; // 最終的なカメラ位置
+export const FIRST_CAMERA_POSITION: [number, number, number] = [0, 15, 600]; // 初期カメラ位置
 export const CAMERA_ROTATION: [number, number, number] = [-Math.PI / 6, 0, 0]; // カメラ回転
 
 export const ANIMATION_SPEED = 4; // アニメーションのスピード
