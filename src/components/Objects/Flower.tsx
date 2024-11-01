@@ -99,63 +99,17 @@ type GLTFResult = {
   animations: THREE.AnimationClip[];
 };
 
-export const Hibiscus = (props: Props) => {
-  const { colors, noAnimation } = props;
-  const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF(
-    "/gltf/flowers/haibisukasu.glb"
-  ) as unknown as GLTFResult;
-  const { actions } = useAnimations(animations, group);
-
-  useEffect(() => {
-    Object.values(actions).forEach((action) => {
-      if (noAnimation) {
-        action!.reset();
-        return;
-      }
-      action!.loop = THREE.LoopOnce; // ループを一度だけに設定
-      action!.clampWhenFinished = true; // アニメーションが終了したらそのままにする
-      action!.timeScale = noAnimation
-        ? animationSpeedOnNoAnimation
-        : animationSpeed; // アニメーションの速度を設定（適宜調整）
-      action?.play();
-    });
-
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        // console.log(child.name);
-        const mesh = child as THREE.Mesh;
-        if (colors && mesh.name.includes("平面")) {
-          const material = new THREE.MeshStandardMaterial({
-            transparent: true, // 透明度を設定
-            opacity: 0.85, // 透明度の値を設定
-          });
-          material.onBeforeCompile = (shader) => {
-            if (colors) makeGradation(shader, colors[0], colors[1]);
-          };
-          mesh.material = material;
-        }
-        // 影を計算させる
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        //範囲外でも描画する
-        mesh.frustumCulled = false;
-      }
-    });
-  }, [actions, scene, colors, noAnimation]);
-
-  return (
-    <mesh scale={2}>
-      <primitive ref={group} object={scene} />
-    </mesh>
-  );
+type GlbFlowerProps = {
+  colors?: [THREE.Color, THREE.Color];
+  noAnimation?: boolean;
+  name: string;
+  scale: number;
 };
-
-export const Sunflower = (props: Props) => {
-  const { colors, noAnimation } = props;
+const GlbFlower = (props: GlbFlowerProps) => {
+  const { colors, noAnimation, name, scale } = props;
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(
-    "/gltf/flowers/sunflower.glb"
+    `/gltf/flowers/${name}`
   ) as unknown as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
@@ -199,6 +153,66 @@ export const Sunflower = (props: Props) => {
   return <primitive ref={group} object={scene} />;
 };
 
+export const Hibiscus = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="hibiscus.glb"
+      scale={2}
+    />
+  );
+};
+
+export const Asaago = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="asaago.glb"
+      scale={2}
+    />
+  );
+};
+
+export const Gerbera = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="gerbera.glb"
+      scale={2}
+    />
+  );
+};
+
+export const Sunflower = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="sunflower.glb"
+      scale={2}
+    />
+  );
+};
+
+export const Momiji = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="momiji_leaf.glb"
+      scale={2}
+    />
+  );
+};
+
 export const Flower = (props: Props) => {
   // const colors = [new THREE.Color(0xff69b4), new THREE.Color(0xffffff)] as [
   //   THREE.Color,
@@ -213,6 +227,12 @@ export const Flower = (props: Props) => {
     return <Hibiscus colors={colors} noAnimation={noAnimation} />;
   } else if (flowerType === "Sunflower") {
     return <Sunflower colors={colors} noAnimation={noAnimation} />;
+  } else if (flowerType === "Asaago") {
+    return <Asaago colors={colors} noAnimation={noAnimation} />;
+  } else if (flowerType === "Gerbera") {
+    return <Gerbera colors={colors} noAnimation={noAnimation} />;
+  } else if (flowerType === "Momiji") {
+    return <Momiji colors={colors} noAnimation={noAnimation} />;
   }
 
   return <Hibiscus colors={colors} />;

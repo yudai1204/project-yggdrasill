@@ -14,7 +14,13 @@ export type Location =
   | "BaldMountain";
 export type Season = "Spring" | "Summer" | "Autumn" | "Winter";
 export type TreeTexture = "realistic" | "cartoon" | "pixel";
-export type FlowerType = "Hibiscus" | "CherryBlossom" | "Sunflower";
+export type FlowerType =
+  | "Hibiscus"
+  | "CherryBlossom"
+  | "Sunflower"
+  | "Asaago"
+  | "Gerbera"
+  | "Momiji";
 
 export interface GptAnalysis {
   userName: string;
