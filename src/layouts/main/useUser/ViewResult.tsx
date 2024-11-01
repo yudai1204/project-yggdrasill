@@ -16,6 +16,7 @@ export const ViewResult = (props: Props) => {
   }
   return (
     <Result
+      shareUrl={`https://yggdrasil.shibalab.com/share?uuid=${currentUser.uuid}`}
       answers={currentUser.metadata.answers}
       gptAnalysis={currentUser.metadata.gptAnalysis}
     />

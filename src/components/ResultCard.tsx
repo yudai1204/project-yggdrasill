@@ -16,7 +16,8 @@ import type { UserType } from "@/types/calibrate";
 import { getNearestColor } from "@/util/util";
 import type { GptAnalysis } from "@/types/metaData";
 
-const rmvCaptl = (str: string, toLower = true) => {
+const rmvCaptl = (str: string | undefined, toLower = true) => {
+  if (!str) return "NO REPLACER";
   if (toLower) {
     return str.replace(/([A-Z])/g, " $1").toLowerCase();
   }

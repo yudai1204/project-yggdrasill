@@ -20,39 +20,42 @@ const ResultPage = () => {
   };
   const initialAnswers: string[] = ["#000000"];
 
-  // localStorageからデータを取得
-  // useMemoだとServerでも実行されてしまうため、useEffectを使用
+  const [uuid, setUuid] = useState<string | null | undefined>(null);
   const [gptAnalysis, setGptAnalysis] = useState<GptAnalysis | null>(null);
   const [answers, setAnswers] = useState<string[]>(initialAnswers);
-  const [uuid, setUuid] = useState<string>("");
 
+  // URL queryからUUIDを取得し、APIを叩いてデータを取得
   useEffect(() => {
-    const storedGptAnalysis = localStorage.getItem("gptAnalysis");
-    if (storedGptAnalysis) {
-      setGptAnalysis(JSON.parse(storedGptAnalysis));
-    } else {
-      setGptAnalysis(initialAnalysis);
+    const url = new URL(window.location.href);
+    const hasUuid = url.searchParams.has("uuid");
+    if (!hasUuid) {
+      setUuid(undefined);
+      return;
     }
-
-    const storedAnswers = localStorage.getItem("answers");
-    if (storedAnswers) {
-      setAnswers(JSON.parse(storedAnswers));
-    }
-
-    const storedUuid = localStorage.getItem("uuid");
-    if (storedUuid) {
-      setUuid(storedUuid);
-    }
-  }, []);
+    const uuid = url.searchParams.get("uuid");
+    setUuid(uuid);
+    fetch(`/api/proxy?uuid=${uuid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data", data);
+        setGptAnalysis(JSON.parse(data.gpt_result));
+        setAnswers(JSON.parse(data.answers));
+      });
+  }, [setUuid]);
 
   return (
     <>
       <title>Project Yggdrasil - ShibaLab</title>
-      <Result
-        gptAnalysis={gptAnalysis}
-        answers={answers}
-        shareUrl={`https://yggdrasil.shibalab.com/share?uuid=${uuid}`}
-      />
+      {uuid === undefined ? (
+        <div>Error: UUID not found</div>
+      ) : (
+        <Result
+          gptAnalysis={gptAnalysis}
+          answers={answers}
+          isShared
+          shareUrl={`https://yggdrasil.shibalab.com/share?uuid=${uuid}`}
+        />
+      )}
     </>
   );
 };
