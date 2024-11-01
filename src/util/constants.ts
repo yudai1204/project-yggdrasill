@@ -6,6 +6,8 @@ type FlowerPositions = {
   rotation: Euler;
 }[];
 
+export const COLORS_LENGTH = 5;
+
 export const FOV = 45; // 視野角
 export const NEAR = 0.1; // 最小距離
 export const FAR = 1000; // 最大距離

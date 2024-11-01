@@ -55,7 +55,10 @@ export const CherryBlossom = (props: Props) => {
       // meshの名前を取得
       // console.log(object.name);
       if (colors && object.name === "平面009") {
-        const material = new THREE.MeshStandardMaterial();
+        const material = new THREE.MeshStandardMaterial({
+          transparent: true,
+          opacity: 0.85,
+        });
         material.onBeforeCompile = (shader) => {
           if (colors) makeGradation(shader, colors[0], colors[1]);
         };
@@ -123,7 +126,10 @@ export const Hibiscus = (props: Props) => {
         // console.log(child.name);
         const mesh = child as THREE.Mesh;
         if (colors && mesh.name.includes("平面")) {
-          const material = new THREE.MeshStandardMaterial();
+          const material = new THREE.MeshStandardMaterial({
+            transparent: true, // 透明度を設定
+            opacity: 0.85, // 透明度の値を設定
+          });
           material.onBeforeCompile = (shader) => {
             if (colors) makeGradation(shader, colors[0], colors[1]);
           };
@@ -172,7 +178,10 @@ export const Sunflower = (props: Props) => {
         // console.log(child.name);
         const mesh = child as THREE.Mesh;
         if (colors && mesh.name.includes("平面")) {
-          const material = new THREE.MeshStandardMaterial();
+          const material = new THREE.MeshStandardMaterial({
+            transparent: true, // 透明度を設定
+            opacity: 0.85, // 透明度の値を設定
+          });
           material.onBeforeCompile = (shader) => {
             if (colors) makeGradation(shader, colors[0], colors[1]);
           };

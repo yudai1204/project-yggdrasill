@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import {
   CAMERA_POSITION,
   CAMERA_ROTATION,
+  COLORS_LENGTH,
   FLOWER_POSITIONS,
   defaultCameraOptions,
 } from "@/util/constants";
@@ -16,6 +17,7 @@ import { useState } from "react";
 import type { UserType } from "@/types/calibrate";
 import { Weather } from "./Objects/Weather";
 import { Stage } from "./Objects/Stage";
+import { generateTintColors } from "@/util/util";
 
 // 基本
 type Props = {
@@ -124,10 +126,22 @@ export const Basic = (props: Props) => {
     }
   });
 
+  const tintColors = generateTintColors(
+    currentUser?.metadata?.answers?.[0] ?? "#000000",
+    COLORS_LENGTH + 2
+  );
+
+  const tintColorsArray = useMemo(() => {
+    if (!analysis) return [];
+    return analysis.flowerColor.map((color) => {
+      return generateTintColors(color, COLORS_LENGTH);
+    });
+  }, [analysis]);
+
   return (
     <>
       {/* コントロール */}
-      {isDebug && <OrbitControls />}
+      {/* {isDebug && <OrbitControls />} */}
       {noAnimation && (
         <OrbitControls
           target={[0, 11.4, 0]}
@@ -184,31 +198,47 @@ export const Basic = (props: Props) => {
 
           {/* 花 */}
           <group>
-            {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => (
-              <group
-                key={index}
-                position={pos.position}
-                rotation={pos.rotation}
-              >
-                <mesh
-                  rotation={[0, -Math.PI / 2, -Math.PI / 2]}
-                  castShadow
-                  scale={0.4}
+            {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
+              const randRY = ((Math.random() - 0.5) * Math.PI) / 4;
+              const randRZ = ((Math.random() - 0.5) * Math.PI) / 4;
+
+              const randIdxPair = [
+                Math.floor(Math.random() * COLORS_LENGTH),
+                Math.floor(Math.random() * (COLORS_LENGTH - 1)),
+              ].sort((a, b) => a - b);
+
+              const idx = Math.floor(Math.random() * tintColorsArray.length);
+
+              const colors: [THREE.Color, THREE.Color] =
+                Math.random() > 0.5
+                  ? [
+                      new THREE.Color(tintColors[randIdxPair[0]]),
+                      new THREE.Color(tintColors[randIdxPair[1]]),
+                    ]
+                  : [
+                      new THREE.Color(tintColorsArray[idx][randIdxPair[0]]),
+                      new THREE.Color(tintColorsArray[idx][randIdxPair[1]]),
+                    ];
+              return (
+                <group
+                  key={index}
+                  position={pos.position}
+                  rotation={pos.rotation}
                 >
-                  <Flower
-                    flowerType={analysis.flowerType}
-                    noAnimation={noAnimation}
-                    colors={[
-                      new THREE.Color(
-                        currentUser?.metadata?.answers?.[0] ??
-                          analysis.flowerColor[1]
-                      ),
-                      new THREE.Color(analysis.flowerColor[0]),
-                    ]}
-                  />
-                </mesh>
-              </group>
-            ))}
+                  <mesh
+                    rotation={[0, -Math.PI / 2 + randRY, -Math.PI / 2 + randRZ]}
+                    castShadow
+                    scale={0.4}
+                  >
+                    <Flower
+                      flowerType={analysis.flowerType}
+                      noAnimation={noAnimation}
+                      colors={colors}
+                    />
+                  </mesh>
+                </group>
+              );
+            })}
           </group>
           {/* 木 */}
           <mesh
