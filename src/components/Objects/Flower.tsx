@@ -146,10 +146,10 @@ const GlbFlower = (props: GlbFlowerProps) => {
           mesh.material = material;
         }
         // 影を計算させる
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+        // mesh.castShadow = true;
+        // mesh.receiveShadow = true;
         //範囲外でも描画する
-        mesh.frustumCulled = false;
+        // mesh.frustumCulled = false;
       }
     });
   }, [actions, scene, colors, noAnimation]);
