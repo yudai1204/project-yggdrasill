@@ -44,7 +44,7 @@ const App = () => {
           flowerName: "桜",
           flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
           flowerSize: "medium",
-          flowerType: "Lily",
+          flowerType: "Sunflower",
           treeType: "conifer",
           treeHeight: "large",
           treeTexture: "realistic",
@@ -73,10 +73,6 @@ const App = () => {
   const times: Time[] = ["Noon", "Evening", "Night"];
 
   let timeIndex = 0;
-
-  useEffect(() => {
-    setCurrentUser(duser);
-  }, [duser]);
 
   // useEffect(() => {
   //   const interval = setInterval(() => {

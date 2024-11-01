@@ -108,10 +108,11 @@ type GlbFlowerProps = {
   noAnimation?: boolean;
   name: string;
   scale: number;
+  randomize?: number;
 };
 
 const GlbFlower = (props: GlbFlowerProps) => {
-  const { colors, noAnimation, name, scale } = props;
+  const { colors, noAnimation, name, scale, randomize = Math.PI } = props;
   const group = useRef<THREE.Group>(null);
   const { scene: originScene, animations } = useGLTF(
     `/gltf/flowers/${name}`
@@ -167,7 +168,7 @@ const GlbFlower = (props: GlbFlowerProps) => {
     <group ref={group} scale={scale} rotation={[0, -Math.PI / 2, -Math.PI / 2]}>
       <primitive
         object={scene}
-        rotation={[0, (Math.random() - 0.5) * Math.PI, 0]}
+        rotation={[0, (Math.random() - 0.5) * randomize, 0]}
       />
     </group>
   );
@@ -191,7 +192,7 @@ export const Asaago = (props: Props) => {
     <GlbFlower
       colors={colors}
       noAnimation={noAnimation}
-      name="asaago.glb"
+      name="asagao.glb"
       scale={2}
     />
   );
@@ -200,12 +201,15 @@ export const Asaago = (props: Props) => {
 export const Gerbera = (props: Props) => {
   const { colors, noAnimation } = props;
   return (
-    <GlbFlower
-      colors={colors}
-      noAnimation={noAnimation}
-      name="gerbera.glb"
-      scale={2}
-    />
+    <group rotation={[Math.PI, Math.PI / 2, Math.PI / 2]}>
+      <GlbFlower
+        colors={colors}
+        noAnimation={noAnimation}
+        name="gerbera.glb"
+        scale={2.4}
+        randomize={Math.PI / 2}
+      />
+    </group>
   );
 };
 
@@ -216,20 +220,36 @@ export const Sunflower = (props: Props) => {
       colors={colors}
       noAnimation={noAnimation}
       name="sunflower.glb"
-      scale={2}
+      scale={1}
     />
   );
 };
 
 export const Momiji = (props: Props) => {
   const { colors, noAnimation } = props;
+  const sign = useMemo(() => (Math.random() > 0.5 ? 1 : -1), []);
   return (
-    <GlbFlower
-      colors={colors}
-      noAnimation={noAnimation}
-      name="momiji_leaf.glb"
-      scale={2}
-    />
+    <>
+      <group rotation={[Math.PI / 3, Math.PI, 0]}>
+        <GlbFlower
+          colors={colors}
+          noAnimation={true}
+          name="momiji_leaf.glb"
+          scale={20}
+        />
+      </group>
+      <group
+        rotation={[-Math.PI / 3, (sign * Math.PI) / 2, 0]}
+        position={[0.5, 0, 0]}
+      >
+        <GlbFlower
+          colors={colors}
+          noAnimation={true}
+          name="momiji_leaf.glb"
+          scale={20}
+        />
+      </group>
+    </>
   );
 };
 
