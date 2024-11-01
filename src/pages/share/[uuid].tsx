@@ -2,6 +2,8 @@ import { GptAnalysis } from "@/types/metaData";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { Result } from "@/layouts/result";
+import { rmvCaptl } from "@/util/util";
+import Head from "next/head";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -54,6 +56,12 @@ interface Props {
 const UuidPage = (props: Props) => {
   const { uuid, notFound, gptAnalysis, answers } = props;
 
+  const title = encodeURIComponent(
+    "Magical " + rmvCaptl(gptAnalysis.flowerType, false)
+  );
+  const subtitle = encodeURIComponent(`${gptAnalysis.userName}が咲かせた花は`);
+  const ogImageUrl = `https://yggdrasill.shibalab.com/api/og?title=${title}&subtitle=${subtitle}`;
+
   const router = useRouter();
 
   // ページがまだ生成されていない場合のローディング状態
@@ -67,12 +75,19 @@ const UuidPage = (props: Props) => {
 
   return (
     <>
-      <title>Project Yggdrasil - ShibaLab</title>
+      <Head>
+        <meta property="og:image" content={ogImageUrl} />
+        <meta
+          property="og:title"
+          content="Let the magic flower bloom - ShibaLab"
+        />
+        <title>Project Yggdrasil - ShibaLab</title>
+      </Head>
       <Result
         gptAnalysis={gptAnalysis}
         answers={answers}
         isShared
-        shareUrl={`https://yggdrasill.shibalab.com/share?uuid=${uuid}`}
+        shareUrl={`https://yggdrasill.shibalab.com/share/${uuid}`}
       />
     </>
   );
