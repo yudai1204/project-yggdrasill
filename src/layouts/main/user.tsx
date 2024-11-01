@@ -41,6 +41,8 @@ export const User = (props: Props) => {
   const [isJoroMode, setIsJoroMode] = useState<boolean>(false);
   const [displayEndButton, setDisplayEndButton] = useState<boolean>(false);
 
+  const [touchCount, setTouchCount] = useState<number>(0);
+
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
 
   const windowSize = useWindowSize(windowRef);
@@ -216,6 +218,37 @@ export const User = (props: Props) => {
             h="100%"
             opacity={isJoroMode ? 0 : 1}
             transition="all 1s"
+            onTouchStart={(e) => {
+              if (adjustedAnimationCount >= 3) return;
+              setTouchCount((prev) => prev + 1);
+              setAnimationCount((prev) =>
+                Math.max(prev, Math.floor(touchCount / 10))
+              );
+              const div = document.createElement("div");
+              div.style.position = "fixed";
+              div.style.top = `${e.touches[0].clientY}px`;
+              div.style.left = `${e.touches[0].clientX}px`;
+              div.style.width = "50px";
+              div.style.height = "50px";
+              div.style.color = "#FFF7";
+              div.style.boxShadow =
+                "0 0 10px 0px currentColor, inset 0 0 10px 0px currentColor";
+              div.style.zIndex = "1000000";
+              div.style.borderRadius = "50%";
+              div.style.transform = "translate(-50%, -50%)";
+              div.style.opacity = "1";
+              div.style.transition = "all 0.2s";
+
+              document.body.appendChild(div);
+              setTimeout(() => {
+                div.style.opacity = "0";
+                div.style.width = "120px";
+                div.style.height = "120px";
+                setTimeout(() => {
+                  document.body.removeChild(div);
+                }, 200);
+              }, 100);
+            }}
           >
             <UserAnimation
               userBody={userBody}

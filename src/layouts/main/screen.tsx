@@ -89,12 +89,14 @@ export const Screen = () => {
     // screenWidthとtranslateXをlocalStorageから取得
     const savedScreenWidth = localStorage.getItem("screenWidth");
     const savedTranslateX = localStorage.getItem("translateX");
-    if (savedScreenWidth) {
-      setScreenWidth(parseInt(savedScreenWidth, 10));
-    }
-    if (savedTranslateX) {
-      setTranslateX(parseInt(savedTranslateX, 10));
-    }
+    setTimeout(() => {
+      if (savedScreenWidth) {
+        setScreenWidth(parseInt(savedScreenWidth, 10));
+      }
+      if (savedTranslateX) {
+        setTranslateX(parseInt(savedTranslateX, 10));
+      }
+    }, 500);
 
     return () => {
       // コンポーネントのアンマウント時に手動でWebSocketを閉じる

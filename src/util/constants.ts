@@ -18,7 +18,7 @@ export const CAMERA_POSITION: [number, number, number] = [0, 10, 50]; // 最終�
 export const FIRST_CAMERA_POSITION: [number, number, number] = [0, 15, 600]; // 初期カメラ位置
 export const CAMERA_ROTATION: [number, number, number] = [-Math.PI / 6, 0, 0]; // カメラ回転
 
-export const ANIMATION_SPEED = 4; // アニメーションのスピード
+export const ANIMATION_SPEED = process.env.NODE_ENV === "development" ? 4 : 0.8;
 
 export const FLOWER_POSITIONS: {
   [key: string]: FlowerPositions;
