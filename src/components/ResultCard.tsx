@@ -13,16 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { IoIosArrowDown } from "react-icons/io";
 import type { UserType } from "@/types/calibrate";
-import { getNearestColor } from "@/util/util";
+import { getNearestColor, rmvCaptl } from "@/util/util";
 import type { GptAnalysis } from "@/types/metaData";
-
-const rmvCaptl = (str: string | undefined, toLower = true) => {
-  if (!str) return "NO REPLACER";
-  if (toLower) {
-    return str.replace(/([A-Z])/g, " $1").toLowerCase();
-  }
-  return str.replace(/([A-Z])/g, " $1");
-};
 
 type Props = {
   currentUser: UserType | null;

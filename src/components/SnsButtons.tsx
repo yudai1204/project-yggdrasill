@@ -10,20 +10,26 @@ import { FaLine, FaFacebook, FaWhatsapp } from "react-icons/fa";
 
 type Props = {
   url: string;
+  language: "ja" | "en";
+  flowerName: string;
 };
 export const SNSButtons = (props: Props) => {
+  const titleText =
+    props.language === "ja"
+      ? `魔法で${props.flowerName || "花"}を咲かせました！`
+      : `I made a ${props.flowerName} at ShibaLab!`;
   return (
     <Stack spacing={2} direction="row" justify="center">
       <TwitterShareButton
         url={props.url}
-        title="ShibaLabで魔法の花を作りました!"
+        title={titleText}
         hashtags={["ShibaLab", "芝浦祭"]}
       >
         <Card as={Button} w={12} h={12} borderRadius="full">
           <BsTwitterX />
         </Card>
       </TwitterShareButton>
-      <LineShareButton url={props.url} title="ShibaLabで魔法の花を作りました!">
+      <LineShareButton url={props.url} title={titleText}>
         <Card as={Button} w={12} h={12} borderRadius="full">
           <FaLine />
         </Card>

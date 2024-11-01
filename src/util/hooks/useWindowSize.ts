@@ -6,7 +6,8 @@ import _ from "lodash";
 
 export const useWindowSize = (
   windowRef: React.RefObject<HTMLDivElement>,
-  delay: number = 300
+  delay: number = 300,
+  observerWidth?: number
 ) => {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
@@ -21,6 +22,12 @@ export const useWindowSize = (
     window.addEventListener("resize", handleWindowResize);
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
+
+  useEffect(() => {
+    if (observerWidth !== undefined) {
+      handleWindowResize();
+    }
+  }, [observerWidth]);
 
   return windowSize;
 };

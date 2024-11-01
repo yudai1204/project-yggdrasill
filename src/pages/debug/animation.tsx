@@ -39,13 +39,13 @@ const App = () => {
           userName: "aaa",
           season: "Summer",
           location: "BaldMountain",
-          time: "Noon",
-          weather: "Snowy",
+          time: "Evening",
+          weather: "Sunny",
           flowerName: "桜",
           flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
           flowerSize: "medium",
           flowerType: "Sunflower",
-          treeType: "conifer",
+          treeType: "broadleaf",
           treeHeight: "large",
           treeTexture: "realistic",
           treeAge: "ancient",
@@ -106,7 +106,7 @@ const App = () => {
         }}
       >
         <AnimationBase
-          isDebug={true}
+          isDebug={false}
           isJoroMode={false}
           animationStartFrom={0}
           currentUser={currentUser}

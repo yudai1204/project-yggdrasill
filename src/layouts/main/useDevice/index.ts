@@ -1,8 +1,13 @@
-import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
+import type {
+  DeviceType,
+  ScreenType,
+  UserType,
+  SavedDevicePositon,
+} from "@/types/calibrate";
 import { sendJson, getScreenSize, calculateTimeOffset } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
 
-const initDevice = () => {
+const initDevice = (initialDevicePosition: SavedDevicePositon): DeviceType => {
   const screenSize = getScreenSize();
   const device: DeviceType = {
     connectedAt: 0,
@@ -14,13 +19,13 @@ const initDevice = () => {
     type: "device",
     uuid: uuidv4(),
     size: screenSize,
-    rawSize: screenSize,
-    rotation: 0,
-    position: {
-      x: 0,
-      y: 0,
+    rawSize: {
+      width: screenSize.width * initialDevicePosition.zoom,
+      height: screenSize.height * initialDevicePosition.zoom,
     },
-    zoom: 1,
+    rotation: 0,
+    position: initialDevicePosition.position,
+    zoom: initialDevicePosition.zoom,
     isConnected: false,
   };
   return device;
@@ -42,6 +47,7 @@ type Props = {
   setCurrentUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   setIsJoroMode: React.Dispatch<React.SetStateAction<boolean>>;
   setAnimationStartFrom: React.Dispatch<React.SetStateAction<number>>;
+  initialDevicePosition: SavedDevicePositon;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -59,6 +65,7 @@ export const connectWebSocket = (props: Props) => {
     setCurrentUser,
     setIsJoroMode,
     setAnimationStartFrom,
+    initialDevicePosition,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -72,7 +79,7 @@ export const connectWebSocket = (props: Props) => {
     // 初回接続処理
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       if (deviceBodyRef.current === null) {
-        const device = initDevice();
+        const device = initDevice(initialDevicePosition);
         sendJson(wsRef.current, device, "init");
         deviceBodyRef.current = device;
         setDeviceBody(deviceBodyRef.current);

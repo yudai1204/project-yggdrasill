@@ -6,6 +6,7 @@ import type {
 } from "@/types/calibrate";
 import { sendJson, getScreenSize, calculateTimeOffset } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
+import { USER_POS_X, USER_POS_Y } from "@/util/constants";
 
 const initScreen = () => {
   const screenSize = getScreenSize();
@@ -109,8 +110,8 @@ export const connectWebSocket = (props: Props) => {
       setIsDebug(data.body.debug);
     } else if (data.head.type === "spPosition") {
       const newPos = {
-        translateX: 0,
-        translateY: 0,
+        translateX: USER_POS_X,
+        translateY: USER_POS_Y,
         width: data.body.size.width * data.body.zoom,
         height: data.body.size.height * data.body.zoom,
       };

@@ -10,6 +10,7 @@ import type { GptAnalysis } from "@/types/metaData";
 import { UserAnimation } from "./useUser/UserAnimation";
 import { ViewResult } from "./useUser/ViewResult";
 import { saveToLocalStorage } from "./useUser/saveToLocalStorage";
+import { USER_POS_X, USER_POS_Y } from "@/util/constants";
 
 type Props = {
   gptAnalysis: GptAnalysis;
@@ -69,8 +70,15 @@ export const User = (props: Props) => {
   useEffect(() => {
     if (userBodyRef.current && screenSize) {
       userBodyRef.current.position = {
-        x: screenSize.width / 2 - (userBodyRef.current.size.width * qrZoom) / 2,
-        y: screenSize.height - userBodyRef.current.size.height * qrZoom - 20,
+        x:
+          screenSize.width / 2 -
+          (userBodyRef.current.size.width * qrZoom) / 2 +
+          USER_POS_X,
+        y:
+          screenSize.height -
+          userBodyRef.current.size.height * qrZoom -
+          20 +
+          USER_POS_Y,
       };
       setUserBody({ ...userBodyRef.current });
     }
@@ -230,6 +238,11 @@ export const User = (props: Props) => {
               <Button
                 onClick={() => {
                   setDisplayStep(2);
+                  if (userBody?.uuid) {
+                    const url = new URL(window.location.href);
+                    url.pathname = `/share?uuid=${userBody.uuid}`;
+                    window.history.pushState({}, "", url.toString());
+                  }
                 }}
                 size="lg"
               >

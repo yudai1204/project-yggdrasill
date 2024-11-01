@@ -28,6 +28,9 @@ export const Screen = () => {
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [isDebug, setIsDebug] = useState<boolean>(false);
 
+  const [screenWidth, setScreenWidth] = useState<number>(100);
+  const [translateX, setTranslateX] = useState<number>(0);
+
   const [spPos, setSpPos] = useState<SpPos>({
     translateX: 0,
     translateY: 0,
@@ -41,7 +44,7 @@ export const Screen = () => {
     new Date().getTime() + 1000 * 60 * 60 * 24
   );
 
-  const windowSize = useWindowSize(windowRef);
+  const windowSize = useWindowSize(windowRef, 300, screenWidth);
   const toast = useToast();
   const isOnline = useNetworkStatus();
 
@@ -81,6 +84,16 @@ export const Screen = () => {
       setAnimationStartFrom,
     });
 
+    // screenWidthとtranslateXをlocalStorageから取得
+    const savedScreenWidth = localStorage.getItem("screenWidth");
+    const savedTranslateX = localStorage.getItem("translateX");
+    if (savedScreenWidth) {
+      setScreenWidth(parseInt(savedScreenWidth, 10));
+    }
+    if (savedTranslateX) {
+      setTranslateX(parseInt(savedTranslateX, 10));
+    }
+
     return () => {
       // コンポーネントのアンマウント時に手動でWebSocketを閉じる
       // shouldReconnect.current = false;
@@ -91,14 +104,23 @@ export const Screen = () => {
     };
   }, []);
 
+  // screenWidthとtranslateXをlocalStorageに保存
+  useEffect(() => {
+    localStorage.setItem("screenWidth", screenWidth.toString());
+    localStorage.setItem("translateX", translateX.toString());
+  }, [screenWidth, translateX]);
+
   return (
     <Box
-      w="100%"
+      w={`${screenWidth}%`}
       h="100svh"
       position="relative"
       overflow="hidden"
       padding="60px 40px"
       ref={windowRef}
+      border={mode === "Calibration" ? "1px solid #FFFFFF" : "none"}
+      boxShadow={`0 0 500px 1000px #000000`}
+      transform={`translateX(${translateX}px)`}
     >
       {mode === "Calibration" && (
         <ScreenCalibration
@@ -109,6 +131,10 @@ export const Screen = () => {
           devices={devices}
           screenNum={screenNum}
           spPos={spPos}
+          screenWidth={screenWidth}
+          setScreenWidth={setScreenWidth}
+          translateX={translateX}
+          setTranslateX={setTranslateX}
         />
       )}
       {mode === "Operation" && (

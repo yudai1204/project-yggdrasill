@@ -1,6 +1,11 @@
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, position, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import type { DeviceType, ScreenType, UserType } from "@/types/calibrate";
+import type {
+  DeviceType,
+  ScreenType,
+  UserType,
+  SavedDevicePositon,
+} from "@/types/calibrate";
 import { connectWebSocket } from "./useDevice";
 import { useWindowSize, useNetworkStatus } from "@/util/hooks";
 import { sendJson } from "@/util/util";
@@ -51,6 +56,11 @@ export const Device = () => {
     deviceBodyRef.current = newDevice;
     setDeviceBody({ ...deviceBodyRef.current });
     sendJson(wsRef.current, deviceBodyRef.current, "devices_update");
+    const lastDevicePosition: SavedDevicePositon = {
+      position: newDevice.position,
+      zoom: newDevice.zoom,
+    };
+    localStorage.setItem("devicePosition", JSON.stringify(lastDevicePosition));
   };
 
   // resize時の挙動
@@ -76,6 +86,14 @@ export const Device = () => {
 
   // WebSocket接続の開始とクリーンアップ
   useEffect(() => {
+    const lastDevicePosition = localStorage.getItem("devicePosition");
+    const initialDevicePosition: SavedDevicePositon = lastDevicePosition
+      ? JSON.parse(lastDevicePosition)
+      : {
+          position: { x: 0, y: 0 },
+          zoom: 1,
+        };
+
     connectWebSocket({
       wsRef,
       deviceBodyRef,
@@ -90,6 +108,7 @@ export const Device = () => {
       setCurrentUser,
       setIsJoroMode,
       setAnimationStartFrom,
+      initialDevicePosition,
     });
 
     return () => {

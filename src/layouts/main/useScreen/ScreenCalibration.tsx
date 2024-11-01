@@ -1,4 +1,15 @@
-import { Box, Button, ButtonGroup, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  NumberInput,
+  Stack,
+  Text,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/react";
 import { CalibrationBox } from "@/components/CalibrationBox";
 import { sendJson } from "@/util/util";
 import type { DeviceType, ScreenType, SpPos } from "@/types/calibrate";
@@ -11,6 +22,10 @@ type Props = {
   wsRef: React.MutableRefObject<WebSocket | null>;
   setDevices: React.Dispatch<React.SetStateAction<DeviceType[]>>;
   spPos: SpPos;
+  screenWidth: number;
+  setScreenWidth: React.Dispatch<React.SetStateAction<number>>;
+  translateX: number;
+  setTranslateX: React.Dispatch<React.SetStateAction<number>>;
 };
 export const ScreenCalibration = (props: Props) => {
   const {
@@ -21,6 +36,10 @@ export const ScreenCalibration = (props: Props) => {
     wsRef,
     setDevices,
     spPos,
+    screenWidth,
+    setScreenWidth,
+    translateX,
+    setTranslateX,
   } = props;
   return (
     <>
@@ -28,8 +47,8 @@ export const ScreenCalibration = (props: Props) => {
       <Box
         position="absolute"
         bottom={5}
-        left="50%"
-        transform="translateX(-50%)"
+        left={`calc(50% - ${spPos.width / 2}px)`}
+        transform={`translate(${spPos.translateX}px, ${spPos.translateY}px)`}
         backgroundColor="#070"
         width={spPos.width}
         height={spPos.height}
@@ -93,7 +112,7 @@ export const ScreenCalibration = (props: Props) => {
           }
         })}
 
-      <Box position="absolute" top={0} left={0} zIndex={100}>
+      <Box position="absolute" top={0} left={0} zIndex={100} width="100%" p={4}>
         <ButtonGroup mb={1}>
           <Button
             onClick={() => {
@@ -110,6 +129,42 @@ export const ScreenCalibration = (props: Props) => {
             スクリーンサイズを同期
           </Button>
         </ButtonGroup>
+        <Stack direction="row" display="flex" gap={8} mt={4}>
+          <Stack direction="row" justifyContent="center" alignItems="center">
+            <Text fontSize="sm">Width: </Text>
+            <NumberInput
+              value={screenWidth}
+              onChange={(value) => {
+                setScreenWidth(Number(value));
+              }}
+              w="100px"
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text fontSize="sm">%</Text>
+          </Stack>
+          <Stack direction="row" justifyContent="center" alignItems="center">
+            <Text fontSize="sm">TranslateX: </Text>
+            <NumberInput
+              w="100px"
+              value={translateX}
+              onChange={(value) => {
+                setTranslateX(Number(value));
+              }}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text fontSize="sm">px</Text>
+          </Stack>
+        </Stack>
       </Box>
     </>
   );

@@ -14,6 +14,21 @@ export const WaitingScreen = (props: Props) => {
   50% { opacity: 0.2;  }
 `;
 
+  const fadeOutExpandAnimation = keyframes`
+  0%{
+    opacity: 0;
+    box-shadow: 0 0 0px 0px currentColor, inset 0 0 0px 0px currentColor;
+  }
+  20%{
+    opacity: 0.8;
+    box-shadow: 0 0 10px 0px currentColor, inset 0 0 10px 0px currentColor;
+  }
+  100%{
+    opacity: 0;
+    box-shadow: 0 0 40px 100px currentColor, inset 0 0 10px 0px currentColor;
+  }
+  `;
+
   return (
     <Box>
       <Box
@@ -44,8 +59,8 @@ export const WaitingScreen = (props: Props) => {
       <Box
         position="absolute"
         bottom={5}
-        left="50%"
-        transform="translateX(-50%)"
+        left={`calc(50% - ${spPos.width / 2}px)`}
+        transform={`translate(${spPos.translateX}px, ${spPos.translateY}px)`}
         borderRadius={10}
         color="#fff"
         boxShadow={"0 0 10px 0px currentColor, inset 0 0 10px 0px currentColor"}
@@ -54,7 +69,7 @@ export const WaitingScreen = (props: Props) => {
         textAlign="center"
         pt={2}
         zIndex={1000}
-        animation={`${fadeAnimation} 4s ease-in-out infinite`}
+        animation={`${fadeOutExpandAnimation} 4s ease-in-out infinite`}
       ></Box>
 
       <Box

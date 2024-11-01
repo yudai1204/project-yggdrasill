@@ -99,3 +99,11 @@ export const generateTintColors = (
 
   return tints;
 };
+
+export const rmvCaptl = (str: string | undefined, toLower = true) => {
+  if (!str) return "NO REPLACER";
+  if (toLower) {
+    return str.replace(/([A-Z])/g, " $1").toLowerCase();
+  }
+  return str.replace(/([A-Z])/g, " $1");
+};

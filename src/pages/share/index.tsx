@@ -3,21 +3,6 @@ import type { GptAnalysis } from "@/types/metaData";
 import { useEffect, useState } from "react";
 
 const ResultPage = () => {
-  const initialAnalysis: GptAnalysis = {
-    userName: "undefined",
-    season: "Summer",
-    location: "BaldMountain",
-    time: "Noon",
-    weather: "Sunny",
-    flowerName: "undefined",
-    flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
-    flowerSize: "medium",
-    flowerType: "CherryBlossom",
-    treeType: "conifer",
-    treeHeight: "large",
-    treeTexture: "realistic",
-    treeAge: "ancient",
-  };
   const initialAnswers: string[] = ["#000000"];
 
   const [uuid, setUuid] = useState<string | null | undefined>(null);

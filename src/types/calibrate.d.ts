@@ -107,3 +107,8 @@ export interface SpPos {
   width: number;
   height: number;
 }
+
+export type SavedDevicePositon = {
+  position: { x: number; y: number };
+  zoom: number;
+};

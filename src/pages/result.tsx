@@ -42,6 +42,9 @@ const ResultPage = () => {
     const storedUuid = localStorage.getItem("uuid");
     if (storedUuid) {
       setUuid(storedUuid);
+      const url = new URL(window.location.href);
+      url.pathname = `/share?uuid=${uuid}`;
+      window.history.pushState({}, "", url.toString());
     }
   }, []);
 

@@ -18,6 +18,7 @@ import "@fontsource/charmonman";
 import { ResultCard } from "@/components/ResultCard";
 import { initUserDevice } from "./main/useUser";
 import { BsTwitterX } from "react-icons/bs";
+import { rmvCaptl } from "@/util/util";
 
 type Props = {
   answers: (string | undefined)[];
@@ -63,7 +64,11 @@ export const Result = (props: Props) => {
                 <ResultCard currentUser={currentUser} language={language} />
               </Box>
               <Box zIndex={1} pos="absolute" bottom={2} left={2} right={2}>
-                <SNSButtons url={shareUrl} />
+                <SNSButtons
+                  url={shareUrl}
+                  language={language}
+                  flowerName={`Magical ${rmvCaptl(currentUser.metadata.gptAnalysis.flowerType, false)}`}
+                />
               </Box>
             </>
           ) : (

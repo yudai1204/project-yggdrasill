@@ -6,6 +6,9 @@ type FlowerPositions = {
   rotation: Euler;
 }[];
 
+export const USER_POS_X = 0;
+export const USER_POS_Y = 0;
+
 export const COLORS_LENGTH = 5;
 
 export const FOV = 45; // 視野角
