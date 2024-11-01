@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Gltf, useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
@@ -81,7 +81,10 @@ export const CherryBlossom = (props: Props) => {
 
   // フレームごとにアニメーションを更新
   useFrame((state, delta) => {
-    mixer.update(delta);
+    if (!noAnimation) {
+      mixer.update(delta);
+      state.invalidate(); // 必要なときだけ再レンダリング
+    }
   });
 
   return (
@@ -117,6 +120,32 @@ const GlbFlower = (props: GlbFlowerProps) => {
 
   const { actions } = useAnimations(animations, group);
 
+  // traverseの処理をuseCallbackでメモ化
+  const updateMaterial = useCallback(
+    (child: THREE.Object3D) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (colors && mesh.name.includes("平面")) {
+          const material = new THREE.MeshStandardMaterial({
+            transparent: true,
+            opacity: 0.85,
+          });
+          material.onBeforeCompile = (shader) => {
+            if (colors) makeGradation(shader, colors[0], colors[1]);
+          };
+          mesh.material = material;
+        }
+
+        // 影を計算させる
+        // mesh.castShadow = true;
+        // mesh.receiveShadow = true;
+        //範囲外でも描画する
+        // mesh.frustumCulled = false;
+      }
+    },
+    [colors]
+  );
+
   useEffect(() => {
     Object.values(actions).forEach((action) => {
       if (noAnimation) {
@@ -131,32 +160,15 @@ const GlbFlower = (props: GlbFlowerProps) => {
       action?.play();
     });
 
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        // console.log(child.name);
-        const mesh = child as THREE.Mesh;
-        if (colors && mesh.name.includes("平面")) {
-          const material = new THREE.MeshStandardMaterial({
-            transparent: true, // 透明度を設定
-            opacity: 0.85, // 透明度の値を設定
-          });
-          material.onBeforeCompile = (shader) => {
-            if (colors) makeGradation(shader, colors[0], colors[1]);
-          };
-          mesh.material = material;
-        }
-        // 影を計算させる
-        // mesh.castShadow = true;
-        // mesh.receiveShadow = true;
-        //範囲外でも描画する
-        // mesh.frustumCulled = false;
-      }
-    });
-  }, [actions, scene, colors, noAnimation]);
+    scene.traverse(updateMaterial);
+  }, [actions, scene, colors, noAnimation, updateMaterial]);
 
   return (
-    <group ref={group} scale={scale}>
-      <primitive object={scene} />
+    <group ref={group} scale={scale} rotation={[0, -Math.PI / 2, -Math.PI / 2]}>
+      <primitive
+        object={scene}
+        rotation={[0, (Math.random() - 0.5) * Math.PI, 0]}
+      />
     </group>
   );
 };
@@ -221,6 +233,18 @@ export const Momiji = (props: Props) => {
   );
 };
 
+export const Lily = (props: Props) => {
+  const { colors, noAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="lily.glb"
+      scale={1.1}
+    />
+  );
+};
+
 export const Flower = (props: Props) => {
   // const colors = [new THREE.Color(0xff69b4), new THREE.Color(0xffffff)] as [
   //   THREE.Color,
@@ -241,6 +265,8 @@ export const Flower = (props: Props) => {
     return <Gerbera colors={colors} noAnimation={noAnimation} />;
   } else if (flowerType === "Momiji") {
     return <Momiji colors={colors} noAnimation={noAnimation} />;
+  } else if (flowerType === "Lily") {
+    return <Lily colors={colors} noAnimation={noAnimation} />;
   }
 
   return <Hibiscus colors={colors} />;

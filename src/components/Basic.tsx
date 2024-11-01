@@ -199,8 +199,8 @@ export const Basic = (props: Props) => {
           {/* 花 */}
           <group>
             {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
-              const randRY = ((Math.random() - 0.5) * Math.PI) / 4;
-              const randRZ = ((Math.random() - 0.5) * Math.PI) / 4;
+              const randRY = ((Math.random() - 0.5) * Math.PI) / 3;
+              const randRZ = ((Math.random() - 0.5) * Math.PI) / 3;
 
               const randIdxPair = [
                 Math.floor(Math.random() * COLORS_LENGTH),
@@ -225,17 +225,13 @@ export const Basic = (props: Props) => {
                   position={pos.position}
                   rotation={pos.rotation}
                 >
-                  <mesh
-                    rotation={[0, -Math.PI / 2 + randRY, -Math.PI / 2 + randRZ]}
-                    castShadow
-                    scale={0.4}
-                  >
+                  <group rotation={[0, randRY, randRZ]} castShadow scale={0.4}>
                     <Flower
                       flowerType={analysis.flowerType}
                       noAnimation={noAnimation}
                       colors={colors}
                     />
-                  </mesh>
+                  </group>
                 </group>
               );
             })}

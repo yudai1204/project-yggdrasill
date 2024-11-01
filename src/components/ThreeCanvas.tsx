@@ -29,6 +29,7 @@ export const ThreeCanvas = (props: Props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
         <Canvas
+          dpr={[0.5, 1.5]}
           flat
           shadows
           gl={{

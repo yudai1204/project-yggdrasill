@@ -20,7 +20,8 @@ export type FlowerType =
   | "Sunflower"
   | "Asaago"
   | "Gerbera"
-  | "Momiji";
+  | "Momiji"
+  | "Lily";
 
 export interface GptAnalysis {
   userName: string;

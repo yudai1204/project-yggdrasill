@@ -62,6 +62,7 @@ const handler = async (
       "Asaago",
       "Gerbera",
       "Momiji",
+      "Lily",
     ]),
     treeType: z.enum(["broadleaf", "conifer"]), // 紅葉樹・針葉樹
     treeHeight: z.enum(["small", "large"]),

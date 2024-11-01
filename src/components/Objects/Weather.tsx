@@ -30,6 +30,8 @@ const Rain = () => {
   }
 
   useFrame((state, delta) => {
+    let needsUpdate = false; // 更新が必要かどうかを追跡
+
     if (ref.current?.geometry.attributes.position) {
       for (let i = 0; i < particles.length; i += 6) {
         particles[i + 1] -= 20 * delta; // Y方向に降らせる速度調整
@@ -39,10 +41,15 @@ const Rain = () => {
         if (particles[i + 1] < -3) {
           particles[i + 1] = 30;
           particles[i + 4] = 30 - lineLength;
+          needsUpdate = true; // 更新が必要
         }
       }
-      // 変更を反映
-      ref.current.geometry.attributes.position.needsUpdate = true;
+
+      if (needsUpdate) {
+        // 変更を反映
+        ref.current.geometry.attributes.position.needsUpdate = true;
+        state.invalidate(); // 必要なときだけ再レンダリング
+      }
     }
   });
 
@@ -79,6 +86,8 @@ const Snow = () => {
   }
 
   useFrame((state, delta) => {
+    let needsUpdate = false; // 更新が必要かどうかを追跡
+
     // ref.currentとgeometry、positionが存在するか確認
     if (ref.current && ref.current.geometry.attributes.position) {
       for (let i = 0; i < particles.length; i += 3) {
@@ -90,10 +99,15 @@ const Snow = () => {
         // 下まで来た粒をリセット
         if (particles[i + 1] < -3) {
           particles[i + 1] = 35;
+          needsUpdate = true; // 更新が必要
         }
       }
-      // 更新フラグを立てて変更を反映
-      ref.current.geometry.attributes.position.needsUpdate = true;
+
+      if (needsUpdate) {
+        // 更新フラグを立てて変更を反映
+        ref.current.geometry.attributes.position.needsUpdate = true;
+        state.invalidate(); // 必要なときだけ再レンダリング
+      }
     }
   });
 
@@ -139,6 +153,8 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
   return (
     <>
       <Sky
+        turbidity={weather === "Rainy" ? 30 : 8}
+        rayleigh={weather === "Rainy" ? 0.3 : 0.8}
         sunPosition={
           isDaytime
             ? [100, 20, 100]
@@ -188,8 +204,8 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
         color={directionalColor}
         position={[10, 10, 5]}
         intensity={isNight ? 0.8 : 1.5}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={128}
+        shadow-mapSize-height={128}
         shadow-camera-far={100}
         shadow-camera-left={-10}
         shadow-camera-right={10}
@@ -197,13 +213,47 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
         shadow-camera-bottom={-10}
       />
 
-      {weather === "Cloudy" && (
+      {weather === "Rainy" && (
         <>
-          <Cloud position={[-10, 10, -10]} />
-          <Cloud position={[10, 20, -15]} />
+          <Cloud
+            position={[40, 120, -50]}
+            scale={[15, 15, 15]}
+            color={"#777777"}
+            opacity={0.5}
+            growth={10}
+            speed={0.05}
+          />
+          <Cloud
+            speed={0.05}
+            position={[-40, 120, -50]}
+            scale={[15, 15, 15]}
+            color={"#777777"}
+            opacity={0.5}
+            growth={10}
+          />
+          <Rain />
         </>
       )}
-      {weather === "Rainy" && <Rain />}
+      {(weather === "Snowy" || weather === "Cloudy") && (
+        <>
+          <Cloud
+            position={[40, 80, -50]}
+            scale={[8, 8, 8]}
+            color={"#CCCCCC"}
+            opacity={0.5}
+            growth={10}
+            speed={0.02}
+          />
+          <Cloud
+            speed={0.02}
+            position={[-40, 80, -50]}
+            scale={[8, 8, 8]}
+            color={"#CCCCCC"}
+            opacity={0.5}
+            growth={10}
+          />
+        </>
+      )}
       {weather === "Snowy" && <Snow />}
     </>
   );
