@@ -240,7 +240,7 @@ export const User = (props: Props) => {
                   setDisplayStep(2);
                   if (userBody?.uuid) {
                     const url = new URL(window.location.href);
-                    url.pathname = `/share?uuid=${userBody.uuid}`;
+                    url.pathname = `/share/${userBody.uuid}`;
                     window.history.pushState({}, "", url.toString());
                   }
                 }}

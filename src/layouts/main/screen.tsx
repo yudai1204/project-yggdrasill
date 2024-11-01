@@ -31,6 +31,8 @@ export const Screen = () => {
   const [screenWidth, setScreenWidth] = useState<number>(100);
   const [translateX, setTranslateX] = useState<number>(0);
 
+  const [isWaiting, setIsWaiting] = useState<boolean>(false);
+
   const [spPos, setSpPos] = useState<SpPos>({
     translateX: 0,
     translateY: 0,
@@ -110,6 +112,18 @@ export const Screen = () => {
     localStorage.setItem("translateX", translateX.toString());
   }, [screenWidth, translateX]);
 
+  // animation終了からしばらく後に待機モードに戻す
+  useEffect(() => {
+    setIsWaiting(false);
+    const timeout = setTimeout(
+      () => {
+        setIsWaiting(true);
+      },
+      animationStartFrom - new Date().getTime() + 1000 * 20
+    );
+    return () => clearTimeout(timeout);
+  }, [animationStartFrom]);
+
   return (
     <Box
       w={`${screenWidth}%`}
@@ -142,13 +156,20 @@ export const Screen = () => {
           {!currentUser ? (
             <WaitingScreen spPos={spPos} />
           ) : (
-            <ScreenAnimation
-              isDebug={isDebug}
-              devices={devices}
-              isJoroMode={isJoroMode}
-              currentUser={currentUser}
-              animationStartFrom={animationStartFrom}
-            />
+            <>
+              <ScreenAnimation
+                isDebug={isDebug}
+                devices={devices}
+                isJoroMode={isJoroMode}
+                currentUser={currentUser}
+                animationStartFrom={animationStartFrom}
+              />
+              {isWaiting && (
+                <Box zIndex={999999999999}>
+                  <WaitingScreen spPos={spPos} />
+                </Box>
+              )}
+            </>
           )}
         </>
       )}

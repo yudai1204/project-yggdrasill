@@ -43,7 +43,7 @@ const ResultPage = () => {
     if (storedUuid) {
       setUuid(storedUuid);
       const url = new URL(window.location.href);
-      url.pathname = `/share?uuid=${uuid}`;
+      url.pathname = `/share/${uuid}`;
       window.history.pushState({}, "", url.toString());
     }
   }, []);
@@ -54,7 +54,7 @@ const ResultPage = () => {
       <Result
         gptAnalysis={gptAnalysis}
         answers={answers}
-        shareUrl={`https://yggdrasill.shibalab.com/share?uuid=${uuid}`}
+        shareUrl={`https://yggdrasill.shibalab.com/share/${uuid}`}
       />
     </>
   );

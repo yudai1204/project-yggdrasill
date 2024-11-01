@@ -122,8 +122,13 @@ export const connectWebSocket = (props: Props) => {
       setIsDebug(data.body.debug);
       setScreenSize(data.body.screen);
     } else if (data.head.type === "user_ready") {
-      setCurrentUser(data.body.user);
-      setIsJoroMode(true);
+      setCurrentUser(null);
+      setIsJoroMode(false);
+      setAnimationStartFrom(new Date().getTime() + 1000 * 60 * 60 * 24);
+      setTimeout(() => {
+        setCurrentUser(data.body.user);
+        setIsJoroMode(true);
+      }, 1000);
     } else if (data.head.type === "animation_start") {
       setAnimationStartFrom(data.body.animationStartFrom);
       setIsJoroMode(false);

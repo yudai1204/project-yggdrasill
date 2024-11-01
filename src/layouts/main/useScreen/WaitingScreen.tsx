@@ -44,6 +44,7 @@ export const WaitingScreen = (props: Props) => {
           fontSize="16px"
           mt="20px"
           fontFamily="Kaisei Opti"
+          textShadow="0 0 10px #000"
         >
           スマートフォンを置いてください
         </Heading>
@@ -52,6 +53,7 @@ export const WaitingScreen = (props: Props) => {
           fontSize="12px"
           mt="12px"
           fontFamily="Kaisei Opti"
+          textShadow="0 0 10px #000"
         >
           Put your smartphone here.
         </Heading>
@@ -69,6 +71,8 @@ export const WaitingScreen = (props: Props) => {
         textAlign="center"
         pt={2}
         zIndex={1000}
+        backgroundColor="#1A202C66"
+        backdropFilter="blur(10px)"
         animation={`${fadeOutExpandAnimation} 4s ease-in-out infinite`}
       ></Box>
 

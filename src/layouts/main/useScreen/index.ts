@@ -118,8 +118,14 @@ export const connectWebSocket = (props: Props) => {
       setSpPos(newPos);
       console.log("spPosition", newPos);
     } else if (data.head.type === "user_ready") {
-      setCurrentUser(data.body.user);
-      setIsJoroMode(true);
+      setCurrentUser(null);
+      setIsJoroMode(false);
+      setAnimationStartFrom(new Date().getTime() + 1000 * 60 * 60 * 24);
+      setSpPos((prev) => ({ ...prev, width: 84, height: 170 }));
+      setTimeout(() => {
+        setCurrentUser(data.body.user);
+        setIsJoroMode(true);
+      }, 1000);
     } else if (data.head.type === "animation_start") {
       setAnimationStartFrom(data.body.animationStartFrom);
       setIsJoroMode(false);
