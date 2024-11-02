@@ -7,7 +7,7 @@ type FlowerPositions = {
 }[];
 
 export const USER_POS_X = 0;
-export const USER_POS_Y = -475;
+export const USER_POS_Y = -460;
 
 export const COLORS_LENGTH = 5;
 
