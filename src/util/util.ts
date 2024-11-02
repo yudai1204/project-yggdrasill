@@ -1,5 +1,6 @@
 import colorNameList from "color-name-list";
 import nearestColor from "nearest-color";
+import chroma from "chroma-js";
 
 export const getScreenSize = () => {
   return {
@@ -106,4 +107,13 @@ export const rmvCaptl = (str: string | undefined, toLower = true) => {
     return str.replace(/([A-Z])/g, " $1").toLowerCase();
   }
   return str.replace(/([A-Z])/g, " $1");
+};
+
+const hexToHsv = (hex: string) => {};
+
+export const getBetterColors = (
+  primaryColor: string,
+  accentColors: string[]
+) => {
+  const primaryHsv = hexToHsv(primaryColor);
 };

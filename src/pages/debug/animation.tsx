@@ -44,7 +44,7 @@ const App = () => {
           flowerName: "桜",
           flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
           flowerSize: "medium",
-          flowerType: "Sunflower",
+          flowerType: "CherryBlossom",
           treeType: "broadleaf",
           treeHeight: "large",
           treeTexture: "realistic",
@@ -68,30 +68,6 @@ const App = () => {
     []
   );
 
-  const [currentUser, setCurrentUser] = useState<UserType>(duser);
-
-  const times: Time[] = ["Noon", "Evening", "Night"];
-
-  let timeIndex = 0;
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentUser({
-  //       ...duser,
-  //       // @ts-ignore
-  //       metadata: {
-  //         ...duser.metadata,
-  //         gptAnalysis: {
-  //           // @ts-ignore
-  //           ...duser.metadata.gptAnalysis,
-  //           time: times[timeIndex++ % 3],
-  //         },
-  //       },
-  //     });
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
-
   return (
     <div style={{ position: "relative" }}>
       <div
@@ -109,7 +85,7 @@ const App = () => {
           isDebug={false}
           isJoroMode={false}
           animationStartFrom={0}
-          currentUser={currentUser}
+          currentUser={duser}
         />
       </div>
       <div

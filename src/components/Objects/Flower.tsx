@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Gltf, useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
+import { MeshStandardMaterial } from "three";
 import type { FlowerType } from "@/types/metaData";
 import { ANIMATION_SPEED } from "@/util/constants";
 import { SkeletonUtils } from "three-stdlib";
@@ -36,19 +37,21 @@ const makeGradation = (
   );
 };
 
-const animationSpeed = 0.5 * (1 + ANIMATION_SPEED);
+const animationSpeed = 1; //0.3 * ANIMATION_SPEED;
 const animationSpeedOnNoAnimation = 1.8;
 
 type Props = {
   colors?: [THREE.Color, THREE.Color];
   flowerType?: FlowerType;
   noAnimation?: boolean;
+  doAnimation?: boolean;
 };
 
 export const CherryBlossom = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   const { scene, animations } = useGLTF("/gltf/flowers/cherryBlossom.gltf");
   const mixer = new THREE.AnimationMixer(scene);
+  const groupRef = useRef<THREE.Group>(null);
   // マテリアルの色を変更
   scene.traverse((object) => {
     if ((object as THREE.Mesh).isMesh) {
@@ -69,15 +72,33 @@ export const CherryBlossom = (props: Props) => {
   });
 
   // アニメーションを追加
-  animations.forEach((clip) => {
-    const action = mixer.clipAction(clip);
-    action.setLoop(THREE.LoopOnce, 0); // ループを1度だけに設定
-    action.clampWhenFinished = true; // 最後のフレームで止める
-    action.timeScale = noAnimation
-      ? animationSpeedOnNoAnimation
-      : animationSpeed; // アニメーション速度を1にする
-    action.play();
-  });
+  if (doAnimation) {
+    if (groupRef.current) {
+      let scaleValue = 0;
+      const scaleIncrement = 0.01; // スケールの増加量
+
+      const scaleAnimation = () => {
+        if (scaleValue < 1) {
+          scaleValue += scaleIncrement;
+          if (groupRef.current) {
+            groupRef.current.scale.set(scaleValue, scaleValue, scaleValue);
+          }
+          requestAnimationFrame(scaleAnimation);
+        }
+      };
+
+      scaleAnimation();
+    }
+    animations.forEach((clip) => {
+      const action = mixer.clipAction(clip);
+      action.setLoop(THREE.LoopOnce, 0); // ループを1度だけに設定
+      action.clampWhenFinished = true; // 最後のフレームで止める
+      action.timeScale = noAnimation
+        ? animationSpeedOnNoAnimation
+        : animationSpeed * 2; // アニメーション速度を1にする
+      action.play();
+    });
+  }
 
   // フレームごとにアニメーションを更新
   useFrame((state, delta) => {
@@ -88,12 +109,14 @@ export const CherryBlossom = (props: Props) => {
   });
 
   return (
-    <Gltf
-      src="/gltf/flowers/cherryBlossom.gltf"
-      scale={1}
-      castShadow
-      receiveShadow
-    />
+    <group rotation={[Math.PI / 2, 0, 0]} scale={0} ref={groupRef}>
+      <Gltf
+        src="/gltf/flowers/cherryBlossom.gltf"
+        scale={1}
+        castShadow
+        receiveShadow
+      />
+    </group>
   );
 };
 
@@ -109,10 +132,18 @@ type GlbFlowerProps = {
   name: string;
   scale: number;
   randomize?: number;
+  doAnimation?: boolean;
 };
 
 const GlbFlower = (props: GlbFlowerProps) => {
-  const { colors, noAnimation, name, scale, randomize = Math.PI } = props;
+  const {
+    colors,
+    noAnimation,
+    name,
+    scale,
+    randomize = Math.PI,
+    doAnimation = true,
+  } = props;
   const group = useRef<THREE.Group>(null);
   const { scene: originScene, animations } = useGLTF(
     `/gltf/flowers/${name}`
@@ -158,15 +189,35 @@ const GlbFlower = (props: GlbFlowerProps) => {
       action!.timeScale = noAnimation
         ? animationSpeedOnNoAnimation
         : animationSpeed; // アニメーションの速度を設定（適宜調整）
-      action?.play();
+
+      if (doAnimation) {
+        let scaleValue = 0;
+        const scaleIncrement = 0.01; // スケールの増加量
+
+        const scaleAnimation = () => {
+          if (scaleValue < 1) {
+            scaleValue += scaleIncrement;
+            if (group.current) {
+              group.current.scale.set(scaleValue, scaleValue, scaleValue);
+            }
+            requestAnimationFrame(scaleAnimation);
+          }
+        };
+
+        scaleAnimation();
+
+        action?.play();
+      } else {
+      }
     });
 
     scene.traverse(updateMaterial);
-  }, [actions, scene, colors, noAnimation, updateMaterial]);
+  }, [actions, scene, colors, noAnimation, updateMaterial, doAnimation]);
 
   return (
-    <group ref={group} scale={scale} rotation={[0, -Math.PI / 2, -Math.PI / 2]}>
+    <group ref={group} rotation={[0, -Math.PI / 2, -Math.PI / 2]} scale={0}>
       <primitive
+        scale={scale}
         object={scene}
         rotation={[0, (Math.random() - 0.5) * randomize, 0]}
       />
@@ -175,31 +226,33 @@ const GlbFlower = (props: GlbFlowerProps) => {
 };
 
 export const Hibiscus = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   return (
     <GlbFlower
       colors={colors}
       noAnimation={noAnimation}
       name="hibiscus.glb"
       scale={2}
+      doAnimation={doAnimation}
     />
   );
 };
 
 export const Asaago = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   return (
     <GlbFlower
       colors={colors}
       noAnimation={noAnimation}
       name="asagao.glb"
       scale={2}
+      doAnimation={doAnimation}
     />
   );
 };
 
 export const Gerbera = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   return (
     <group rotation={[Math.PI, Math.PI / 2, Math.PI / 2]}>
       <GlbFlower
@@ -208,25 +261,27 @@ export const Gerbera = (props: Props) => {
         name="gerbera.glb"
         scale={2.4}
         randomize={Math.PI / 2}
+        doAnimation={doAnimation}
       />
     </group>
   );
 };
 
 export const Sunflower = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   return (
     <GlbFlower
       colors={colors}
       noAnimation={noAnimation}
       name="sunflower.glb"
       scale={1}
+      doAnimation={doAnimation}
     />
   );
 };
 
 export const Momiji = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   const sign = useMemo(() => (Math.random() > 0.5 ? 1 : -1), []);
   return (
     <>
@@ -236,6 +291,7 @@ export const Momiji = (props: Props) => {
           noAnimation={true}
           name="momiji_leaf.glb"
           scale={20}
+          doAnimation={doAnimation}
         />
       </group>
       <group
@@ -247,6 +303,7 @@ export const Momiji = (props: Props) => {
           noAnimation={true}
           name="momiji_leaf.glb"
           scale={20}
+          doAnimation={doAnimation}
         />
       </group>
     </>
@@ -254,13 +311,14 @@ export const Momiji = (props: Props) => {
 };
 
 export const Lily = (props: Props) => {
-  const { colors, noAnimation } = props;
+  const { colors, noAnimation, doAnimation } = props;
   return (
     <GlbFlower
       colors={colors}
       noAnimation={noAnimation}
       name="lily.glb"
       scale={1.1}
+      doAnimation={doAnimation}
     />
   );
 };
@@ -271,23 +329,64 @@ export const Flower = (props: Props) => {
   //   THREE.Color,
   // ];
 
-  const { flowerType = "CherryBlossom", colors, noAnimation = false } = props;
+  const {
+    flowerType = "CherryBlossom",
+    colors,
+    noAnimation = false,
+    doAnimation = true,
+  } = props;
 
-  if (flowerType === "CherryBlossom") {
-    return <CherryBlossom colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Hibiscus") {
-    return <Hibiscus colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Sunflower") {
-    return <Sunflower colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Asaago") {
-    return <Asaago colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Gerbera") {
-    return <Gerbera colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Momiji") {
-    return <Momiji colors={colors} noAnimation={noAnimation} />;
-  } else if (flowerType === "Lily") {
-    return <Lily colors={colors} noAnimation={noAnimation} />;
-  }
-
-  return <Hibiscus colors={colors} />;
+  return (
+    <>
+      {flowerType === "CherryBlossom" && (
+        <CherryBlossom
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+      {flowerType === "Hibiscus" && (
+        <Hibiscus
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}{" "}
+      {flowerType === "Sunflower" && (
+        <Sunflower
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+      {flowerType === "Asaago" && (
+        <Asaago
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+      {flowerType === "Gerbera" && (
+        <Gerbera
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+      {flowerType === "Momiji" && (
+        <Momiji
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+      {flowerType === "Lily" && (
+        <Lily
+          colors={colors}
+          noAnimation={noAnimation}
+          doAnimation={doAnimation}
+        />
+      )}
+    </>
+  );
 };

@@ -50,6 +50,8 @@ export const Basic = (props: Props) => {
     y: false,
     r: false,
   });
+  const [doFlowerAnimation, setDoFlowerAnimation] = useState<boolean>(false);
+  const [doFlowerDisplay, setDoFlowerDisplay] = useState<boolean>(false);
 
   const analysis: GptAnalysis | undefined = useMemo(
     () => currentUser?.metadata?.gptAnalysis,
@@ -88,6 +90,20 @@ export const Basic = (props: Props) => {
       return () => clearTimeout(timer);
     }
   }, [animationStartFrom]);
+
+  useEffect(() => {
+    if (!doAnimation) {
+      return;
+    }
+
+    const timer2 = setTimeout(() => {
+      setDoFlowerAnimation(true);
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer2);
+    };
+  }, [doAnimation]);
 
   // カメラアニメーション
   useFrame(() => {
@@ -191,8 +207,8 @@ export const Basic = (props: Props) => {
                   ? "/fonts/ZenKakuGothicNew-Regular.ttf"
                   : "/fonts/KaiseiOpti-Medium.ttf"
             }
-            fontSize={1}
-            color="orange"
+            fontSize={1.5}
+            color={currentUser?.metadata?.answers?.[0] ?? "#000000"}
             position={[0, 5, 10]}
             anchorX="center" // テキストのX軸方向の基準位置
             anchorY="middle" // テキストのY軸方向の基準位置
@@ -236,6 +252,7 @@ export const Basic = (props: Props) => {
                       flowerType={analysis.flowerType}
                       noAnimation={noAnimation}
                       colors={colors}
+                      doAnimation={doFlowerAnimation}
                     />
                   </group>
                 </group>
