@@ -5,9 +5,10 @@ import { WaitingAnimation } from "@/components/WaitingAnimation";
 
 type Props = {
   spPos: SpPos;
+  logo?: boolean;
 };
 export const WaitingScreen = (props: Props) => {
-  const { spPos } = props;
+  const { spPos, logo = false } = props;
 
   const fadeAnimation = keyframes`
   0%, 100% { opacity: 0.5; }
@@ -33,9 +34,9 @@ export const WaitingScreen = (props: Props) => {
     <Box>
       <Box
         position="absolute"
-        bottom={spPos.height + 20}
+        bottom={spPos.height + 50}
         left="50%"
-        transform="translate(-50%, -50%)"
+        transform={`translate(-50%, ${spPos.translateY}px)`}
         animation={`${fadeAnimation} 4s ease-in-out infinite`}
         zIndex={1000}
       >
@@ -79,7 +80,7 @@ export const WaitingScreen = (props: Props) => {
       <Box
         zIndex={1000}
         position="absolute"
-        top={50}
+        top={350}
         backgroundColor="#FFFa"
         borderRadius={40}
         boxShadow={"0 0 10px 0px #FFF"}
@@ -88,10 +89,14 @@ export const WaitingScreen = (props: Props) => {
       >
         <img src="/QR_180017.svg" alt="QR" style={{ width: "min(25vw)" }} />
       </Box>
-      <WaitingAnimation />
-      <Box position="absolute" bottom={3} right={1} p={4}>
-        <img src="/logo.png" alt="logo" style={{ opacity: 0.4 }} width={80} />
+      <Box position="absolute" w="100%" h="100svh" top="0" left="0">
+        <WaitingAnimation />
       </Box>
+      {logo && (
+        <Box position="absolute" bottom={3} right={1} p={4}>
+          <img src="/logo.png" alt="logo" style={{ opacity: 0.4 }} width={80} />
+        </Box>
+      )}
     </Box>
   );
 };

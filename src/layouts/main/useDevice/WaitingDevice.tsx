@@ -17,10 +17,10 @@ export const WaitingDevice = () => {
         <img
           src="/QR_180017.svg"
           alt="QR"
-          style={{ width: "min(50vw, 40vh)" }}
+          style={{ width: "min(75vw, 75vh)" }}
         />
       </Box>
-      <WaitingAnimation />
+      {/* <WaitingAnimation /> */}
     </Box>
   );
 };

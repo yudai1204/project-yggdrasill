@@ -18,6 +18,7 @@ import type { UserType } from "@/types/calibrate";
 import { Weather } from "./Objects/Weather";
 import { Stage } from "./Objects/Stage";
 import { generateTintColors } from "@/util/util";
+import { GptAnalysis, Time as TimeType } from "@/types/metaData";
 
 // 基本
 type Props = {
@@ -26,6 +27,7 @@ type Props = {
   animationStartFrom: number;
   currentUser: UserType | null;
   noAnimation: boolean;
+  timeValue: TimeType | null;
 };
 export const Basic = (props: Props) => {
   const {
@@ -34,6 +36,7 @@ export const Basic = (props: Props) => {
     animationStartFrom,
     currentUser,
     noAnimation,
+    timeValue,
   } = props;
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
@@ -48,7 +51,7 @@ export const Basic = (props: Props) => {
     r: false,
   });
 
-  const analysis = useMemo(
+  const analysis: GptAnalysis | undefined = useMemo(
     () => currentUser?.metadata?.gptAnalysis,
     [currentUser]
   );
@@ -174,7 +177,10 @@ export const Basic = (props: Props) => {
           <Weather
             doAnimation={doAnimation}
             weather={analysis.weather}
-            time={analysis.location === "Moon" ? "Night" : analysis.time}
+            time={
+              timeValue ||
+              (analysis.location === "Moon" ? "Night" : analysis.time)
+            }
           />
           {/* テキスト */}
           <Text
@@ -183,11 +189,11 @@ export const Basic = (props: Props) => {
                 ? "/fonts/DotGothic16-Regular.ttf"
                 : analysis.treeTexture === "realistic"
                   ? "/fonts/ZenKakuGothicNew-Regular.ttf"
-                  : "/fonts/ZenMaruGothicNew-Regular.ttf"
+                  : "/fonts/KaiseiOpti-Medium.ttf"
             }
             fontSize={1}
             color="orange"
-            position={[0, 2, 10]}
+            position={[0, 5, 10]}
             anchorX="center" // テキストのX軸方向の基準位置
             anchorY="middle" // テキストのY軸方向の基準位置
             castShadow

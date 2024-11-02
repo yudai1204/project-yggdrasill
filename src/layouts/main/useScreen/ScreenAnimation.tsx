@@ -3,6 +3,7 @@ import { Box, Heading } from "@chakra-ui/react";
 import { DeviceType, UserType } from "@/types/calibrate";
 
 import "@fontsource/kaisei-opti";
+import { useEffect } from "react";
 
 type Props = {
   isDebug: boolean;
@@ -14,15 +15,23 @@ type Props = {
 export const ScreenAnimation = (props: Props) => {
   const { isDebug, devices, isJoroMode, animationStartFrom, currentUser } =
     props;
+
   return (
     <>
-      <AnimationBase
-        isDebug={isDebug}
-        logo
-        isJoroMode={isJoroMode}
-        animationStartFrom={animationStartFrom}
-        currentUser={currentUser}
-      />
+      <Box
+        width="100%"
+        height="100%"
+        opacity={isJoroMode ? 0 : 1}
+        transition="opacity .5s 1.5s ease-in-out"
+      >
+        <AnimationBase
+          isDebug={isDebug}
+          logo
+          isJoroMode={isJoroMode}
+          animationStartFrom={animationStartFrom}
+          currentUser={currentUser}
+        />
+      </Box>
       {isJoroMode && (
         <Heading
           position="absolute"

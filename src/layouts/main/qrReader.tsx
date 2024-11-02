@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
-import { Box, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/react";
 import { v4 as uuidv4 } from "uuid";
 import type { QrReaderType } from "@/types/calibrate";
 import { sendJson } from "@/util/util";
@@ -178,7 +186,7 @@ const QrScanner = () => {
 
           // QRコードのサイズを計算
           // /50を変更することで適宜調整
-          const size = (width + height) / 2 / zoomConstant;
+          const size = (height * zoomConstant) / 50;
           sendJson(
             wsRef.current,
             {
@@ -221,7 +229,7 @@ const QrScanner = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(scanQRCode, 1000); // 1000msごとにQRコードをスキャン
+    const interval = setInterval(scanQRCode, 500); // 500
     return () => clearInterval(interval);
   }, [zoomConstant]);
 
@@ -244,18 +252,22 @@ const QrScanner = () => {
         </select>
       </Box>
       <Box my={3}>
-        ZOOM倍率:
-        <input
-          type="number"
+        ZOOM倍率: (大きくするとスマホも大きくなる)
+        <NumberInput
+          w={32}
           value={zoomConstant}
-          onChange={(e) =>
-            setZoomConstant(
-              parseInt(e.target.value) <= 0 ? 1 : parseInt(e.target.value)
-            )
+          onChange={(value) =>
+            setZoomConstant(parseInt(value) <= 0 ? 1 : parseInt(value))
           }
-        />
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
       </Box>
-      <Box width={640} bg="gray.200" position="relative">
+      <Box width={1280} bg="gray.200" position="relative">
         <canvas
           ref={canvasRef}
           style={{
@@ -263,7 +275,7 @@ const QrScanner = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            width: 640,
+            width: 1280,
             height: "auto",
           }}
         ></canvas>
@@ -273,9 +285,9 @@ const QrScanner = () => {
           playsInline
           style={{
             display: "block",
-            width: 640,
+            width: 1280,
             height: "auto",
-            opacity: 0.6,
+            opacity: 0,
           }}
         ></video>
       </Box>

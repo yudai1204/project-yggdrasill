@@ -157,9 +157,9 @@ export const Screen = () => {
       {mode === "Operation" && (
         <>
           {!currentUser ? (
-            <WaitingScreen spPos={spPos} />
+            <WaitingScreen spPos={spPos} logo />
           ) : (
-            <>
+            <Box w="100%" h="100%">
               <ScreenAnimation
                 isDebug={isDebug}
                 devices={devices}
@@ -172,7 +172,7 @@ export const Screen = () => {
                   <WaitingScreen spPos={spPos} />
                 </Box>
               )}
-            </>
+            </Box>
           )}
         </>
       )}

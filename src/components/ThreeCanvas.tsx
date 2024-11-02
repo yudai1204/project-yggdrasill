@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { Basic } from "./Basic";
 import { CameraOptions } from "@/types/camera";
 import type { UserType } from "@/types/calibrate";
+import { Time as TimeType } from "@/types/metaData";
 
 type Props = {
   currentUser: UserType | null;
@@ -13,6 +14,7 @@ type Props = {
   isJoroMode: boolean;
   animationStartFrom: number;
   noAnimation: boolean;
+  timeValue: TimeType | null;
 };
 
 export const ThreeCanvas = (props: Props) => {
@@ -23,6 +25,7 @@ export const ThreeCanvas = (props: Props) => {
     isJoroMode,
     animationStartFrom,
     noAnimation,
+    timeValue,
   } = props;
 
   return (
@@ -47,6 +50,7 @@ export const ThreeCanvas = (props: Props) => {
             }
             currentUser={currentUser}
             noAnimation={noAnimation}
+            timeValue={timeValue}
           />
         </Canvas>
       </StrictMode>

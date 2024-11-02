@@ -68,6 +68,7 @@ const handler = async (
     treeHeight: z.enum(["small", "large"]),
     treeTexture: z.enum(["realistic", "cartoon", "pixel"]),
     treeAge: z.enum(["young", "old", "ancient"]),
+    nameLanguage: z.enum(["ja", "en"]),
   });
 
   try {

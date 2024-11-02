@@ -6,6 +6,7 @@ import "@fontsource/zen-kaku-gothic-new/300.css";
 import { CameraOptions } from "@/types/camera";
 import { defaultCameraOptions } from "@/util/constants";
 import type { UserType } from "@/types/calibrate";
+import { Time } from "@/types/metaData";
 
 // ジョウロモードの時はメインのアニメーション(Basic)を停止し、透明にする
 // 現在のUnixTimeがanimationStartFromより後になったら、透明を解除してアニメーションを開始する
@@ -19,6 +20,7 @@ type Props = {
   animationStartFrom: number; // UnixTime
   currentUser: UserType | null;
   noAnimation?: boolean;
+  timeValue?: Time | null;
 };
 export const AnimationBase = (props: Props) => {
   const {
@@ -29,6 +31,7 @@ export const AnimationBase = (props: Props) => {
     animationStartFrom,
     currentUser,
     noAnimation = false,
+    timeValue = null,
   } = props;
 
   return (
@@ -42,6 +45,7 @@ export const AnimationBase = (props: Props) => {
             isJoroMode={isJoroMode}
             animationStartFrom={animationStartFrom}
             noAnimation={noAnimation}
+            timeValue={timeValue}
           />
         </Box>
       </Box>

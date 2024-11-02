@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { AnimationBase } from "@/components/AnimationBase";
-import type { GptAnalysis } from "@/types/metaData";
+import type { GptAnalysis, Time as TimeType } from "@/types/metaData";
 import { UserType } from "@/types/calibrate";
 import { useState, useEffect } from "react";
 import { SNSButtons } from "@/components/SnsButtons";
@@ -19,6 +19,7 @@ import { ResultCard } from "@/components/ResultCard";
 import { initUserDevice } from "./main/useUser";
 import { BsTwitterX } from "react-icons/bs";
 import { rmvCaptl } from "@/util/util";
+import { ModifyPanel } from "@/components/ModifyPanel";
 
 type Props = {
   answers: (string | undefined)[];
@@ -30,6 +31,8 @@ export const Result = (props: Props) => {
   const { answers, gptAnalysis, shareUrl, isShared = false } = props;
   const [language, setLanguage] = useState<"ja" | "en">("ja");
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+
+  const [timeValue, setTimeValue] = useState<TimeType | null>(null);
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -52,12 +55,16 @@ export const Result = (props: Props) => {
     const user = initUserDevice(gptAnalysis, answers);
     user.ready = true;
     setCurrentUser(user);
+    setTimeValue((user.metadata?.gptAnalysis as GptAnalysis).time);
   }, [gptAnalysis, answers]);
 
   return (
     <Box w="100%" h="100svh" pos="relative">
       {currentUser?.metadata?.gptAnalysis ? (
         <>
+          <Box zIndex={1} pos="absolute" top={2} left={2}>
+            <ModifyPanel setTimeValue={setTimeValue} timeValue={timeValue} />
+          </Box>
           {!isShared ? (
             <>
               <Box zIndex={1} pos="absolute" bottom={16} left={2} right={2}>
@@ -135,6 +142,7 @@ export const Result = (props: Props) => {
             animationStartFrom={0}
             noAnimation
             currentUser={currentUser}
+            timeValue={timeValue}
           />
         </>
       ) : (

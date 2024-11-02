@@ -37,4 +37,5 @@ export interface GptAnalysis {
   treeHeight: "small" | "large";
   treeTexture: TreeTexture;
   treeAge: "young" | "old" | "ancient";
+  nameLanguage?: "ja" | "en";
 }
