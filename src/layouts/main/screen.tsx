@@ -12,6 +12,7 @@ import { useWindowSize, useNetworkStatus } from "@/util/hooks";
 import { sendJson } from "@/util/util";
 import { ScreenAnimation } from "./useScreen/ScreenAnimation";
 import { WaitingScreen } from "./useScreen/WaitingScreen";
+import { USER_POS_X, USER_POS_Y } from "@/util/constants";
 
 export const Screen = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -28,14 +29,14 @@ export const Screen = () => {
   const [mode, setMode] = useState<"Calibration" | "Operation">("Calibration");
   const [isDebug, setIsDebug] = useState<boolean>(false);
 
-  const [screenWidth, setScreenWidth] = useState<number>(100);
+  const [screenWidth, setScreenWidth] = useState<number>(90);
   const [translateX, setTranslateX] = useState<number>(0);
 
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
   const [spPos, setSpPos] = useState<SpPos>({
-    translateX: 0,
-    translateY: 0,
+    translateX: USER_POS_X,
+    translateY: USER_POS_Y,
     width: 84,
     height: 170,
   });
