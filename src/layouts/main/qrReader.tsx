@@ -186,7 +186,7 @@ const QrScanner = () => {
 
           // QRコードのサイズを計算
           // /50を変更することで適宜調整
-          const size = (height * zoomConstant) / 50;
+          const size = (height * zoomConstant) / 2000;
           sendJson(
             wsRef.current,
             {
