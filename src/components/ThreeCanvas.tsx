@@ -59,14 +59,14 @@ export const ThreeCanvas = (props: Props) => {
             noAnimation={noAnimation}
             timeValue={timeValue}
           />
-          {doEffect && (
-            <EffectComposer>
-              {/* 色調整の例: 色相と彩度 */}
-              <HueSaturation hue={1} saturation={0.8} />
-              {/* 明度とコントラスト */}
-              <BrightnessContrast brightness={0.05} contrast={0.5} />
-            </EffectComposer>
-          )}
+          {/* {doEffect && (
+          <EffectComposer>
+            色調整の例: 色相と彩度
+            <HueSaturation hue={1} saturation={0.8} />
+            明度とコントラスト
+            <BrightnessContrast brightness={0.05} contrast={0.5} />
+          </EffectComposer>
+          )} */}
         </Canvas>
       </StrictMode>
     </div>

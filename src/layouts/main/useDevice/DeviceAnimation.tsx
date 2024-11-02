@@ -54,7 +54,7 @@ export const DeviceAnimation = (props: Props) => {
   }, [deviceBody, screenSize, hoge]);
 
   return (
-    <>
+    <Box w="100%" h="100%" filter="sepia(0.8)">
       {isDebug && (
         <Heading
           fontSize="30vw"
@@ -82,6 +82,6 @@ export const DeviceAnimation = (props: Props) => {
           }}
         />
       }
-    </>
+    </Box>
   );
 };
