@@ -77,6 +77,7 @@ export const Form = () => {
       alert(
         "An error occurred while submitting your answers.\n回答を送信中にエラーが発生しました。"
       );
+      setIsLoading(false);
     }
   };
 

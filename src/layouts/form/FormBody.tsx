@@ -274,7 +274,8 @@ export const FormBody = (props: Props) => {
             );
           })}
         </Accordion>
-        {activeQuestion === questions.en.length - 1 && (
+        {(activeQuestion === questions.en.length - 1 ||
+          !answers.includes(undefined)) && (
           <Button
             isLoading={isLoading}
             mb={5}
