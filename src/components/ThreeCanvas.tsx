@@ -6,6 +6,11 @@ import { Basic } from "./Basic";
 import { CameraOptions } from "@/types/camera";
 import type { UserType } from "@/types/calibrate";
 import { Time as TimeType } from "@/types/metaData";
+import {
+  EffectComposer,
+  HueSaturation,
+  BrightnessContrast,
+} from "@react-three/postprocessing";
 
 type Props = {
   currentUser: UserType | null;
@@ -15,6 +20,7 @@ type Props = {
   animationStartFrom: number;
   noAnimation: boolean;
   timeValue: TimeType | null;
+  doEffect?: boolean;
 };
 
 export const ThreeCanvas = (props: Props) => {
@@ -26,6 +32,7 @@ export const ThreeCanvas = (props: Props) => {
     animationStartFrom,
     noAnimation,
     timeValue,
+    doEffect,
   } = props;
 
   return (
@@ -52,6 +59,14 @@ export const ThreeCanvas = (props: Props) => {
             noAnimation={noAnimation}
             timeValue={timeValue}
           />
+          {doEffect && (
+            <EffectComposer>
+              {/* 色調整の例: 色相と彩度 */}
+              <HueSaturation hue={1} saturation={0.8} />
+              {/* 明度とコントラスト */}
+              <BrightnessContrast brightness={0.05} contrast={0.5} />
+            </EffectComposer>
+          )}
         </Canvas>
       </StrictMode>
     </div>

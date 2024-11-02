@@ -72,6 +72,7 @@ export const DeviceAnimation = (props: Props) => {
       {
         <AnimationBase
           isDebug={isDebug}
+          doEffect={true}
           isJoroMode={isJoroMode}
           animationStartFrom={animationStartFrom}
           currentUser={currentUser}

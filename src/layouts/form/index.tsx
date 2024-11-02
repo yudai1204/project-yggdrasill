@@ -75,7 +75,8 @@ export const Form = () => {
     } catch (error) {
       console.error("ERROR", error);
       alert(
-        "An error occurred while submitting your answers.\n回答を送信中にエラーが発生しました。"
+        "An error occurred while submitting your answers.\n回答を送信中にエラーが発生しました。\n" +
+          error
       );
       setIsLoading(false);
     }

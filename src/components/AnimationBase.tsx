@@ -21,6 +21,7 @@ type Props = {
   currentUser: UserType | null;
   noAnimation?: boolean;
   timeValue?: Time | null;
+  doEffect?: boolean;
 };
 export const AnimationBase = (props: Props) => {
   const {
@@ -32,6 +33,7 @@ export const AnimationBase = (props: Props) => {
     currentUser,
     noAnimation = false,
     timeValue = null,
+    doEffect = false,
   } = props;
 
   return (
@@ -46,6 +48,7 @@ export const AnimationBase = (props: Props) => {
             animationStartFrom={animationStartFrom}
             noAnimation={noAnimation}
             timeValue={timeValue}
+            doEffect={doEffect}
           />
         </Box>
       </Box>
