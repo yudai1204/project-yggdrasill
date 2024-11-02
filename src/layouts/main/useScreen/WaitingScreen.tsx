@@ -84,13 +84,9 @@ export const WaitingScreen = (props: Props) => {
         borderRadius={40}
         boxShadow={"0 0 10px 0px #FFF"}
         left="50%"
-        transform="translateX(-50%)"
+        transform="translateX(10%)"
       >
-        <img
-          src="/QR_180017.svg"
-          alt="QR"
-          style={{ width: "min(50vw, 40vh)" }}
-        />
+        <img src="/QR_180017.svg" alt="QR" style={{ width: "min(25vw)" }} />
       </Box>
       <WaitingAnimation />
       <Box position="absolute" bottom={3} right={1} p={4}>
