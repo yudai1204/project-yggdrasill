@@ -109,7 +109,11 @@ export const CherryBlossom = (props: Props) => {
   });
 
   return (
-    <group rotation={[Math.PI / 2, 0, 0]} scale={0} ref={groupRef}>
+    <group
+      rotation={[Math.PI / 2, 0, 0]}
+      scale={noAnimation ? 1 : 0}
+      ref={groupRef}
+    >
       <Gltf
         src="/gltf/flowers/cherryBlossom.gltf"
         scale={1}
@@ -215,7 +219,11 @@ const GlbFlower = (props: GlbFlowerProps) => {
   }, [actions, scene, colors, noAnimation, updateMaterial, doAnimation]);
 
   return (
-    <group ref={group} rotation={[0, -Math.PI / 2, -Math.PI / 2]} scale={0}>
+    <group
+      ref={group}
+      rotation={[0, -Math.PI / 2, -Math.PI / 2]}
+      scale={noAnimation ? 1 : 0}
+    >
       <primitive
         scale={scale}
         object={scene}
