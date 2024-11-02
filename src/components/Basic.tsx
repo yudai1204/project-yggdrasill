@@ -177,7 +177,7 @@ export const Basic = (props: Props) => {
             time={analysis.location === "Moon" ? "Night" : analysis.time}
           />
           {/* テキスト */}
-          {/* <Text
+          <Text
             font={
               analysis.treeTexture === "pixel"
                 ? "/fonts/DotGothic16-Regular.ttf"
@@ -194,10 +194,10 @@ export const Basic = (props: Props) => {
             receiveShadow
           >
             {analysis.userName}の木
-          </Text> */}
+          </Text>
 
           {/* 花 */}
-          {/* <group>
+          <group>
             {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
               const randRY = ((Math.random() - 0.5) * Math.PI) / 3;
               const randRZ = ((Math.random() - 0.5) * Math.PI) / 3;
@@ -235,7 +235,7 @@ export const Basic = (props: Props) => {
                 </group>
               );
             })}
-          </group> */}
+          </group>
           {/* 木 */}
           <mesh
             position={[0, -0.1, 0]}
