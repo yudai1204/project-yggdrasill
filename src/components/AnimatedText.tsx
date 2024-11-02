@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 type Props = {
   text: string;
   randomize?: boolean;
+  speed?: number;
 };
 
 export const AnimatedText = (props: Props) => {
-  const { text, randomize } = props;
+  const { text, randomize, speed = 1 } = props;
 
   const letters = Array.from(text);
 
@@ -14,7 +15,7 @@ export const AnimatedText = (props: Props) => {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 * i },
+      transition: { staggerChildren: 0.1 / speed, delayChildren: 0.1 * i },
     }),
   };
 

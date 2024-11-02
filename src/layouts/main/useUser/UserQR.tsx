@@ -38,7 +38,7 @@ export const UserQR = (props: Props) => {
 
   const opacityAnimation = keyframes`
   0%, 100% { opacity: 1; }
-  90% { opacity: 0.5; }
+  90% { opacity: 0.3; }
   `;
 
   return (

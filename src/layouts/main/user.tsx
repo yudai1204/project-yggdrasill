@@ -247,7 +247,7 @@ export const User = (props: Props) => {
                 setTimeout(() => {
                   document.body.removeChild(div);
                 }, 200);
-              }, 100);
+              }, 50);
             }}
           >
             <UserAnimation

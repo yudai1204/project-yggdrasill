@@ -1,9 +1,8 @@
 import { AnimationBase } from "@/components/AnimationBase";
 import { Box, Heading } from "@chakra-ui/react";
-import { DeviceType, UserType } from "@/types/calibrate";
-
+import { DeviceType, SpPos, UserType } from "@/types/calibrate";
 import "@fontsource/kaisei-opti";
-import { useEffect } from "react";
+import { JoroModeAnimation } from "./JoroModeAnimation";
 
 type Props = {
   isDebug: boolean;
@@ -11,10 +10,19 @@ type Props = {
   isJoroMode: boolean;
   animationStartFrom: number; // UnixTime
   currentUser: UserType | null;
+  spPos: SpPos;
+  receiveJoroStatus: number;
 };
 export const ScreenAnimation = (props: Props) => {
-  const { isDebug, devices, isJoroMode, animationStartFrom, currentUser } =
-    props;
+  const {
+    isDebug,
+    devices,
+    isJoroMode,
+    animationStartFrom,
+    currentUser,
+    spPos,
+    receiveJoroStatus,
+  } = props;
 
   return (
     <>
@@ -33,18 +41,10 @@ export const ScreenAnimation = (props: Props) => {
         />
       </Box>
       {isJoroMode && (
-        <Heading
-          position="absolute"
-          textAlign="center"
-          top="20%"
-          left="50%"
-          transform="translateX(-50%)"
-          zIndex={10000}
-          color={"#fff"}
-          fontFamily="Kaisei Opti"
-        >
-          魔法のジョウロで種に水をあげよう
-        </Heading>
+        <JoroModeAnimation
+          spPos={spPos}
+          receiveJoroStatus={receiveJoroStatus}
+        />
       )}
       {isDebug &&
         devices.map((device, idx) => {

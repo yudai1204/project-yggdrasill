@@ -10,7 +10,7 @@ import * as THREE from "three";
 import { FreeFlower } from "@/components/Objects/Form/FreeFlower";
 import { Heading, Box } from "@chakra-ui/react";
 import "@fontsource/kaisei-opti";
-import { AnimatedText } from "./AnimatedText";
+import { AnimatedText } from "../../components/AnimatedText";
 
 // メイン
 export const FormBlooming = () => {

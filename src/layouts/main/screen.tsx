@@ -47,6 +47,8 @@ export const Screen = () => {
     new Date().getTime() + 1000 * 60 * 60 * 24
   );
 
+  const [receiveJoroStatus, setReceiveJoroStatus] = useState<number>(0);
+
   const windowSize = useWindowSize(windowRef, 300, screenWidth);
   const toast = useToast();
   const isOnline = useNetworkStatus();
@@ -85,6 +87,7 @@ export const Screen = () => {
       setCurrentUser,
       setIsJoroMode,
       setAnimationStartFrom,
+      setReceiveJoroStatus,
     });
 
     // screenWidthとtranslateXをlocalStorageから取得
@@ -121,11 +124,29 @@ export const Screen = () => {
     const timeout = setTimeout(
       () => {
         setIsWaiting(true);
+        setReceiveJoroStatus(0);
       },
       animationStartFrom - new Date().getTime() + 1000 * 20
     );
     return () => clearTimeout(timeout);
   }, [animationStartFrom]);
+
+  // じょうろモードのまま3分経過したら解除して待機モードに戻す
+  useEffect(() => {
+    if (isJoroMode) {
+      const timeout = setTimeout(
+        () => {
+          setIsJoroMode(false);
+          setCurrentUser(null);
+          setReceiveJoroStatus(0);
+          setAnimationStartFrom(new Date().getTime() + 1000 * 60 * 60 * 24);
+          setSpPos((prev) => ({ ...prev, width: 84, height: 170 }));
+        },
+        1000 * 60 * 3
+      );
+      return () => clearTimeout(timeout);
+    }
+  }, [isJoroMode]);
 
   return (
     <Box
@@ -154,6 +175,7 @@ export const Screen = () => {
           setTranslateX={setTranslateX}
         />
       )}
+
       {mode === "Operation" && (
         <>
           {!currentUser ? (
@@ -166,6 +188,8 @@ export const Screen = () => {
                 isJoroMode={isJoroMode}
                 currentUser={currentUser}
                 animationStartFrom={animationStartFrom}
+                spPos={spPos}
+                receiveJoroStatus={receiveJoroStatus}
               />
               {isWaiting && (
                 <Box zIndex={999999999999}>

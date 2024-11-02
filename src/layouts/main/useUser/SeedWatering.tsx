@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, StrictMode, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import { Group } from "three";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { useFrame } from "@react-three/fiber";
 
 // GLTF型の独自定義
 type GLTFResult = {
@@ -34,6 +36,41 @@ const Model = ({ url, doAnimation }: ModelProps) => {
   }, [actions, doAnimation]);
 
   return <primitive ref={group} object={scene} />;
+};
+
+type AnimationLightProps = {
+  doAnimation: boolean;
+  animationCount: number;
+};
+const AnimationLight = (props: AnimationLightProps) => {
+  const { doAnimation, animationCount } = props;
+  const lightRef = useRef<THREE.DirectionalLight>(null);
+  useFrame(() => {
+    if (lightRef.current == null) return;
+    if (lightRef.current.intensity > 100) return;
+    if (doAnimation) {
+      lightRef.current.intensity += 0.5;
+    } else if (lightRef.current.intensity > 10) {
+      lightRef.current.intensity -= 0.3;
+    }
+  });
+
+  return (
+    <>
+      <directionalLight
+        position={[5, 5, 5]}
+        intensity={20}
+        castShadow
+        ref={lightRef}
+      />
+      <Sparkles
+        size={animationCount / 2}
+        count={20}
+        scale={[3, 4, 3]}
+        position={[0.1, -0.5, 0.1]}
+      />
+    </>
+  );
 };
 
 // メイン
@@ -72,12 +109,15 @@ export const SeedWatering = (props: Props) => {
           }}
         >
           <ambientLight intensity={1} />
-          <directionalLight position={[5, 5, 5]} intensity={10} castShadow />
+          <AnimationLight
+            doAnimation={doAnimation}
+            animationCount={animationCount}
+          />
           <mesh
             castShadow
             receiveShadow
             position={[0, -1, 0]}
-            scale={1.8}
+            scale={2}
             rotation={[0, -Math.PI / 5, 0]}
           >
             <Model
@@ -85,6 +125,13 @@ export const SeedWatering = (props: Props) => {
               doAnimation={doAnimation}
             />
           </mesh>
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0.1} // 明るさのしきい値
+              luminanceSmoothing={0.9} // 明るさの平滑化
+              height={300} // 高さ
+            />
+          </EffectComposer>
         </Canvas>
       </StrictMode>
     </div>

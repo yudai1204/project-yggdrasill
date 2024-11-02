@@ -121,6 +121,26 @@ export const Device = () => {
     };
   }, []);
 
+  // 画面がオフにならないようにする
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      try {
+        const wl = await navigator.wakeLock.request("screen");
+        console.log("%cScreen Wake Lock is active", "color: blue");
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    handleVisibilityChange();
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <Box
       w="100%"

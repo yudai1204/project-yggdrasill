@@ -39,6 +39,7 @@ type Props = {
   setCurrentUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   setIsJoroMode: React.Dispatch<React.SetStateAction<boolean>>;
   setAnimationStartFrom: React.Dispatch<React.SetStateAction<number>>;
+  setReceiveJoroStatus: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const connectWebSocket = (props: Props) => {
@@ -56,6 +57,7 @@ export const connectWebSocket = (props: Props) => {
     setCurrentUser,
     setIsJoroMode,
     setAnimationStartFrom,
+    setReceiveJoroStatus,
   } = props;
   wsRef.current = new WebSocket(
     process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3210"
@@ -134,6 +136,8 @@ export const connectWebSocket = (props: Props) => {
       setIsJoroMode(false);
       setAnimationStartFrom(new Date().getTime() + 1000 * 60 * 60 * 24);
       setSpPos((prev) => ({ ...prev, width: 84, height: 170 }));
+    } else if (data.head.type === "joro_status") {
+      setReceiveJoroStatus((prev) => prev + 1);
     }
   };
 

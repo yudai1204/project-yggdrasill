@@ -1,4 +1,15 @@
-import { Box, Heading, keyframes } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Grid,
+  Heading,
+  Image,
+  Icon,
+  keyframes,
+  Text,
+} from "@chakra-ui/react";
 import type { SpPos } from "@/types/calibrate";
 import { useEffect } from "react";
 import { WaitingAnimation } from "@/components/WaitingAnimation";
@@ -30,11 +41,90 @@ export const WaitingScreen = (props: Props) => {
   }
   `;
 
+  const fadeInAnimation = keyframes`
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+  `;
+
   return (
-    <Box>
+    <Box animation={`${fadeInAnimation} 4s ease-in`}>
+      <Box>
+        <Card
+          borderRadius="2vw"
+          position="absolute"
+          top="50%"
+          left="50%"
+          w="80%"
+          p={4}
+          transform="translate(-50%, -50%)"
+          boxShadow="0 0 10px 0px #0006"
+          zIndex={1000}
+          backgroundColor="#2D374855"
+          backdropFilter="blur(10px)"
+        >
+          <CardHeader
+            textAlign="center"
+            fontSize="2.2vw"
+            fontFamily="Kaisei Opti"
+            pb={0}
+          >
+            体験の流れ
+          </CardHeader>
+          <CardBody>
+            <Grid templateColumns="1fr 1fr 1fr" gap={4}>
+              <Box textAlign="center">
+                <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
+                  1
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                  QRからあなたの好みを教えてください
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize=".8vw">
+                  Tell us your preferences from the QR code above.
+                </Text>
+                <Box opacity={0.6} w="50%" mx="auto" mt={5}>
+                  <Image src="/1.svg" alt="1" />
+                </Box>
+              </Box>
+              <Box textAlign="center">
+                <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
+                  2
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                  作品にスマートフォンを置いてください
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize=".8vw">
+                  Place your smartphone on the artwork.
+                </Text>
+                <Box opacity={0.6} w="50%" mx="auto" mt={3}>
+                  <Image src="/2.svg" alt="2" />
+                </Box>
+              </Box>
+              <Box textAlign="center">
+                <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
+                  3
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                  魔法のじょうろで種を育てよう！
+                </Text>
+                <Text fontFamily="Kaisei Opti" fontSize=".8vw">
+                  Grow the seed with the magic watering can.
+                </Text>
+                <Box opacity={0.6} w="50%" mx="auto" mt={4}>
+                  <Image src="/3.svg" alt="3" />
+                </Box>
+              </Box>
+            </Grid>
+          </CardBody>
+        </Card>
+      </Box>
       <Box
         position="absolute"
-        bottom={spPos.height + 50}
+        bottom={spPos.height + 100}
         left="50%"
         transform={`translate(-50%, ${spPos.translateY}px)`}
         animation={`${fadeAnimation} 4s ease-in-out infinite`}
@@ -42,16 +132,16 @@ export const WaitingScreen = (props: Props) => {
       >
         <Heading
           textAlign="center"
-          fontSize="16px"
+          fontSize="20px"
           mt="20px"
           fontFamily="Kaisei Opti"
           textShadow="0 0 10px #000"
         >
-          スマートフォンを置いてください
+          ここにスマートフォンを置いてください
         </Heading>
         <Heading
           textAlign="center"
-          fontSize="12px"
+          fontSize="16px"
           mt="12px"
           fontFamily="Kaisei Opti"
           textShadow="0 0 10px #000"
