@@ -24,17 +24,17 @@ export const UserQR = (props: Props) => {
     }, 500);
   }, [onReady]);
 
-  // useEffect(() => {
-  //   if (connectingStatus !== "Connected" || qrZoom === 0) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (connectingStatus !== "Connected" || qrZoom === 0) {
+      return;
+    }
 
-  //   const timer = setTimeout(() => {
-  //     onReadyPush();
-  //   }, 5000);
+    const timer = setTimeout(() => {
+      onReadyPush();
+    }, 100);
 
-  //   return () => clearTimeout(timer);
-  // }, [connectingStatus, qrZoom, onReadyPush]);
+    return () => clearTimeout(timer);
+  }, [connectingStatus, qrZoom, onReadyPush]);
 
   const opacityAnimation = keyframes`
   0%, 100% { opacity: 1; }
