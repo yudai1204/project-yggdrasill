@@ -38,6 +38,8 @@ export const Device = () => {
     new Date().getTime() + 1000 * 60 * 60 * 24
   );
 
+  const [isWaiting, setIsWaiting] = useState<boolean>(false);
+
   const windowSize = useWindowSize(windowRef);
   const toast = useToast();
   const isOnline = useNetworkStatus();
@@ -51,6 +53,18 @@ export const Device = () => {
       });
     }
   }, [isOnline, wsRef.current, toast]);
+
+  // animation開始からしばらく後に待機モードに戻す
+  useEffect(() => {
+    setIsWaiting(false);
+    const timeout = setTimeout(
+      () => {
+        setIsWaiting(true);
+      },
+      animationStartFrom - new Date().getTime() + 1000 * 20
+    );
+    return () => clearTimeout(timeout);
+  }, [animationStartFrom]);
 
   const postUpdateDevice = (newDevice: DeviceType) => {
     deviceBodyRef.current = newDevice;
@@ -161,7 +175,7 @@ export const Device = () => {
       )}
       {mode === "Operation" && (
         <>
-          {!currentUser ? (
+          {!currentUser || isWaiting ? (
             <WaitingDevice />
           ) : (
             <DeviceAnimation
