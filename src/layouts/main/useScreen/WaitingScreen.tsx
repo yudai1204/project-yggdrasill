@@ -58,7 +58,7 @@ export const WaitingScreen = (props: Props) => {
           position="absolute"
           top="50%"
           left="50%"
-          w="80%"
+          w="84%"
           p={4}
           transform="translate(-50%, -50%)"
           boxShadow="0 0 10px 0px #0006"
@@ -94,7 +94,7 @@ export const WaitingScreen = (props: Props) => {
                 <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
                   2
                 </Text>
-                <Text fontFamily="Kaisei Opti" fontSize="1.2vw">
+                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
                   作品にスマートフォンを置いてください
                 </Text>
                 <Text fontFamily="Kaisei Opti" fontSize=".8vw">
