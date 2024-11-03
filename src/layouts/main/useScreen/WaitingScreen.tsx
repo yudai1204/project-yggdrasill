@@ -75,7 +75,7 @@ export const WaitingScreen = (props: Props) => {
             体験の流れ
           </CardHeader>
           <CardBody>
-            <Grid templateColumns="1fr 1fr 1fr" gap={4}>
+            <Grid templateColumns="1fr 1fr 1fr" gap={2}>
               <Box textAlign="center">
                 <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
                   1

@@ -145,7 +145,7 @@ export const JoroModeAnimation = (props: Props) => {
           <Heading
             position="absolute"
             textAlign="center"
-            top="15%"
+            top="10%"
             left="50%"
             transform="translateX(-50%)"
             zIndex={10000}
