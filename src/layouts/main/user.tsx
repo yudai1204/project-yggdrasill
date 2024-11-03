@@ -101,7 +101,7 @@ export const User = (props: Props) => {
   useEffect(() => {
     if (displayStep === 1 && animationCount > 0) {
       setAdjustedAnimationCount((prev) => prev + 1);
-      if (adjustedAnimationCount === 3) {
+      if (adjustedAnimationCount === 3 || adjustedAnimationCount === 15) {
         if (userBodyRef.current) {
           userBodyRef.current = {
             ...userBodyRef.current,
