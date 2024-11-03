@@ -126,7 +126,7 @@ export const JoroModeAnimation = (props: Props) => {
           left={`calc(50% - ${spPos.width / 2}px)`}
           transform={`translate(${spPos.translateX}px, ${spPos.translateY}px)`}
           borderRadius={10}
-          color="#97dada"
+          color="#87dada"
           boxShadow={
             "0 0 10px 0px currentColor, inset 0 0 10px 0px currentColor"
           }
@@ -145,7 +145,7 @@ export const JoroModeAnimation = (props: Props) => {
           <Heading
             position="absolute"
             textAlign="center"
-            top="20%"
+            top="15%"
             left="50%"
             transform="translateX(-50%)"
             zIndex={10000}

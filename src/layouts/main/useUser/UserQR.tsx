@@ -31,7 +31,7 @@ export const UserQR = (props: Props) => {
 
     const timer = setTimeout(() => {
       onReadyPush();
-    }, 2500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [connectingStatus, qrZoom, onReadyPush]);

@@ -63,7 +63,7 @@ export const WaitingScreen = (props: Props) => {
           transform="translate(-50%, -50%)"
           boxShadow="0 0 10px 0px #0006"
           zIndex={1000}
-          backgroundColor="#2D374855"
+          backgroundColor="#2D374888"
           backdropFilter="blur(10px)"
         >
           <CardHeader
@@ -80,7 +80,7 @@ export const WaitingScreen = (props: Props) => {
                 <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
                   1
                 </Text>
-                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                <Text fontFamily="Kaisei Opti" fontSize="1.2vw">
                   QRからあなたの好みを教えてください
                 </Text>
                 <Text fontFamily="Kaisei Opti" fontSize=".8vw">
@@ -94,7 +94,7 @@ export const WaitingScreen = (props: Props) => {
                 <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
                   2
                 </Text>
-                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                <Text fontFamily="Kaisei Opti" fontSize="1.2vw">
                   作品にスマートフォンを置いてください
                 </Text>
                 <Text fontFamily="Kaisei Opti" fontSize=".8vw">
@@ -108,7 +108,7 @@ export const WaitingScreen = (props: Props) => {
                 <Text fontFamily="Kaisei Opti" fontSize="1.8vw">
                   3
                 </Text>
-                <Text fontFamily="Kaisei Opti" fontSize="1.1vw">
+                <Text fontFamily="Kaisei Opti" fontSize="1.2vw">
                   魔法のじょうろで種を育てよう！
                 </Text>
                 <Text fontFamily="Kaisei Opti" fontSize=".8vw">
@@ -124,7 +124,7 @@ export const WaitingScreen = (props: Props) => {
       </Box>
       <Box
         position="absolute"
-        bottom={spPos.height + 100}
+        bottom={spPos.height + 50}
         left="50%"
         transform={`translate(-50%, ${spPos.translateY}px)`}
         animation={`${fadeAnimation} 4s ease-in-out infinite`}
@@ -132,7 +132,7 @@ export const WaitingScreen = (props: Props) => {
       >
         <Heading
           textAlign="center"
-          fontSize="20px"
+          fontSize="24px"
           mt="20px"
           fontFamily="Kaisei Opti"
           textShadow="0 0 10px #000"
