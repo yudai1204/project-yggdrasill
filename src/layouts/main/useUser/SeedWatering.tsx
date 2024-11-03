@@ -65,7 +65,6 @@ const AnimationLight = (props: AnimationLightProps) => {
       />
       <Sparkles
         size={animationCount}
-        count={15}
         scale={[3, 4, 3]}
         position={[0.1, -0.5, 0.1]}
       />
@@ -99,7 +98,7 @@ export const SeedWatering = (props: Props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
         <Canvas
-          dpr={0.5}
+          dpr={[0.5, 1]}
           flat
           shadows
           gl={{
