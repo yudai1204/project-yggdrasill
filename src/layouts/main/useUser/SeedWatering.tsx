@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { useGLTF, useAnimations, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import { Group } from "three";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
+// import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useFrame } from "@react-three/fiber";
 
 // GLTF型の独自定義
@@ -64,8 +64,8 @@ const AnimationLight = (props: AnimationLightProps) => {
         ref={lightRef}
       />
       <Sparkles
-        size={animationCount / 2}
-        count={20}
+        size={animationCount}
+        count={15}
         scale={[3, 4, 3]}
         position={[0.1, -0.5, 0.1]}
       />
@@ -126,13 +126,13 @@ export const SeedWatering = (props: Props) => {
               doAnimation={doAnimation}
             />
           </mesh>
-          <EffectComposer>
+          {/* <EffectComposer>
             <Bloom
               luminanceThreshold={0.1} // 明るさのしきい値
               luminanceSmoothing={0.9} // 明るさの平滑化
               height={300} // 高さ
             />
-          </EffectComposer>
+          </EffectComposer> */}
         </Canvas>
       </StrictMode>
     </div>

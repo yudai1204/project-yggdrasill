@@ -55,6 +55,7 @@ export const UserAnimation = (props: Props) => {
         isJoroMode={false}
         animationStartFrom={animationStartFrom}
         currentUser={userBody}
+        isUser={true}
         cameraOptions={{
           ...defaultCameraOptions,
           viewOffset,

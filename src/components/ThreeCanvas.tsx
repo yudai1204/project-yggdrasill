@@ -6,11 +6,6 @@ import { Basic } from "./Basic";
 import { CameraOptions } from "@/types/camera";
 import type { UserType } from "@/types/calibrate";
 import { Time as TimeType } from "@/types/metaData";
-import {
-  EffectComposer,
-  HueSaturation,
-  BrightnessContrast,
-} from "@react-three/postprocessing";
 
 type Props = {
   currentUser: UserType | null;
@@ -21,6 +16,7 @@ type Props = {
   noAnimation: boolean;
   timeValue: TimeType | null;
   doEffect?: boolean;
+  isUser?: boolean;
 };
 
 export const ThreeCanvas = (props: Props) => {
@@ -33,13 +29,14 @@ export const ThreeCanvas = (props: Props) => {
     noAnimation,
     timeValue,
     doEffect,
+    isUser,
   } = props;
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
         <Canvas
-          dpr={[0.5, 1.5]}
+          dpr={isUser ? 0.3 : [0.5, 1.5]}
           flat
           shadows
           gl={{

@@ -226,11 +226,7 @@ export const User = (props: Props) => {
       )}
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
-          {displaySeed && (
-            <>
-              <SeedWatering animationCount={adjustedAnimationCount} />
-            </>
-          )}
+          <SeedWatering animationCount={adjustedAnimationCount} />
           <Box
             w="100%"
             h="100%"
