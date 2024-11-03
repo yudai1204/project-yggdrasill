@@ -1,5 +1,5 @@
 import { Box, Button, useToast } from "@chakra-ui/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { UserType } from "@/types/calibrate";
 import { connectWebSocket } from "./useUser";
 import { useWindowSize, useNetworkStatus } from "@/util/hooks";
@@ -45,9 +45,20 @@ export const User = (props: Props) => {
 
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
 
+  const [displaySeed, setDisplaySeed] = useState<boolean>(true);
+
   const windowSize = useWindowSize(windowRef);
   const toast = useToast();
   const isOnline = useNetworkStatus();
+
+  const onClickResultButton = useCallback(() => {
+    setDisplayStep(2);
+    if (userBody?.uuid) {
+      const url = new URL(window.location.href);
+      url.pathname = `/share/${userBody.uuid}`;
+      window.history.pushState({}, "", url.toString());
+    }
+  }, [userBody]);
 
   useEffect(() => {
     if (wsRef.current && toast) {
@@ -90,11 +101,11 @@ export const User = (props: Props) => {
   useEffect(() => {
     if (displayStep === 1 && animationCount > 0) {
       setAdjustedAnimationCount((prev) => prev + 1);
-      if (animationCount === 3) {
+      if (adjustedAnimationCount === 3) {
         if (userBodyRef.current) {
           userBodyRef.current = {
             ...userBodyRef.current,
-            animationStartFrom: new Date().getTime() + ANIMATION_WAIT,
+            animationStartFrom: new Date().getTime() + ANIMATION_WAIT - 500,
           };
           setUserBody({ ...userBodyRef.current });
           sendJson(wsRef.current, userBodyRef.current, "animation_start");
@@ -170,6 +181,9 @@ export const User = (props: Props) => {
         wakeLock?.release();
         console.log("%cScreen Wake Lock is released", "color: blue");
         setWakeLock(null);
+        setTimeout(() => {
+          onClickResultButton();
+        }, 30 * 1000);
       },
       userBody.animationStartFrom - new Date().getTime() + 10000
     );
@@ -212,7 +226,11 @@ export const User = (props: Props) => {
       )}
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
-          <SeedWatering animationCount={adjustedAnimationCount} />
+          {displaySeed && (
+            <>
+              <SeedWatering animationCount={adjustedAnimationCount} />
+            </>
+          )}
           <Box
             w="100%"
             h="100%"
@@ -268,17 +286,7 @@ export const User = (props: Props) => {
               textAlign="center"
               zIndex={1000000}
             >
-              <Button
-                onClick={() => {
-                  setDisplayStep(2);
-                  if (userBody?.uuid) {
-                    const url = new URL(window.location.href);
-                    url.pathname = `/share/${userBody.uuid}`;
-                    window.history.pushState({}, "", url.toString());
-                  }
-                }}
-                size="lg"
-              >
+              <Button onClick={onClickResultButton} size="lg">
                 {navigator.language.includes("ja")
                   ? "結果を見る"
                   : "View Result"}

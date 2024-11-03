@@ -37,7 +37,7 @@ const makeGradation = (
   );
 };
 
-const animationSpeed = 1; //0.3 * ANIMATION_SPEED;
+const animationSpeed = 0.6; //0.3 * ANIMATION_SPEED;
 const animationSpeedOnNoAnimation = 1.8;
 
 type Props = {

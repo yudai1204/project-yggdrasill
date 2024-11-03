@@ -210,7 +210,7 @@ export const Basic = (props: Props) => {
             }
             fontSize={1.5}
             color={currentUser?.metadata?.answers?.[0] ?? "#000000"}
-            position={[0, 5.5, 10]}
+            position={[0, 6.5, 10]}
             anchorX="center" // テキストのX軸方向の基準位置
             anchorY="middle" // テキストのY軸方向の基準位置
             castShadow

@@ -99,7 +99,7 @@ export const SeedWatering = (props: Props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <StrictMode>
         <Canvas
-          dpr={[0.5, 1]}
+          dpr={0.5}
           flat
           shadows
           gl={{
