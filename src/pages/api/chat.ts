@@ -58,17 +58,19 @@ const handler = async (
     flowerType: z.enum([
       "Hibiscus",
       "CherryBlossom",
-      // "Sunflower",
+      "Sunflower",
       "Asaago",
       "Gerbera",
       "Momiji",
       "Lily",
+      "Gingko",
     ]),
     treeType: z.enum(["broadleaf", "conifer"]), // 紅葉樹・針葉樹
     treeHeight: z.enum(["small", "large"]),
     treeTexture: z.enum(["realistic", "cartoon", "pixel"]),
     treeAge: z.enum(["young", "old", "ancient"]),
     nameLanguage: z.enum(["ja", "en"]),
+    stageDecoration: z.enum(["None", "SnowMan"]),
   });
 
   try {

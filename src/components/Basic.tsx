@@ -19,6 +19,7 @@ import { Weather } from "./Objects/Weather";
 import { Stage } from "./Objects/Stage";
 import { generateTintColors } from "@/util/util";
 import { GptAnalysis, Time as TimeType } from "@/types/metaData";
+import { ObjectsOnStage } from "./Objects/ObjectsOnStage";
 
 // 基本
 type Props = {
@@ -218,6 +219,8 @@ export const Basic = (props: Props) => {
             {analysis.userName}の木
           </Text>
 
+          <ObjectsOnStage decorationObject={analysis.stageDecoration} />
+
           {/* 花 */}
           <group>
             {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
@@ -249,6 +252,7 @@ export const Basic = (props: Props) => {
                 >
                   <group rotation={[0, randRY, randRZ]} castShadow scale={0.4}>
                     <Flower
+                      index={index}
                       flowerType={analysis.flowerType}
                       noAnimation={noAnimation}
                       colors={colors}

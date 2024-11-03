@@ -6,7 +6,7 @@ import type {
 } from "@/types/calibrate";
 import { sendJson, getScreenSize, calculateTimeOffset } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
-import { USER_POS_X, USER_POS_Y } from "@/util/constants";
+import { USER_POS_X, USER_POS_Y, ANIMATION_WAIT } from "@/util/constants";
 
 const initScreen = () => {
   const screenSize = getScreenSize();
@@ -129,7 +129,8 @@ export const connectWebSocket = (props: Props) => {
         setIsJoroMode(true);
       }, 1000);
     } else if (data.head.type === "animation_start") {
-      setAnimationStartFrom(data.body.animationStartFrom);
+      // setAnimationStartFrom(data.body.animationStartFrom);
+      setAnimationStartFrom(new Date().getTime() + ANIMATION_WAIT - 100);
       setIsJoroMode(false);
     } else if (data.head.type === "reset_to_waiting") {
       setCurrentUser(null);

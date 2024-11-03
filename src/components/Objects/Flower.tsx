@@ -45,6 +45,7 @@ type Props = {
   flowerType?: FlowerType;
   noAnimation?: boolean;
   doAnimation?: boolean;
+  index?: number;
 };
 
 export const CherryBlossom = (props: Props) => {
@@ -137,6 +138,7 @@ type GlbFlowerProps = {
   scale: number;
   randomize?: number;
   doAnimation?: boolean;
+  opacity?: number;
 };
 
 const GlbFlower = (props: GlbFlowerProps) => {
@@ -147,6 +149,7 @@ const GlbFlower = (props: GlbFlowerProps) => {
     scale,
     randomize = Math.PI,
     doAnimation = true,
+    opacity = 0.85,
   } = props;
   const group = useRef<THREE.Group>(null);
   const { scene: originScene, animations } = useGLTF(
@@ -164,7 +167,7 @@ const GlbFlower = (props: GlbFlowerProps) => {
         if (colors && mesh.name.includes("平面")) {
           const material = new THREE.MeshStandardMaterial({
             transparent: true,
-            opacity: 0.85,
+            opacity: opacity,
           });
           material.onBeforeCompile = (shader) => {
             if (colors) makeGradation(shader, colors[0], colors[1]);
@@ -331,6 +334,73 @@ export const Lily = (props: Props) => {
   );
 };
 
+export const CherryBlossomP = (props: Props) => {
+  const { colors, noAnimation, doAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="panda_sakura.glb"
+      scale={1}
+      doAnimation={doAnimation}
+    />
+  );
+};
+
+export const IchouP = (props: Props) => {
+  const { colors, noAnimation, doAnimation } = props;
+  return (
+    <>
+      <group rotation={[Math.PI / 2, (Math.PI * 2) / 3, Math.PI / 2]}>
+        <GlbFlower
+          colors={colors}
+          noAnimation={noAnimation}
+          name="panda_ityou.glb"
+          scale={3}
+          doAnimation={doAnimation}
+        />
+      </group>
+      <group rotation={[-Math.PI / 3, -Math.PI, 0]}>
+        <GlbFlower
+          colors={colors}
+          noAnimation={true}
+          name="momiji_leaf.glb"
+          scale={16}
+          doAnimation={doAnimation}
+          opacity={0.6}
+        />
+      </group>
+    </>
+  );
+};
+
+export const SunflowerP = (props: Props) => {
+  const { colors, noAnimation, doAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="panda_sunflower_gerbera.glb"
+      scale={0.8}
+      doAnimation={doAnimation}
+      opacity={0.6}
+    />
+  );
+};
+
+export const GerberaP = (props: Props) => {
+  const { colors, noAnimation, doAnimation } = props;
+  return (
+    <GlbFlower
+      colors={colors}
+      noAnimation={noAnimation}
+      name="panda_sunflower_gerbera_colorchange.glb"
+      scale={0.5}
+      doAnimation={doAnimation}
+    />
+  );
+};
+
 export const Flower = (props: Props) => {
   // const colors = [new THREE.Color(0xff69b4), new THREE.Color(0xffffff)] as [
   //   THREE.Color,
@@ -342,31 +412,49 @@ export const Flower = (props: Props) => {
     colors,
     noAnimation = false,
     doAnimation = true,
+    index = 0,
   } = props;
 
   return (
     <>
-      {flowerType === "CherryBlossom" && (
-        <CherryBlossom
-          colors={colors}
-          noAnimation={noAnimation}
-          doAnimation={doAnimation}
-        />
-      )}
+      {
+        flowerType === "CherryBlossom" && (
+          // (index % 2 === 0 ? (
+          //   <CherryBlossom
+          //     colors={colors}
+          //     noAnimation={noAnimation}
+          //     doAnimation={doAnimation}
+          //   />
+          // ) : (
+          <CherryBlossomP
+            colors={colors}
+            noAnimation={noAnimation}
+            doAnimation={doAnimation}
+          />
+        )
+        // ))
+      }
       {flowerType === "Hibiscus" && (
         <Hibiscus
           colors={colors}
           noAnimation={noAnimation}
           doAnimation={doAnimation}
         />
-      )}{" "}
-      {flowerType === "Sunflower" && (
-        <Sunflower
-          colors={colors}
-          noAnimation={noAnimation}
-          doAnimation={doAnimation}
-        />
       )}
+      {flowerType === "Sunflower" &&
+        (index % 2 === 0 ? (
+          <Sunflower
+            colors={colors}
+            noAnimation={noAnimation}
+            doAnimation={doAnimation}
+          />
+        ) : (
+          <SunflowerP
+            colors={colors}
+            noAnimation={noAnimation}
+            doAnimation={doAnimation}
+          />
+        ))}
       {flowerType === "Asaago" && (
         <Asaago
           colors={colors}
@@ -374,15 +462,29 @@ export const Flower = (props: Props) => {
           doAnimation={doAnimation}
         />
       )}
-      {flowerType === "Gerbera" && (
-        <Gerbera
+      {flowerType === "Gerbera" &&
+        (index % 2 === 0 ? (
+          <Gerbera
+            colors={colors}
+            noAnimation={noAnimation}
+            doAnimation={doAnimation}
+          />
+        ) : (
+          <GerberaP
+            colors={colors}
+            noAnimation={noAnimation}
+            doAnimation={doAnimation}
+          />
+        ))}
+      {flowerType === "Momiji" && (
+        <Momiji
           colors={colors}
           noAnimation={noAnimation}
           doAnimation={doAnimation}
         />
       )}
-      {flowerType === "Momiji" && (
-        <Momiji
+      {flowerType === "Gingko" && (
+        <IchouP
           colors={colors}
           noAnimation={noAnimation}
           doAnimation={doAnimation}

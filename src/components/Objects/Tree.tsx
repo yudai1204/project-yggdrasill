@@ -92,7 +92,7 @@ const Model: React.FC<ModelProps> = ({
         }
         // 影を計算させる
         mesh.castShadow = doAnimation;
-        // mesh.receiveShadow = doAnimation;
+        mesh.receiveShadow = doAnimation;
         //範囲外でも描画する
         mesh.frustumCulled = false;
       }

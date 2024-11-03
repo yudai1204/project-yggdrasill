@@ -44,7 +44,7 @@ const App = () => {
           flowerName: "桜",
           flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],
           flowerSize: "medium",
-          flowerType: "CherryBlossom",
+          flowerType: "Gingko",
           treeType: "broadleaf",
           treeHeight: "large",
           treeTexture: "realistic",

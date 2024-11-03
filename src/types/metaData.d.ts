@@ -21,7 +21,9 @@ export type FlowerType =
   | "Asaago"
   | "Gerbera"
   | "Momiji"
-  | "Lily";
+  | "Lily"
+  | "Gingko";
+export type StageDecoration = "None" | "SnowMan";
 
 export interface GptAnalysis {
   userName: string;
@@ -38,4 +40,5 @@ export interface GptAnalysis {
   treeTexture: TreeTexture;
   treeAge: "young" | "old" | "ancient";
   nameLanguage?: "ja" | "en";
+  stageDecoration?: StageDecoration;
 }

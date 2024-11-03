@@ -10,7 +10,7 @@ import type { GptAnalysis } from "@/types/metaData";
 import { UserAnimation } from "./useUser/UserAnimation";
 import { ViewResult } from "./useUser/ViewResult";
 import { saveToLocalStorage } from "./useUser/saveToLocalStorage";
-import { USER_POS_X, USER_POS_Y } from "@/util/constants";
+import { ANIMATION_WAIT, USER_POS_X, USER_POS_Y } from "@/util/constants";
 
 type Props = {
   gptAnalysis: GptAnalysis;
@@ -94,7 +94,7 @@ export const User = (props: Props) => {
         if (userBodyRef.current) {
           userBodyRef.current = {
             ...userBodyRef.current,
-            animationStartFrom: new Date().getTime() + 3000,
+            animationStartFrom: new Date().getTime() + ANIMATION_WAIT,
           };
           setUserBody({ ...userBodyRef.current });
           sendJson(wsRef.current, userBodyRef.current, "animation_start");

@@ -4,6 +4,7 @@ import type {
   UserType,
   SavedDevicePositon,
 } from "@/types/calibrate";
+import { ANIMATION_WAIT } from "@/util/constants";
 import { sendJson, getScreenSize, calculateTimeOffset } from "@/util/util";
 import { v4 as uuidv4 } from "uuid";
 
@@ -130,7 +131,8 @@ export const connectWebSocket = (props: Props) => {
         setIsJoroMode(true);
       }, 1000);
     } else if (data.head.type === "animation_start") {
-      setAnimationStartFrom(data.body.animationStartFrom);
+      // setAnimationStartFrom(data.body.animationStartFrom);
+      setAnimationStartFrom(new Date().getTime() + ANIMATION_WAIT - 100);
       setIsJoroMode(false);
     } else if (data.head.type === "reset_to_waiting") {
       setCurrentUser(null);

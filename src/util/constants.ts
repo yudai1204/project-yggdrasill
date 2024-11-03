@@ -11,6 +11,8 @@ export const USER_POS_Y = -460;
 
 export const COLORS_LENGTH = 5;
 
+export const ANIMATION_WAIT = 3000;
+
 export const FOV = 45; // 視野角
 export const NEAR = 0.1; // 最小距離
 export const FAR = 1000; // 最大距離
