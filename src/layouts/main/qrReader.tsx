@@ -267,7 +267,7 @@ const QrScanner = () => {
           </NumberInputStepper>
         </NumberInput>
       </Box>
-      <Box width={640} bg="gray.200" position="relative">
+      <Box width={1280} bg="gray.200" position="relative">
         <canvas
           ref={canvasRef}
           style={{
@@ -275,7 +275,7 @@ const QrScanner = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            width: 640,
+            width: 1280,
             height: "auto",
             opacity: 0.5,
           }}
