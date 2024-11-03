@@ -54,6 +54,16 @@ export const FormBody = (props: Props) => {
 
   useEffect(() => {
     setActiveQuestion(0);
+    setTimeout(() => {
+      const savedAnswers = localStorage.getItem("answers");
+      if (savedAnswers) {
+        setAnswers(JSON.parse(savedAnswers));
+      }
+    }, 500);
+  }, []);
+
+  const saveFormInput = useCallback(() => {
+    localStorage.setItem("answers", JSON.stringify(answers));
   }, []);
 
   useEffect(() => {
@@ -296,6 +306,7 @@ export const FormBody = (props: Props) => {
                 //   return;
                 // }
                 submitAnswers();
+                saveFormInput();
               }
             }}
             fontFamily="Kaisei Opti"
