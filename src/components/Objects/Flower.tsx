@@ -299,7 +299,7 @@ export const Momiji = (props: Props) => {
       <group rotation={[Math.PI / 3, Math.PI, 0]}>
         <GlbFlower
           colors={colors}
-          noAnimation={true}
+          noAnimation={noAnimation}
           name="momiji_leaf.glb"
           scale={20}
           doAnimation={doAnimation}
@@ -311,7 +311,7 @@ export const Momiji = (props: Props) => {
       >
         <GlbFlower
           colors={colors}
-          noAnimation={true}
+          noAnimation={noAnimation}
           name="momiji_leaf.glb"
           scale={20}
           doAnimation={doAnimation}
@@ -363,7 +363,7 @@ export const IchouP = (props: Props) => {
       <group rotation={[-Math.PI / 3, -Math.PI, 0]}>
         <GlbFlower
           colors={colors}
-          noAnimation={true}
+          noAnimation={noAnimation}
           name="momiji_leaf.glb"
           scale={16}
           doAnimation={doAnimation}
