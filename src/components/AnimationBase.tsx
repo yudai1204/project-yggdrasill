@@ -23,6 +23,8 @@ type Props = {
   timeValue?: Time | null;
   doEffect?: boolean;
   isUser?: boolean;
+  noWeather?: boolean;
+  noFlowers?: boolean;
 };
 export const AnimationBase = (props: Props) => {
   const {
@@ -36,6 +38,8 @@ export const AnimationBase = (props: Props) => {
     timeValue = null,
     doEffect = false,
     isUser,
+    noWeather,
+    noFlowers,
   } = props;
 
   return (
@@ -52,6 +56,8 @@ export const AnimationBase = (props: Props) => {
             timeValue={timeValue}
             doEffect={doEffect}
             isUser={isUser}
+            noWeather={noWeather}
+            noFlowers={noFlowers}
           />
         </Box>
       </Box>

@@ -38,8 +38,8 @@ const App = () => {
         gptAnalysis: {
           userName: "aaa",
           season: "Summer",
-          location: "BaldMountain",
-          time: "Evening",
+          location: "UnderTheSea",
+          time: "Noon",
           weather: "Sunny",
           flowerName: "桜",
           flowerColor: ["#673ab7", "#d81b60", "#ffeb3b"],

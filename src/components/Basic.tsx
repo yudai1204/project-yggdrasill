@@ -29,6 +29,8 @@ type Props = {
   currentUser: UserType | null;
   noAnimation: boolean;
   timeValue: TimeType | null;
+  noWeather?: boolean;
+  noFlowers?: boolean;
 };
 export const Basic = (props: Props) => {
   const {
@@ -38,6 +40,8 @@ export const Basic = (props: Props) => {
     currentUser,
     noAnimation,
     timeValue,
+    noWeather = false,
+    noFlowers = false,
   } = props;
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
@@ -52,7 +56,6 @@ export const Basic = (props: Props) => {
     r: false,
   });
   const [doFlowerAnimation, setDoFlowerAnimation] = useState<boolean>(false);
-  const [doFlowerDisplay, setDoFlowerDisplay] = useState<boolean>(false);
 
   const analysis: GptAnalysis | undefined = useMemo(
     () => currentUser?.metadata?.gptAnalysis,
@@ -161,7 +164,7 @@ export const Basic = (props: Props) => {
   return (
     <>
       {/* コントロール */}
-      {/* {isDebug && <OrbitControls />} */}
+      {/* {<OrbitControls />} */}
       {noAnimation && (
         <OrbitControls
           target={[0, 11.4, 0]}
@@ -192,6 +195,7 @@ export const Basic = (props: Props) => {
         <group position={[0, 0, 0]}>
           {/* 天気 */}
           <Weather
+            noWeather={noWeather}
             doAnimation={doAnimation}
             weather={analysis.weather}
             time={
@@ -223,45 +227,50 @@ export const Basic = (props: Props) => {
 
           {/* 花 */}
           <group>
-            {FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
-              const randRY = ((Math.random() - 0.5) * Math.PI) / 3;
-              const randRZ = ((Math.random() - 0.5) * Math.PI) / 3;
+            {!noFlowers &&
+              FLOWER_POSITIONS[analysis.treeType].map((pos, index) => {
+                const randRY = ((Math.random() - 0.5) * Math.PI) / 3;
+                const randRZ = ((Math.random() - 0.5) * Math.PI) / 3;
 
-              const randIdxPair = [
-                Math.floor(Math.random() * COLORS_LENGTH),
-                Math.floor(Math.random() * (COLORS_LENGTH - 1)),
-              ].sort((a, b) => a - b);
+                const randIdxPair = [
+                  Math.floor(Math.random() * COLORS_LENGTH),
+                  Math.floor(Math.random() * (COLORS_LENGTH - 1)),
+                ].sort((a, b) => a - b);
 
-              const idx = Math.floor(Math.random() * tintColorsArray.length);
+                const idx = Math.floor(Math.random() * tintColorsArray.length);
 
-              const colors: [THREE.Color, THREE.Color] =
-                Math.random() > 0.5
-                  ? [
-                      new THREE.Color(tintColors[randIdxPair[0]]),
-                      new THREE.Color(tintColors[randIdxPair[1]]),
-                    ]
-                  : [
-                      new THREE.Color(tintColorsArray[idx][randIdxPair[0]]),
-                      new THREE.Color(tintColorsArray[idx][randIdxPair[1]]),
-                    ];
-              return (
-                <group
-                  key={index}
-                  position={pos.position}
-                  rotation={pos.rotation}
-                >
-                  <group rotation={[0, randRY, randRZ]} castShadow scale={0.4}>
-                    <Flower
-                      index={index}
-                      flowerType={analysis.flowerType}
-                      noAnimation={noAnimation}
-                      colors={colors}
-                      doAnimation={doFlowerAnimation}
-                    />
+                const colors: [THREE.Color, THREE.Color] =
+                  Math.random() > 0.5
+                    ? [
+                        new THREE.Color(tintColors[randIdxPair[0]]),
+                        new THREE.Color(tintColors[randIdxPair[1]]),
+                      ]
+                    : [
+                        new THREE.Color(tintColorsArray[idx][randIdxPair[0]]),
+                        new THREE.Color(tintColorsArray[idx][randIdxPair[1]]),
+                      ];
+                return (
+                  <group
+                    key={index}
+                    position={pos.position}
+                    rotation={pos.rotation}
+                  >
+                    <group
+                      rotation={[0, randRY, randRZ]}
+                      castShadow
+                      scale={0.4}
+                    >
+                      <Flower
+                        index={index}
+                        flowerType={analysis.flowerType}
+                        noAnimation={noAnimation}
+                        colors={colors}
+                        doAnimation={doFlowerAnimation}
+                      />
+                    </group>
                   </group>
-                </group>
-              );
-            })}
+                );
+              })}
           </group>
           {/* 木 */}
           <mesh

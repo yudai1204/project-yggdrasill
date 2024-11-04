@@ -17,6 +17,8 @@ type Props = {
   timeValue: TimeType | null;
   doEffect?: boolean;
   isUser?: boolean;
+  noWeather?: boolean;
+  noFlowers?: boolean;
 };
 
 export const ThreeCanvas = (props: Props) => {
@@ -30,6 +32,8 @@ export const ThreeCanvas = (props: Props) => {
     timeValue,
     doEffect,
     isUser,
+    noWeather,
+    noFlowers,
   } = props;
 
   return (
@@ -55,6 +59,8 @@ export const ThreeCanvas = (props: Props) => {
             currentUser={currentUser}
             noAnimation={noAnimation}
             timeValue={timeValue}
+            noWeather={noWeather}
+            noFlowers={noFlowers}
           />
           {/* {doEffect && (
           <EffectComposer>

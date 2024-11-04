@@ -137,8 +137,9 @@ const Snow = () => {
 interface WeatherSceneProps {
   weather: WeatherType;
   time: Time;
+  noWeather: boolean;
 }
-function WeatherScene({ weather, time }: WeatherSceneProps) {
+function WeatherScene({ weather, time, noWeather }: WeatherSceneProps) {
   const isDaytime = time === "Noon";
   const isEvening = time === "Evening";
   const isNight = time === "Night";
@@ -146,9 +147,9 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
   const ambientColor = isDaytime
     ? "#ffffff"
     : isEvening
-      ? "#ffa07a"
-      : "#222244";
-  const directionalColor = isEvening ? "#ffcc00" : "#ffffff";
+      ? "#f0b08a"
+      : "#333355";
+  const directionalColor = isEvening ? "#ffcc44" : "#ffffff";
 
   return (
     <>
@@ -166,7 +167,7 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
         inclination={isDaytime ? 0 : isEvening ? 0.5 : 0.9}
         azimuth={0.25}
       />
-      {isNight && (
+      {!noWeather && isNight && (
         <>
           <Stars
             radius={100} // 星の点滅(拡大)度合い
@@ -212,49 +213,52 @@ function WeatherScene({ weather, time }: WeatherSceneProps) {
         shadow-camera-top={20}
         shadow-camera-bottom={-10}
       />
-
-      {weather === "Rainy" && (
+      {!noWeather && (
         <>
-          <Cloud
-            position={[40, 120, -50]}
-            scale={[15, 15, 15]}
-            color={"#777777"}
-            opacity={0.5}
-            growth={10}
-            speed={0.05}
-          />
-          <Cloud
-            speed={0.05}
-            position={[-40, 120, -50]}
-            scale={[15, 15, 15]}
-            color={"#777777"}
-            opacity={0.5}
-            growth={10}
-          />
-          <Rain />
+          {weather === "Rainy" && (
+            <>
+              <Cloud
+                position={[40, 120, -50]}
+                scale={[15, 15, 15]}
+                color={"#777777"}
+                opacity={0.5}
+                growth={10}
+                speed={0.05}
+              />
+              <Cloud
+                speed={0.05}
+                position={[-40, 120, -50]}
+                scale={[15, 15, 15]}
+                color={"#777777"}
+                opacity={0.5}
+                growth={10}
+              />
+              <Rain />
+            </>
+          )}
+          {(weather === "Snowy" || weather === "Cloudy") && (
+            <>
+              <Cloud
+                position={[40, 80, -50]}
+                scale={[8, 8, 8]}
+                color={"#CCCCCC"}
+                opacity={0.5}
+                growth={10}
+                speed={0.02}
+              />
+              <Cloud
+                speed={0.02}
+                position={[-40, 80, -50]}
+                scale={[8, 8, 8]}
+                color={"#CCCCCC"}
+                opacity={0.5}
+                growth={10}
+              />
+            </>
+          )}
+          {weather === "Snowy" && <Snow />}
         </>
       )}
-      {(weather === "Snowy" || weather === "Cloudy") && (
-        <>
-          <Cloud
-            position={[40, 80, -50]}
-            scale={[8, 8, 8]}
-            color={"#CCCCCC"}
-            opacity={0.5}
-            growth={10}
-            speed={0.02}
-          />
-          <Cloud
-            speed={0.02}
-            position={[-40, 80, -50]}
-            scale={[8, 8, 8]}
-            color={"#CCCCCC"}
-            opacity={0.5}
-            growth={10}
-          />
-        </>
-      )}
-      {weather === "Snowy" && <Snow />}
     </>
   );
 }
@@ -263,13 +267,14 @@ type Props = {
   weather: WeatherType;
   time: Time;
   doAnimation: boolean;
+  noWeather?: boolean;
 };
 export const Weather = (props: Props) => {
-  const { weather, time, doAnimation } = props;
+  const { weather, time, doAnimation, noWeather = false } = props;
 
   return (
     <mesh>
-      <WeatherScene weather={weather} time={time} />
+      <WeatherScene weather={weather} time={time} noWeather={noWeather} />
     </mesh>
   );
 };

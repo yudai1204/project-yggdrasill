@@ -41,8 +41,8 @@ export const UserAnimation = (props: Props) => {
       fullHeight: screenSize?.height,
       offsetX: userBody?.position.x,
       offsetY: userBody?.position.y,
-      width: userBody?.rawSize.width,
-      height: userBody?.rawSize.height,
+      width: userBody?.size.width * userBody.zoom,
+      height: userBody?.size.height * userBody.zoom,
       // width:  deviceBody?.size.width * deviceBody?.zoom,
       // height: deviceBody?.size.height * deviceBody?.zoom,
     };
@@ -60,6 +60,8 @@ export const UserAnimation = (props: Props) => {
           ...defaultCameraOptions,
           viewOffset,
         }}
+        noWeather
+        noFlowers
       />
     </>
   );

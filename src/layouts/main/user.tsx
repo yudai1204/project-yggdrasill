@@ -109,10 +109,9 @@ export const User = (props: Props) => {
           };
           setUserBody({ ...userBodyRef.current });
           sendJson(wsRef.current, userBodyRef.current, "animation_start");
-          setTimeout(() => {
-            setIsJoroMode(false);
-          }, 2000);
+          setIsJoroMode(false);
           saveToLocalStorage(userBodyRef.current);
+          setTimeout(() => setDisplaySeed(false), 3000);
         }
       }
     }
@@ -226,12 +225,14 @@ export const User = (props: Props) => {
       )}
       {displayStep === 1 && (
         <Box position="absolute" top={0} left={0} w="100%" h="100%">
-          <SeedWatering animationCount={adjustedAnimationCount} />
+          {displaySeed && (
+            <SeedWatering animationCount={adjustedAnimationCount} />
+          )}
           <Box
             w="100%"
             h="100%"
             opacity={isJoroMode ? 0 : 1}
-            transition="all 1s"
+            transition="all 2s 1s"
             onTouchStart={(e) => {
               if (adjustedAnimationCount >= 3) return;
               setTouchCount((prev) => prev + 1);
