@@ -3,6 +3,7 @@ import { CountryTown, SnowCountryTown } from "./CountryTown";
 import type { Location, Season, TreeTexture } from "@/types/metaData";
 import { VastLand } from "./VastLand";
 import { Moon, RealMoon } from "./Moon";
+import { UnderTheSea } from "./UnderTheSea";
 
 type Props = {
   location: Location;
@@ -32,6 +33,7 @@ export const Stage = (props: Props) => {
       }
       return <Moon />;
     case "UnderTheSea":
+      return <UnderTheSea />;
     case "BaldMountain":
       if (season === "Winter") {
         return <SnowHageyama />;

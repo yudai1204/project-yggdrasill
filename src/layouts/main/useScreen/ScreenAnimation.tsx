@@ -3,6 +3,16 @@ import { Box, Heading } from "@chakra-ui/react";
 import { DeviceType, SpPos, UserType } from "@/types/calibrate";
 import "@fontsource/kaisei-opti";
 import { JoroModeAnimation } from "./JoroModeAnimation";
+import React, { memo } from "react";
+
+const MemoizedAnimationBase = memo(AnimationBase, (prevProps, nextProps) => {
+  return (
+    prevProps.isDebug === nextProps.isDebug &&
+    prevProps.isJoroMode === nextProps.isJoroMode &&
+    prevProps.animationStartFrom === nextProps.animationStartFrom &&
+    prevProps.currentUser === nextProps.currentUser
+  );
+});
 
 type Props = {
   isDebug: boolean;
@@ -32,7 +42,7 @@ export const ScreenAnimation = (props: Props) => {
         opacity={isJoroMode ? 0 : 1}
         transition="opacity .5s 1.5s ease-in-out"
       >
-        <AnimationBase
+        <MemoizedAnimationBase
           isDebug={isDebug}
           logo
           isJoroMode={isJoroMode}

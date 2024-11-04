@@ -129,8 +129,8 @@ export const connectWebSocket = (props: Props) => {
         setIsJoroMode(true);
       }, 1000);
     } else if (data.head.type === "animation_start") {
-      // setAnimationStartFrom(data.body.animationStartFrom);
-      setAnimationStartFrom(new Date().getTime() + ANIMATION_WAIT - 100);
+      setAnimationStartFrom(data.body.animationStartFrom);
+      // setAnimationStartFrom(new Date().getTime() + ANIMATION_WAIT - 100);
       setIsJoroMode(false);
     } else if (data.head.type === "reset_to_waiting") {
       setCurrentUser(null);

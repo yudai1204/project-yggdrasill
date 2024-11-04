@@ -167,7 +167,7 @@ export const WaitingScreen = (props: Props) => {
         animation={`${fadeOutExpandAnimation} 4s ease-in-out infinite`}
       ></Box>
 
-      <Box
+      {/* <Box
         zIndex={1000}
         position="absolute"
         top={350}
@@ -178,7 +178,7 @@ export const WaitingScreen = (props: Props) => {
         transform="translateX(10%)"
       >
         <img src="/QR_180017.svg" alt="QR" style={{ width: "min(25vw)" }} />
-      </Box>
+      </Box> */}
       <Box position="absolute" w="100%" h="100svh" top="0" left="0">
         <WaitingAnimation />
       </Box>

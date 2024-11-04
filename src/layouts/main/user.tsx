@@ -105,7 +105,7 @@ export const User = (props: Props) => {
         if (userBodyRef.current) {
           userBodyRef.current = {
             ...userBodyRef.current,
-            animationStartFrom: new Date().getTime() + ANIMATION_WAIT - 500,
+            animationStartFrom: new Date().getTime() + ANIMATION_WAIT,
           };
           setUserBody({ ...userBodyRef.current });
           sendJson(wsRef.current, userBodyRef.current, "animation_start");

@@ -126,7 +126,7 @@ export const Screen = () => {
         setIsWaiting(true);
         setReceiveJoroStatus(0);
       },
-      animationStartFrom - new Date().getTime() + 1000 * 20
+      animationStartFrom - new Date().getTime() + 1000 * 40
     );
     return () => clearTimeout(timeout);
   }, [animationStartFrom]);

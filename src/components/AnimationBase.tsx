@@ -7,6 +7,7 @@ import { CameraOptions } from "@/types/camera";
 import { defaultCameraOptions } from "@/util/constants";
 import type { UserType } from "@/types/calibrate";
 import { Time } from "@/types/metaData";
+import { useEffect, useMemo, useState } from "react";
 
 // ジョウロモードの時はメインのアニメーション(Basic)を停止し、透明にする
 // 現在のUnixTimeがanimationStartFromより後になったら、透明を解除してアニメーションを開始する
@@ -42,10 +43,37 @@ export const AnimationBase = (props: Props) => {
     noFlowers,
   } = props;
 
+  // const [filter, setFilter] = useState<string>("none");
+
+  // useEffect(() => {
+  //   if (isUser) {
+  //     return;
+  //   }
+
+  //   let timeout;
+
+  //   // deviceの時
+  //   if (noWeather) {
+  //     timeout = setTimeout(() => {
+  //       setFilter("sepia(100%)");
+  //     });
+  //   } else {
+  //     // screenの時
+  //     setFilter("sepia(100%)");
+  //   }
+  // }, [isUser, noWeather, noFlowers]);
+
   return (
     <>
       <Box width="100%" height="100svh">
-        <Box position="absolute" top="0" left="0" width="100%" height="100%">
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          // filter={filter}
+        >
           <ThreeCanvas
             currentUser={currentUser}
             isDebug={isDebug}

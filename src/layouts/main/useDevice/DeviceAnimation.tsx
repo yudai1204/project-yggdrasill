@@ -4,6 +4,22 @@ import { DeviceType, ScreenType, UserType } from "@/types/calibrate";
 import { useState, useMemo, useEffect } from "react";
 import { defaultCameraOptions } from "@/util/constants";
 
+import React, { memo } from "react";
+
+const MemoizedAnimationBase = memo(AnimationBase, (prevProps, nextProps) => {
+  // receiveJoroStatusの変更を無視する
+  return (
+    prevProps.noWeather === nextProps.noWeather &&
+    prevProps.isDebug === nextProps.isDebug &&
+    prevProps.doEffect === nextProps.doEffect &&
+    prevProps.isJoroMode === nextProps.isJoroMode &&
+    prevProps.animationStartFrom === nextProps.animationStartFrom &&
+    prevProps.currentUser === nextProps.currentUser &&
+    // @ts-ignore
+    prevProps.cameraOptions.viewOffset === nextProps.cameraOptions.viewOffset
+  );
+});
+
 type Props = {
   isDebug: boolean;
   deviceNum: number | null;
@@ -70,7 +86,8 @@ export const DeviceAnimation = (props: Props) => {
         </Heading>
       )}
       {
-        <AnimationBase
+        <MemoizedAnimationBase
+          noWeather={true}
           isDebug={isDebug}
           doEffect={true}
           isJoroMode={isJoroMode}
