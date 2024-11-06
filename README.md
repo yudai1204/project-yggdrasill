@@ -1,6 +1,8 @@
 # 芝浦祭2024 - Project Yggdrasil
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/74FTShiPke8?si=np_XRV1Xk6kKDvYQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+![CD9D8A96-EB99-4D4B-8B4A-810A7517A20D_1_105_c](https://github.com/user-attachments/assets/ed040058-d69a-45c4-9677-4a69ed06d40b)
+
+https://www.youtube.com/watch?v=74FTShiPke8
 
 芝浦祭2024で発表を行った「Let the Magic Flower Bloom」のフロントエンド部分のレポジトリ。
 
