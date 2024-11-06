@@ -6,8 +6,8 @@ https://www.youtube.com/watch?v=74FTShiPke8
 
 芝浦祭2024で発表を行った「Let the Magic Flower Bloom」のフロントエンド部分のレポジトリ。
 
-[Backend(WebSocket + DB)](https://github.com/yudai1204/project-yggdrasill-backend)
-[ジョウロ](https://github.com/yudai1204/project-yggdrasill-python)
+- [Backend(WebSocket + DB)](https://github.com/yudai1204/project-yggdrasill-backend)
+- [ジョウロ](https://github.com/yudai1204/project-yggdrasill-python)
 
 
 ## 初回起動
